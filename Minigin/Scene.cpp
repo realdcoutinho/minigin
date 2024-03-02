@@ -7,7 +7,10 @@ using namespace dae;
 
 unsigned int Scene::m_idCounter = 0;
 
-Scene::Scene(const std::string& name) : m_name(name) {}
+Scene::Scene(const std::string& name) : m_name(name) 
+{
+
+}
 
 Scene::~Scene() = default;
 
@@ -26,11 +29,11 @@ void Scene::RemoveAll()
 	m_objects.clear();
 }
 
-void Scene::Update()
+void Scene::Update(float elapsed)
 {
 	for(auto& object : m_objects)
 	{
-		object->Update();
+		object->Update(elapsed);
 	}
 }
 
