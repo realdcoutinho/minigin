@@ -104,6 +104,9 @@ namespace dae
 			return GetComponent<std::unique_ptr<T>>(/*searchChildren*/) != nullptr;
 		}
 
+	protected:
+		TransformComponent* GetTransformComponent() const { return m_pTransformComponent; }
+
 	private:
 
 		Transform m_transform{};

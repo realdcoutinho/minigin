@@ -52,7 +52,7 @@ void dae::TransformComponent::SetPosition(const glm::vec3& position)
 		 if (test->GetParent() != nullptr)
 		 {
 
-			 m_WorldPosition = GetOwner()->GetParent()->GetWorldPosition() - GetOwner()->GetLocalPosition();
+			 m_WorldPosition = GetOwner()->GetParent()->GetWorldPosition() + GetOwner()->GetLocalPosition();
 			 m_IsDirty = false;
 		 }
 		 else
