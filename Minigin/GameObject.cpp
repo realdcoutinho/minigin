@@ -7,13 +7,10 @@
 class TransformComponent;
 
 dae::GameObject::GameObject()
-	: m_transform()
-	, m_texture(nullptr)
-	, m_pComponents()
+	: m_pComponents()
 	, m_pTransformComponent(nullptr)
 	, m_LocalPosition{}
 {
-	//InitializeTransformComponent();
 }
 
 dae::GameObject::~GameObject() = default;
@@ -35,12 +32,6 @@ void dae::GameObject::Update(float elaspsed)
 
 void dae::GameObject::Render() const
 {
-	const auto& pos = m_transform.GetPosition();
-	if (m_texture != nullptr)
-	{
-		Renderer::GetInstance().RenderTexture(*m_texture, pos.x, pos.y);
-	}
-
 	for (auto& comp : m_pComponents)
 	{
 		comp->Render();
@@ -50,29 +41,15 @@ void dae::GameObject::Render() const
 	{
 		child->Render();
 	}
-
 }
 
-void dae::GameObject::SetTexture(const std::string& filename)
+void dae::GameObject::SetLocalPosition(float x, float y)
 {
-	m_texture = ResourceManager::GetInstance().LoadTexture(filename);
-}
-
-void dae::GameObject::SetPosition(float x, float y)
-{
-	//m_transform.SetPosition(x, y, 0.0f);
-
 	m_pTransformComponent->SetPosition(x, y, 0.0f);
-	//m_LocalPosition = glm::vec3(x, y, 0.0f);
-
-
-	//return m_LocalPosition;
 }
 
 void dae::GameObject::SetLocalPosition(const glm::vec3& pos)
 {
-	//m_LocalPosition = pos;
-
 	m_pTransformComponent->SetPosition(pos);
 }
 
@@ -84,33 +61,15 @@ glm::vec3& dae::GameObject::GetWorldPosition()
 glm::vec3& dae::GameObject::GetLocalPosition() 
 {
 	return m_pTransformComponent->GetLocalPosition();
-
-	//return m_pTransformComponent->GetLocalPosition();
 }
 
 //
 void dae::GameObject::InitializeTransformComponent()
 {
-	//m_pTransformComponent = new TransformComponent();
-	//AddComponent(pComp.get());
-
-			//	m_pTransformComponent = comp;
-		//	std::unique_ptr<TransformComponent> pComp(comp);
-		//	AddComponent(comp);
-
-	//m_pTransformComponent = new TransformComponent(shared_from_this());
-	//std::unique_ptr<TransformComponent> pComp(m_pTransformComponent);
-
 	std::unique_ptr<TransformComponent> pComp = std::make_unique<TransformComponent>(shared_from_this());
 	m_pTransformComponent = pComp.get();
-
 	AddComponent(std::move(pComp));
 }
-
-//TransformComponent* dae::GameObject::GetTransformComponent()
-//{
-//	return m_pTransformComponent;
-//}
 
 void dae::GameObject::RemoveComponent(BaseComponent* pComponent/*, bool deleteObject*/)
 {
@@ -120,18 +79,13 @@ void dae::GameObject::RemoveComponent(BaseComponent* pComponent/*, bool deleteOb
 			return componentPtr.get() == pComponent;
 		});
 
-	//auto it = std::find_if(m_pComponents.begin(), m_pComponents.end(),
-	//	[pComponent](const BaseComponent* componentPtr) {
-	//		return componentPtr == pComponent;
-	//	});
-
 	if (it != m_pComponents.end())
 	{
 		m_pComponents.erase(it);
 	}
 }
 
-void dae::GameObject::SetParent(const std::shared_ptr<GameObject>& newParent)
+void dae::GameObject::SetParent(const std::shared_ptr<GameObject>& newParent, bool keepWorldPosition)
 {
 	// 1. Check if the new parent is valid
 	if (newParent.get() == this || IsDescendantOf(newParent))
@@ -144,12 +98,13 @@ void dae::GameObject::SetParent(const std::shared_ptr<GameObject>& newParent)
 		glm::vec3 worldPos = GetWorldPosition();
 		SetLocalPosition(worldPos);
 	}
-	//else
-	//{
-	//	/////
-
-
-	//}
+	else
+	{
+		if (keepWorldPosition)
+		{
+			m_pTransformComponent->SetPosition(GetLocalPosition() - newParent->GetWorldPosition());
+		}
+	}
 
 	// 2. Remove itself from the previous parent (if any)
 	if (auto oldParent = m_parent.lock())
@@ -165,10 +120,6 @@ void dae::GameObject::SetParent(const std::shared_ptr<GameObject>& newParent)
 	{
 		newParent->m_Children.push_back(shared_from_this());
 	}
-
-	// 5. Update position, rotation, and scale
-	//UpdateTransformRelativeToNewParent();
-	//m_pTransformComponent->GetWorldPosition();
 }
 
 bool dae::GameObject::IsDescendantOf(const std::shared_ptr<GameObject>& potentialAncestor) const

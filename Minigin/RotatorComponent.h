@@ -19,7 +19,7 @@ namespace dae {
 
         float m_Radius{};
         float m_RotSpeed{};
-        float m_CurrentRadians{};
+        float m_CurRadians{};
         glm::vec3 m_Center{};
        
     };

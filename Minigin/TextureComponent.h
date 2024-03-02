@@ -18,15 +18,13 @@ namespace dae
 		TextureComponent& operator= (const TextureComponent&) = delete;
 		TextureComponent& operator= (const TextureComponent&&) = delete;
 
+		void Render() const override;
+		void Update(float elapsed) override;
+
 		glm::ivec2 GetSize() const;
 		SDL_Texture* GetSDLTexture() const;
 
-		void Render() const override;
-		void Update(float elapsed);
-
-
 	private:
-		//std::shared_ptr<SDL_Texture> m_texture;
 		SDL_Texture* m_texture;
 	};
 }

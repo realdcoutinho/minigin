@@ -11,21 +11,20 @@
 
 namespace dae
 {
-	FPSComponent::FPSComponent(std::shared_ptr<GameObject> pOwner, const std::string& text, std::shared_ptr<Font> pFont/*, int posX, int posY, int posZ*/)
-		: TextComponent(pOwner, text, pFont/*, posX, posY*/)
+	FPSComponent::FPSComponent(std::shared_ptr<GameObject> pOwner, const std::string& text, std::shared_ptr<Font> pFont)
+		: TextComponent(pOwner, text, pFont)
 	{
-		/*posZ++;*/
+
 	}
+
 	FPSComponent::~FPSComponent()
 	{
-		//delete m_texture;
 	}
 
 	void FPSComponent::Render() const
 	{
 		if (m_texture != nullptr)
 		{
-			//const auto& pos = m_Transform.GetPosition();
 			Renderer::GetInstance().RenderTexture(m_texture.get(), GetOwner()->GetWorldPosition().x, GetOwner()->GetWorldPosition().y);
 		}
 	}
@@ -34,12 +33,11 @@ namespace dae
 	{
 		TextComponent::Update(elasped);
 
-		/// Update the queue of frame times
-			if (m_FrameRateVector.size() >= m_MaxFrameSamples)
-			{
-				m_FrameRateVector.erase(m_FrameRateVector.begin()); // Remove the oldest frame time
-			}
-			m_FrameRateVector.emplace_back(elasped); // Add the new frame time
+ 		if (m_FrameRateVector.size() >= m_MaxFrameSamples)
+		{
+			m_FrameRateVector.erase(m_FrameRateVector.begin()); // Remove the oldest frame time
+		}
+		m_FrameRateVector.emplace_back(elasped); // Add the new frame time
 
 		m_AccumulatedTime += elasped;
 

@@ -15,25 +15,11 @@ namespace dae
 		m_Font{ std::move(pFont) }
 		, m_Text{ text }
 		, m_needsUpdate(true)
-		//create texture
 	{
-		//m_texture = new TextureComponent(m_pOwner, "text.tga");
 	}
-
-	//dae::TextComponent::TextComponent(std::shared_ptr<GameObject> pOwner, const std::string& text, std::shared_ptr<Font> pFont/*, glm::vec3& pos*/)
-	//	:BaseComponent(pOwner),
-	//	m_Font{ std::move(pFont) }
-	//	, m_Text{ text }
-	//	//, m_Positon{ pos}
-	//	, m_TextTexture(nullptr)
-	//	, m_needsUpdate(true)
-	//	//create texture
-	//{
-	//}
 
 	TextComponent::~TextComponent()
 	{
-		//delete m_texture;
 	}
 
 
@@ -47,16 +33,14 @@ namespace dae
 	void TextComponent::Render() const
 	{
 
-		if (m_pOwner == nullptr)
+		if (GetOwner() == nullptr)
 			return;
-		//auto owner = GetOwner();
-		//m_pOwner
+
 		if (m_texture != nullptr)
 		{
 
-			const float x = m_pOwner->GetWorldPosition().x;
-			const float y = m_pOwner->GetWorldPosition().y;
-			//const auto& pos = m_Transform.GetPosition();
+			const float x = GetOwner()->GetWorldPosition().x;
+			const float y = GetOwner()->GetWorldPosition().y;
 			Renderer::GetInstance().RenderTexture(m_texture.get(), x, y);
 		}
 
@@ -79,8 +63,7 @@ namespace dae
 				throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
 			}
 			SDL_FreeSurface(surf);
-			//m_TextTexture = std::make_shared<Texture2D>(texture);
-			m_texture = std::make_shared<TextureComponent>(m_pOwner, texture);
+			m_texture = std::make_shared<TextureComponent>(GetOwner(), texture);
 			m_needsUpdate = false;
 		}
 		elapsed;

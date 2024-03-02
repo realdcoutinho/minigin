@@ -30,10 +30,10 @@ namespace dae
 		
 		virtual void Update(float elasped);
 		virtual void Render() const;
-		void SetTexture(const std::string& filename);
+		//void SetTexture(const std::string& filename);
 		
 		//TRANSFORM
-		void SetPosition(float x, float y);
+		void SetLocalPosition(float x, float y);
 		void SetLocalPosition(const glm::vec3& pos);
 		glm::vec3& GetWorldPosition();
 		glm::vec3& GetLocalPosition();
@@ -41,7 +41,7 @@ namespace dae
 		void InitializeTransformComponent();
 		TransformComponent* GetTransformComponent() { return m_pTransformComponent; }
 		void RemoveComponent(BaseComponent* pComponent/*, bool deleteObject = false*/);
-		void SetParent(const std::shared_ptr<GameObject>& newParent);
+		void SetParent(const std::shared_ptr<GameObject>& newParent, bool keepWorldPosition = false);
 					
 		GameObject* GetParent() const { return m_parent.lock().get(); }
 
@@ -79,9 +79,6 @@ namespace dae
 			return nullptr;
 		}
 
-
-
-
 		template <class T>
 		T* GetComponent(/*bool searchChildren = false*/)
 		{
@@ -104,15 +101,7 @@ namespace dae
 			return GetComponent<std::unique_ptr<T>>(/*searchChildren*/) != nullptr;
 		}
 
-	protected:
-		TransformComponent* GetTransformComponent() const { return m_pTransformComponent; }
-
 	private:
-
-		Transform m_transform{};
-		// todo: mmm, every gameobject has a texture? Is that correct?
-		std::shared_ptr<Texture2D> m_texture{};
-
 		//Diogos
 		bool IsDescendantOf(const std::shared_ptr<GameObject>& potentialAncestor) const;
 

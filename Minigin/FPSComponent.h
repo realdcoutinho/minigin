@@ -13,18 +13,18 @@ namespace dae
 	class FPSComponent : public TextComponent
 	{
 	public:
-		FPSComponent(std::shared_ptr<GameObject> pOwner, const std::string& text, std::shared_ptr<Font> pFont/*, int posX, int posY, int posZ = 1*/);
+		FPSComponent(std::shared_ptr<GameObject> pOwner, const std::string& text, std::shared_ptr<Font> pFont);
 		~FPSComponent();
-		void Render() const;
-		void Update(float elasped);
+		void Render() const override;
+		void Update(float elasped) override;
 
-		float m_Number{ 0 };
-		int m_CountFPS{ 0 };
-		float m_AccumulatedTime{ 0 };
-
+	private:
 		std::vector<float> m_FrameRateVector{};
 
 		const size_t m_MaxFrameSamples = 50;
+		float m_Number{ 0 };
+		int m_CountFPS{ 0 };
+		float m_AccumulatedTime{ 0 };
 	};
 
 }

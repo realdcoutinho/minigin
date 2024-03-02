@@ -8,8 +8,7 @@
 dae::TextureComponent::TextureComponent(std::shared_ptr<GameObject> pOwner, const std::string& filename)
 	: BaseComponent(pOwner)
 {
-	filename;
-	m_texture = ResourceManager::GetInstance().LoadTextureP(filename);
+	m_texture = ResourceManager::GetInstance().LoadTexture(filename);
 }
 
 dae::TextureComponent::TextureComponent(GameObject* pOwner, SDL_Texture* texture)
@@ -40,37 +39,15 @@ void dae::TextureComponent::Render() const
 
 	if (GetOwner() == nullptr)
 		return;
-	auto owner = GetOwner();
 	if (m_texture != nullptr)
 	{
-
-		const float x = owner->GetWorldPosition().x;
-		const float y = owner->GetWorldPosition().y;
+		const float x = GetOwner()->GetWorldPosition().x;
+		const float y = GetOwner()->GetWorldPosition().y;
 		Renderer::GetInstance().RenderTexture(m_texture, x, y);
 	}
-
-
-
 }
 
 void dae::TextureComponent::Update(float elapsed)
 {
-	//if (m_needsUpdate)
-	//{
-	//	const SDL_Color color = { 255,255,255,255 }; // only white text is supported now
-	//	const auto surf = TTF_RenderText_Blended(m_Font->GetFont(), m_Text.c_str(), color);
-	//	if (surf == nullptr)
-	//	{
-	//		throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
-	//	}
-	//	auto texture = SDL_CreateTextureFromSurface(Renderer::GetInstance().GetSDLRenderer(), surf);
-	//	if (texture == nullptr)
-	//	{
-	//		throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
-	//	}
-	//	SDL_FreeSurface(surf);
-	//	m_TextTexture = std::make_shared<Texture2D>(texture);
-	//	m_needsUpdate = false;
-	//}
 	elapsed;
 }

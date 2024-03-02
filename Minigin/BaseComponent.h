@@ -14,14 +14,6 @@ namespace dae
 		virtual void Update(float elapsed) = 0;
 		virtual void Draw() {};
 		virtual void Render() const = 0;
-		//virtual void SetGameObject(GameObject* pGameObject) = 0;
-		//virtual GameObject* GetGameObject() = 0;
-
-		//GameObject* GetGameObject() const { return m_pGameObject; }
-		Scene* GetScene() const { return m_pScene; }
-		
-		void SetOwner(GameObject* pOwner);
-
 
 	protected:
 
@@ -31,13 +23,13 @@ namespace dae
 		GameObject* GetOwner() const { return m_pOwner; }
 
 
-		Scene* m_pScene{};
-
 		bool m_IsInitialized{};
 		int m_ComponentId{ 0 };
-		GameObject* m_pOwner{};
+
 	private:
 	
+		void SetOwner(GameObject* pOwner);
+		GameObject* m_pOwner{};
 		static unsigned int m_idCounter;
 
 	};
