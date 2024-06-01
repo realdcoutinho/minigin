@@ -10,9 +10,17 @@
 
 namespace dae
 {
-	dae::TextComponent::TextComponent(std::shared_ptr<GameObject> pOwner, const std::string& text, std::shared_ptr<Font> pFont/*, int posX, int posY, int posZ*/)
-		: BaseComponent(pOwner),
-		m_Font{ std::move(pFont) }
+	//dae::TextComponent::TextComponent(std::unique_ptr<GameObject> pOwner, const std::string& text, std::shared_ptr<Font> pFont/*, int posX, int posY, int posZ*/)
+	//	: BaseComponent(pOwner.get()),
+	//	m_Font{ std::move(pFont) }
+	//	, m_Text{ text }
+	//	, m_needsUpdate(true)
+	//{
+	//}
+
+	dae::TextComponent::TextComponent(GameObject& pOwner, const std::string& text, _TTF_Font* pFont/*, int posX, int posY, int posZ = 1 */)
+		: BaseComponent(pOwner)
+		, m_Font{ pFont }
 		, m_Text{ text }
 		, m_needsUpdate(true)
 	{
@@ -22,7 +30,6 @@ namespace dae
 	{
 	}
 
-
 	TextComponent* TextComponent::SetText(const std::string& text)
 	{
 		m_Text = text;
@@ -30,7 +37,7 @@ namespace dae
 		return this;
 	}
 
-	void TextComponent::Render() const
+	void TextComponent::Render()
 	{
 
 		if (GetOwner() == nullptr)
@@ -43,16 +50,14 @@ namespace dae
 			const float y = GetOwner()->GetWorldPosition().y;
 			Renderer::GetInstance().RenderTexture(m_texture.get(), x, y);
 		}
-
-		
 	}
 
-	void TextComponent::Update(float elapsed)
+	void TextComponent::Update()
 	{
 		if (m_needsUpdate)
 		{
 			const SDL_Color color = { 255,255,255,255 }; // only white text is supported now
-			const auto surf = TTF_RenderText_Blended(m_Font->GetFont(), m_Text.c_str(), color);
+			const auto surf = TTF_RenderText_Blended(m_Font, m_Text.c_str(), color);
 			if (surf == nullptr)
 			{
 				throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
@@ -63,9 +68,8 @@ namespace dae
 				throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
 			}
 			SDL_FreeSurface(surf);
-			m_texture = std::make_shared<TextureComponent>(GetOwner(), texture);
+			m_texture = std::make_shared<TextureComponent>(*GetOwner(), texture);
 			m_needsUpdate = false;
 		}
-		elapsed;
 	}
 }

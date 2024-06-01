@@ -17,7 +17,7 @@ namespace dae
 	class BaseComponent;
 
 
-	class GameObject final: public std::enable_shared_from_this<GameObject>
+	class GameObject final/*: public std::enable_shared_from_this<GameObject>*/
 	{
 	public:
 
@@ -28,24 +28,25 @@ namespace dae
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
 		
-		virtual void Update(float elasped);
+		virtual void Update();
 		virtual void Render() const;
 		//void SetTexture(const std::string& filename);
 		
 		//TRANSFORM
 		void SetLocalPosition(float x, float y);
 		void SetLocalPosition(const glm::vec3& pos);
+		void SetLocalPosition(const glm::vec2& pos);
 		glm::vec3& GetWorldPosition();
 		glm::vec3& GetLocalPosition();
 
 		void InitializeTransformComponent();
 		TransformComponent* GetTransformComponent() { return m_pTransformComponent; }
 		void RemoveComponent(BaseComponent* pComponent/*, bool deleteObject = false*/);
-		void SetParent(const std::shared_ptr<GameObject>& newParent, bool keepWorldPosition = false);
+		void SetParent(/*const std::shared_ptr<GameObject>& */ GameObject* newParent, bool keepWorldPosition = false);
 					
-		GameObject* GetParent() const { return m_parent.lock().get(); }
+		GameObject* GetParent() const { return m_parent/*.lock().get()*/; }
 
-
+		bool IsDirty() { return m_pTransformComponent->IsDirty(); };
 
 		////Diogo 
 		template<typename T>
@@ -64,20 +65,22 @@ namespace dae
 
 
 
-		template<typename T>
-		std::enable_if_t<std::is_base_of_v<BaseComponent, T>, T*>
-		AddComponent(T* pComp)
-		{
-			if (!HasComponent<T>())
-			{
-				std::unique_ptr<T> pNewComp(pComp);
-				m_pComponents.push_back(std::move(pNewComp));
+		//template<typename T>
+		//std::enable_if_t<std::is_base_of_v<BaseComponent, T>, T*>
+		//AddComponent(T* pComp)
+		//{
+		//	if (!HasComponent<T>())
+		//	{
+		//		std::unique_ptr<T> pNewComp(pComp);
+		//		m_pComponents.push_back(std::move(pNewComp));
 
-				return pComp;
-			}
+		//		//m_pComponentsR.push_back(pComp);
 
-			return nullptr;
-		}
+		//		return pComp;
+		//	}
+
+		//	return nullptr;
+		//}
 
 		template <class T>
 		T* GetComponent(/*bool searchChildren = false*/)
@@ -101,16 +104,34 @@ namespace dae
 			return GetComponent<std::unique_ptr<T>>(/*searchChildren*/) != nullptr;
 		}
 
+		unsigned int GetID() const { return m_ID; }
+
+
+		void SetActive(bool active);
+		void SetDestroy() { m_SetDestroy = true; }
+		bool IsActive() const;
+
 	private:
 		//Diogos
-		bool IsDescendantOf(const std::shared_ptr<GameObject>& potentialAncestor) const;
+		bool IsDescendantOf(const GameObject& potentialAncestor) const;
+		bool m_IsActive = true;
+		bool m_SetDestroy = false;
 
 		std::vector<std::unique_ptr<BaseComponent>> m_pComponents;
 		TransformComponent* m_pTransformComponent;
-		std::weak_ptr<GameObject> m_parent{};
-		std::vector<std::shared_ptr<GameObject>> m_Children{};
-	
+		GameObject* m_parent{};
+		std::vector<GameObject*> m_Children{};
 		glm::vec3 m_LocalPosition;
+
+		//unsigned int m_ID;             // Unique identifier for the GameObject
+		static unsigned int m_NextID;  // Static variable to track the next available ID
+
+		unsigned int m_ID;  // Static member variable to track the number of instances
+
 	};
 
+
+
+
 }
+

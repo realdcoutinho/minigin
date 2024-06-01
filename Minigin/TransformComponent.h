@@ -1,5 +1,7 @@
 #include "BaseComponent.h" // Include the BaseComponent header
 #include <glm/glm.hpp>
+#include <memory>
+
 
 #pragma once
 namespace dae
@@ -8,10 +10,7 @@ namespace dae
 	class TransformComponent : public BaseComponent
 	{
 	public:
-
-		//TransformComponent(GameObject* pOwner);
-		TransformComponent() = default;
-		TransformComponent(std::shared_ptr<GameObject>  pOwner);
+		TransformComponent(GameObject&  pOwner);
 
 		~TransformComponent() override = default;
 
@@ -20,12 +19,15 @@ namespace dae
 		TransformComponent& operator=(const TransformComponent& other) = delete;
 		TransformComponent& operator=(TransformComponent&& other) noexcept = delete;
 
+		void SetDirty() { m_IsDirty = true; }
 
-		void Render() const override;
-		void Update(float elasped) override;
+		void Render() override;
+		void Update() override;
 
 		void SetPosition(float x, float y, float z);
 		void SetPosition(const glm::vec3& position);
+		void SetPosition(const glm::vec2& position);
+
 		glm::vec3& GetLocalPosition();
 		glm::vec3& GetWorldPosition();
 

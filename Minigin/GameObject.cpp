@@ -6,11 +6,15 @@
 #include "TransformComponent.h"
 class TransformComponent;
 
+unsigned int dae::GameObject::m_NextID = 0;
+
+
 dae::GameObject::GameObject()
 	: m_pComponents()
 	, m_pTransformComponent(nullptr)
 	, m_LocalPosition{}
 {
+	m_ID = m_NextID++;  // Assign the current next ID and increment it for the next object
 }
 
 dae::GameObject::~GameObject() = default;
@@ -18,29 +22,38 @@ dae::GameObject::~GameObject() = default;
 //	//delete m_pTransformComponent;
 //}
 
-void dae::GameObject::Update(float elaspsed)
+void dae::GameObject::Update()
 {
-	for (auto& comp : m_pComponents)
+	if (m_IsActive == false)
 	{
-		comp->Update(elaspsed);
+		return;
 	}
-	for (auto& child : m_Children)
+	for (auto& component : m_pComponents)
 	{
-		child->	Update(elaspsed);
+		if (component->IsActive()) {
+			component->Update();
+		}
 	}
+
+	//for (auto& child : m_Children)
+	//{
+	//	child->Update(); 
+	//}
 }
 
 void dae::GameObject::Render() const
 {
-	for (auto& comp : m_pComponents)
+	for (const auto& component : m_pComponents)
 	{
-		comp->Render();
+		if (component->IsActive()) {
+			component->Render();
+		}
 	}
 
-	for (auto& child : m_Children)
-	{
-		child->Render();
-	}
+	//for (auto& child : m_Children)
+	//{
+	//	child->Render();
+	//}
 }
 
 void dae::GameObject::SetLocalPosition(float x, float y)
@@ -49,6 +62,11 @@ void dae::GameObject::SetLocalPosition(float x, float y)
 }
 
 void dae::GameObject::SetLocalPosition(const glm::vec3& pos)
+{
+	m_pTransformComponent->SetPosition(pos);
+}
+
+void dae::GameObject::SetLocalPosition(const glm::vec2& pos)
 {
 	m_pTransformComponent->SetPosition(pos);
 }
@@ -66,7 +84,7 @@ glm::vec3& dae::GameObject::GetLocalPosition()
 //
 void dae::GameObject::InitializeTransformComponent()
 {
-	std::unique_ptr<TransformComponent> pComp = std::make_unique<TransformComponent>(shared_from_this());
+	std::unique_ptr<TransformComponent> pComp = std::make_unique<TransformComponent>(*this);
 	m_pTransformComponent = pComp.get();
 	AddComponent(std::move(pComp));
 }
@@ -85,16 +103,17 @@ void dae::GameObject::RemoveComponent(BaseComponent* pComponent/*, bool deleteOb
 	}
 }
 
-void dae::GameObject::SetParent(const std::shared_ptr<GameObject>& newParent, bool keepWorldPosition)
+void dae::GameObject::SetParent(GameObject* newParent, bool keepWorldPosition)
 {
 	// 1. Check if the new parent is valid
-	if (newParent.get() == this || IsDescendantOf(newParent))
+	if (newParent == this || IsDescendantOf(*newParent))
 	{
 		// Invalid parent, possibly throw an exception or log an error
 		return;
 	}
-	if (newParent.get() == nullptr)
+	if (newParent == nullptr)
 	{
+		//oldParent->m_Children.erase(std::remove(oldParent->m_Children.begin(), oldParent->m_Children.end(), shared_from_this()), oldParent->m_Children.end());
 		glm::vec3 worldPos = GetWorldPosition();
 		SetLocalPosition(worldPos);
 	}
@@ -102,14 +121,15 @@ void dae::GameObject::SetParent(const std::shared_ptr<GameObject>& newParent, bo
 	{
 		if (keepWorldPosition)
 		{
-			m_pTransformComponent->SetPosition(GetLocalPosition() - newParent->GetWorldPosition());
+			//m_pTransformComponent->SetPosition(GetLocalPosition() - newParent->GetWorldPosition());
+			SetLocalPosition(GetLocalPosition() - newParent->GetWorldPosition());
 		}
 	}
 
 	// 2. Remove itself from the previous parent (if any)
-	if (auto oldParent = m_parent.lock())
+	if (auto oldParent = m_parent/*.lock()*/)
 	{
-		oldParent->m_Children.erase(std::remove(oldParent->m_Children.begin(), oldParent->m_Children.end(), shared_from_this()), oldParent->m_Children.end());
+		oldParent->m_Children.erase(std::remove(oldParent->m_Children.begin(), oldParent->m_Children.end(), /*shared_from_this()*/ this), oldParent->m_Children.end());
 	}
 
 	// 3. Set the given parent on itself
@@ -118,22 +138,36 @@ void dae::GameObject::SetParent(const std::shared_ptr<GameObject>& newParent, bo
 	// 4. Add itself as a child to the given parent
 	if (newParent)
 	{
-		newParent->m_Children.push_back(shared_from_this());
+		newParent->m_Children.push_back(/*shared_from_this()*/ this);
 	}
 }
 
-bool dae::GameObject::IsDescendantOf(const std::shared_ptr<GameObject>& potentialAncestor) const
+bool dae::GameObject::IsDescendantOf(const GameObject& potentialAncestor) const //automatically check for nullptr
 {
 	// Recursive function to check if 'this' is a descendant of 'potentialAncestor'
-	auto parent = m_parent.lock();
+	auto parent = m_parent;
 	while (parent)
 	{
-		if (parent == potentialAncestor)
+		if (parent == &potentialAncestor)
 		{
 			return true;
 		}
-		parent = parent->m_parent.lock();
+		parent = parent->m_parent;
 	}
 	return false;
+}
+
+void dae::GameObject::SetActive(bool active)
+{	
+	m_IsActive = active;
+	for (auto& child : m_Children)
+	{
+		child->SetActive(active);
+	}
+}
+
+bool dae::GameObject::IsActive() const
+{
+	return m_IsActive;
 }
 

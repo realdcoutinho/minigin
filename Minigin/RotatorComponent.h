@@ -9,10 +9,10 @@ namespace dae {
     class RotatorComponent : public BaseComponent 
     {
     public:
-        RotatorComponent(std::shared_ptr<GameObject> pOwner, float radius, float speed);
-        RotatorComponent(GameObject* pOwner, float radius, float speed);
-        void Update(float elapsed) override;
-        virtual void Render() const override;
+        //RotatorComponent(std::unique_ptr<GameObject> pOwner, float radius, float speed);
+        RotatorComponent(GameObject& pOwner, float radius, float speed);
+        void Update() override;
+        virtual void Render() override;
 
     private:
         TransformComponent* m_pTransform{};

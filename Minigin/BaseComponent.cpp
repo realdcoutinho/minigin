@@ -6,21 +6,24 @@ namespace dae
 {
 	unsigned int BaseComponent::m_idCounter = 0;
 
-	BaseComponent::BaseComponent(std::shared_ptr<GameObject> pOwner) 
-		: m_IsInitialized(false), m_ComponentId(0)
+	unsigned int BaseComponent::GetOwnerID() const
+	{
+		return GetOwner()->GetID();
+	}
+
+	BaseComponent::BaseComponent(std::unique_ptr<GameObject> pOwner)
+		: m_ComponentId(0)
 	{
 		SetOwner(pOwner.get());
 		++m_idCounter;
 		m_ComponentId = m_idCounter;
-		m_IsInitialized = true;
 	}
-	BaseComponent::BaseComponent(GameObject* pOwner) 
-		: m_IsInitialized(false), m_ComponentId(0)
+	BaseComponent::BaseComponent(GameObject& pOwner) 
+		: m_ComponentId(0)
 	{
-		SetOwner(pOwner);
+		SetOwner(&pOwner);
 		++m_idCounter;
 		m_ComponentId = m_idCounter;
-		m_IsInitialized = true;
 	}
 
 	void BaseComponent::SetOwner(GameObject* pOwner)

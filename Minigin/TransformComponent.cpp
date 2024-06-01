@@ -4,13 +4,22 @@
 #include <iostream>
 
 
-dae::TransformComponent::TransformComponent(std::shared_ptr<GameObject>  pOwner) 
+//dae::TransformComponent::TransformComponent(std::unique_ptr<GameObject>  pOwner) 
+//	: BaseComponent(pOwner.get()),
+//	m_LocalPosition( 0, 0, 0 ),
+//	m_WorldPosition{ 0, 0, 0 }
+//{
+//	std::cout << "transformComponent created\n";
+//}
+
+dae::TransformComponent::TransformComponent(GameObject& pOwner)
 	: BaseComponent(pOwner),
-	m_LocalPosition( 0, 0, 0 ),
+	m_LocalPosition(0, 0, 0),
 	m_WorldPosition{ 0, 0, 0 }
 {
-	std::cout << "transformComponent created\n";
+	//std::cout << "transformComponent created\n";
 }
+
 
 void dae::TransformComponent::SetPosition(float x, float y, float z)
 {
@@ -25,19 +34,27 @@ void dae::TransformComponent::SetPosition(const glm::vec3& position)
 	m_IsDirty = true;
 }
 
- glm::vec3& dae::TransformComponent::GetWorldPosition()
+void dae::TransformComponent::SetPosition(const glm::vec2& position)
 {
-	 if (m_IsDirty)
+	m_LocalPosition = { position.x, position.y, 0 };
+	m_IsDirty = true;
+}
+
+glm::vec3& dae::TransformComponent::GetWorldPosition()
+{
+	if (m_IsDirty)
 	 {
-		 UpdateWorldPosition();
+
+		UpdateWorldPosition();
+
 	 }
 	 return m_WorldPosition;	
 }
 
  void dae::TransformComponent::UpdateWorldPosition()
  {
-	 if (m_IsDirty)
-	 {
+	 //if (m_IsDirty)
+	 //{
 		 auto test = GetOwner();
 		 if (test->GetParent() != nullptr)
 		 {
@@ -51,7 +68,7 @@ void dae::TransformComponent::SetPosition(const glm::vec3& position)
 			 m_IsDirty = false;
 			 m_WorldPosition = m_LocalPosition;
 		 }
-	 }
+	 //}
  }
 
  glm::vec3& dae::TransformComponent::GetLocalPosition()
@@ -59,12 +76,12 @@ void dae::TransformComponent::SetPosition(const glm::vec3& position)
 	 return m_LocalPosition;
  }
 
-void dae::TransformComponent::Render() const
+void dae::TransformComponent::Render()
 {
 
 }
 
-void dae::TransformComponent::Update(float elasped)
+void dae::TransformComponent::Update()
 {
-	elasped;
+
 }

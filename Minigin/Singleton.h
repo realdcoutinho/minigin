@@ -8,6 +8,9 @@ namespace dae
 		static T& GetInstance()
 		{
 			static T instance{};
+			//static std::unique_ptr<T> instance{};
+
+
 			return instance;
 		}
 

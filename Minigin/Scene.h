@@ -1,31 +1,45 @@
 #pragma once
 #include "SceneManager.h"
+#include "GameObject.h"
+#include <memory>
+#include "Timer.h"
+//#include "Input.h"
 
 namespace dae
 {
-	class GameObject;
+	//class GameObject;
+	class Timer;
+	class Input;
+	class PlayerDeathObserver;
 	class Scene final
 	{
-		friend Scene& SceneManager::CreateScene(const std::string& name);
+		friend Scene&  SceneManager::CreateScene(const std::string& name);
 	public:
-		void Add(std::shared_ptr<GameObject> object);
-		void Remove(std::shared_ptr<GameObject> object);
+		void Add(std::unique_ptr<GameObject> object);
+		void Remove(GameObject* object);
 		void RemoveAll();
 
-		void Update(float elapsed);
+		void Update();
+		void FixedUpdate();
 		void Render() const;
 
+		const std::string& GetSceneName() const { return m_name; }
+		Timer& GetTimer() const; 
+		Input& GetSceneInput() const; 
+
 		~Scene();
-		Scene(const Scene& other) = delete;
-		Scene(Scene&& other) = delete;
-		Scene& operator=(const Scene& other) = delete;
-		Scene& operator=(Scene&& other) = delete;
+		Scene(const std::string& name);
 
 	private: 
-		explicit Scene(const std::string& name);
 
 		std::string m_name;
-		std::vector < std::shared_ptr<GameObject>> m_objects{};
+		Timer& m_pTimer;
+		Input& m_pInput;
+
+		std::vector<std::unique_ptr<GameObject>> m_objects{};
+
+		void RemoveInactiveObjects();
+
 
 		static unsigned int m_idCounter; 
 	};
