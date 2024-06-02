@@ -99,6 +99,25 @@ namespace dae
 		}
 
 		template <class T>
+		std::unique_ptr<T> ObtainComponent(/*bool searchChildren = false*/) {
+			auto it = std::find_if(m_pComponents.begin(), m_pComponents.end(), [](const std::unique_ptr<dae::BaseComponent>& component) {
+				return component && typeid(*component) == typeid(T);
+				});
+
+			if (it != m_pComponents.end()) {
+				T* rawPtr = dynamic_cast<T*>(it->get());
+				if (rawPtr) {
+					// Transfer ownership from m_pComponents to the caller
+					std::unique_ptr<T> uniquePtr(static_cast<T*>(it->release()));
+					m_pComponents.erase(it); // remove the now-empty unique_ptr from m_pComponents
+					return uniquePtr;
+				}
+			}
+
+			return nullptr;
+		}
+
+		template <class T>
 		bool HasComponent(/*bool searchChildren = false*/)
 		{
 			return GetComponent<std::unique_ptr<T>>(/*searchChildren*/) != nullptr;

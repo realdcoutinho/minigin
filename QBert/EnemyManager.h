@@ -26,6 +26,8 @@ namespace dae
 		void DestroyAllEnemies();
 		void DestroyEnemy(GameObject* pEnemy);
 
+		void Reset();
+
 	private:
 
 		void UpdateCoilySpawnTimers(float elapsedSec);

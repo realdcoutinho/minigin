@@ -15,10 +15,10 @@ namespace dae
 		TextureComponent(GameObject& pOwner);
 		~TextureComponent();
 
-		TextureComponent(const TextureComponent&) = delete;
-		TextureComponent(TextureComponent&&) = delete;
-		TextureComponent& operator= (const TextureComponent&) = delete;
-		TextureComponent& operator= (const TextureComponent&&) = delete;
+		//TextureComponent(const TextureComponent&) = delete;
+		//TextureComponent(TextureComponent&&) = delete;
+		//TextureComponent& operator= (const TextureComponent&) = delete;
+		//TextureComponent& operator= (const TextureComponent&&) = delete;
 
 		void Render() override;
 		void Update() override;

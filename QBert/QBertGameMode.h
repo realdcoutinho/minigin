@@ -29,6 +29,7 @@ namespace dae
 
 
 		void StartScene(const std::string sceneName);
+		void LoadNextScene();
 		void SetQBertNode(GridNode& node);
 
 

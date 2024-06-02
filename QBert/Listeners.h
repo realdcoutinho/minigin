@@ -53,9 +53,9 @@ namespace dae
         std::vector<std::type_index> GetSupportedEvents() override;
 
     private:
-        void OnNodeEventPlayer(NodeInteractorEvent& event);
-        void OnNodeEventEnemy(NodeInteractorEvent& event);
-        void OnNodeEventCoily(NodeInteractorEvent& event);
+        //void OnNodeEventPlayer(NodeInteractorEvent& event);
+        //void OnNodeEventEnemy(NodeInteractorEvent& event);
+        //void OnNodeEventCoily(NodeInteractorEvent& event);
 
         void OnDeathEventQBert(CharacterDeathEvent& event);
         void OnDeathEventCoily(CharacterDeathEvent& event);

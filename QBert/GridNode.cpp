@@ -13,6 +13,7 @@
 #include "TricklePathComponent.h"
 #include "PathFinderComponent.h"
 #include "TimeManager.h"
+#include "QBertEvents.h"
 
 
 
@@ -24,6 +25,14 @@ namespace dae
         m_Level(gameInfo.level)
     {
         m_NodeStates = std::make_unique<NodeStateOne>();
+
+        if(m_NodeInfo.type == TileType::Pit)
+			m_NodeStates = std::make_unique<NodeStatePit>();
+        else if (m_NodeInfo.type == TileType::Disc)
+			m_NodeStates = std::make_unique<NodeStateDisc>();
+
+	
+      
         auto sprite = std::make_unique<TextureComponent>(pOwner);
 
         if (m_NodeInfo.type == TileType::Pit)
@@ -32,16 +41,20 @@ namespace dae
 		}
         else if (m_NodeInfo.type == TileType::Disc)
         {
-			//sprite = std::make_unique<TextureComponent>(*GetOwner(), "Disc.png", 1);
+			sprite = std::make_unique<TextureComponent>(*GetOwner(), "Disk Spritesheet.png", 1);
+            sprite.get()->SetTextureSegments({ 30.f, 1.f });
+            sprite.get()->SetTexturePositionIndex({ 0.f, 0.f });
+            sprite.get()->SetScale({ 2.0f, 2.0f });
+            sprite.get()->nodesTest = true;
 		}
 		else
+        {
             sprite = std::make_unique<TextureComponent>(*GetOwner(), "Qbert Cubes.png", 2);
-
-       
-        sprite.get()->SetTextureSegments({6.f, 3.f});
-        sprite.get()->SetTexturePositionIndex({ static_cast<float>(gameInfo.startColor), 0.f});
-        sprite.get()->SetScale({ 2.0f, 2.0f });
-        sprite.get()->nodesTest = true;
+            sprite.get()->SetTextureSegments({ 6.f, 3.f });
+            sprite.get()->SetTexturePositionIndex({ static_cast<float>(gameInfo.startColor), 0.f });
+            sprite.get()->SetScale({ 2.0f, 2.0f });
+            sprite.get()->nodesTest = true;
+        }
         m_NodeInfo.textureComp = sprite.get();
         GetOwner()->AddComponent(std::move(sprite));
     }
@@ -51,13 +64,11 @@ namespace dae
         m_NodeStates->Update();
     }
 
-    int GridNode::EnterNode(GameObject* character)
+    int GridNode::EnterNode(NodeInteractorEvent* nodeEvent)
     {
-        if(m_NodeInfo.type == TileType::Pit)
-            return 0;
-
-        CheckInCharacter(character);
-        return HandleInput(character);
+        nodeEvent->GetOldNode().ExitNode(&nodeEvent->GetSender());
+        CheckInCharacter(&nodeEvent->GetSender());
+        return HandleInput(&nodeEvent->GetSender(), &nodeEvent->GetOldNode());
     }
 
     void GridNode::ExitNode(GameObject* character)
@@ -253,9 +264,9 @@ namespace dae
         }
     }
 
-    int GridNode::HandleInput(GameObject* character)
+    int GridNode::HandleInput(GameObject* character, GridNode* previousNode)
     {
-        auto state = m_NodeStates->HandleInput(this, character);
+        auto state = m_NodeStates->HandleInput(this, character, previousNode);
         if (state)
         {
 			//state->Exit();

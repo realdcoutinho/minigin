@@ -59,6 +59,9 @@ namespace dae
 		int m_CurrentCompletedNodes{ 0 };
 		int m_NrOfNodes{ 28 };
 		std::vector<GridNode*> m_GridNodes;
+
+		bool m_CanSwitch{ false };
+		float m_SwitchTimer{ 0.0f };
 	};
 
 

@@ -11,6 +11,10 @@
 #include "RespawnComponent.h"
 #include <memory>
 #include "TimeManager.h"
+#include "CoilyComponent.h"
+#include "QBertComponent.h"
+#include "GameModeManager.h"
+#include "QbertGameMode.h"
 
 namespace dae
 {
@@ -23,15 +27,31 @@ namespace dae
     //{
     //}
 
-    NodeStates::NodeStates(GridNode* node, GameObject* character)
-        : m_Node(node), m_Character(character)
+    NodeStates::NodeStates(GridNode* node, GameObject* character, GridNode* previousNode)
+        : m_Node(node), m_Character(character), m_PreviousNode(previousNode)
     {
     }
 
 
     void NodeStates::Enter()
     {
-       
+        auto comp = m_Character->GetComponent<CoilyComponent>();
+        if (comp != nullptr)
+        {
+            comp->HandleInput(*m_Node);
+        }
+        auto bert = m_Character->GetComponent<QBertComponent>();
+        if (bert != nullptr)
+        {
+            auto gameMode = GameModeManager::GetInstance().GetActiveGameMode();
+            auto qbertGameMode = dynamic_cast<QBertGameMode*>(gameMode);
+            if (qbertGameMode != nullptr)
+            {
+                //qbertGameMode->SetQBertNode(newNode);
+                qbertGameMode->QBertMovement();
+            }
+		}
+
 
     }
 
@@ -63,19 +83,24 @@ namespace dae
     //    return nullptr;
     //}
 
-    std::unique_ptr<NodeStates> NodeStateOne::HandleInput(GridNode* node, GameObject* character)
+    std::unique_ptr<NodeStates> NodeStateOne::HandleInput(GridNode* node, GameObject* character, GridNode* previousNode)
     {
         auto charType = character->GetComponent<CharacterComponent>()->GetType();
         if (charType == CharacterType::QBert)
         {
+            auto scoreEvent = std::make_unique<ScoreEvent>(25, character->GetID());
+            EventDispatcher::GetInstance().DispatchEvent(std::move(scoreEvent));
+
             if (node->m_Level == 1)
             {
                 auto nodeUpgrade = std::make_unique<UpgradeNodeEvent>(node->GetOwner()->GetParent()->GetID(), true);
                 EventDispatcher::GetInstance().DispatchEvent(std::move(nodeUpgrade));
+
                 return std::make_unique<NodeStateTwo>(node, character);
             }
             else if (node->m_Level == 2)
             {
+
                 return std::make_unique<NodeStateTwo>(node, character);
             }
             else if (node->m_Level == 3)
@@ -85,6 +110,7 @@ namespace dae
                 return std::make_unique<NodeStateTwo>(node, character);
             }
 		}
+        previousNode;
         return std::make_unique<NodeStateOne>(node, character);
 
     }
@@ -128,7 +154,7 @@ namespace dae
     //    return nullptr;
     //}
 
-    std::unique_ptr<NodeStates> NodeStateTwo::HandleInput(GridNode* node, GameObject* character)
+    std::unique_ptr<NodeStates> NodeStateTwo::HandleInput(GridNode* node, GameObject* character, GridNode* previousNode)
     {
         auto charType = character->GetComponent<CharacterComponent>()->GetType();
         if (charType == CharacterType::QBert)
@@ -137,6 +163,10 @@ namespace dae
             {
                 auto nodeUpgrade = std::make_unique<UpgradeNodeEvent>(node->GetOwner()->GetParent()->GetID(), true);
                 EventDispatcher::GetInstance().DispatchEvent(std::move(nodeUpgrade));
+
+                auto scoreEvent = std::make_unique<ScoreEvent>(25, character->GetID());
+                EventDispatcher::GetInstance().DispatchEvent(std::move(scoreEvent));
+
                 return std::make_unique<NodeStateThree>(node, character);
             }
             if (node->m_Level == 3)
@@ -155,7 +185,7 @@ namespace dae
             }
             return std::make_unique<NodeStateOne>(node, character);
 		}
-        
+        previousNode;
         return std::make_unique<NodeStateTwo>(node, character);
     }
 
@@ -189,7 +219,7 @@ namespace dae
     //    return nullptr;
     //}
 
-    std::unique_ptr<NodeStates> NodeStateThree::HandleInput(GridNode* node, GameObject* character)
+    std::unique_ptr<NodeStates> NodeStateThree::HandleInput(GridNode* node, GameObject* character, GridNode* previousNode)
     {
         auto charType = character->GetComponent<CharacterComponent>()->GetType();
         if (charType == CharacterType::Slick || charType == CharacterType::Sam)
@@ -198,6 +228,7 @@ namespace dae
             EventDispatcher::GetInstance().DispatchEvent(std::move(nodeUpgrade));
             return std::make_unique<NodeStateTwo>(node, character);
         }
+        previousNode;
         return std::make_unique<NodeStateThree>(node, character);
     }
 
@@ -225,11 +256,9 @@ namespace dae
     //{
     //    return std::unique_ptr<NodeStates>();
     //}
-    std::unique_ptr<NodeStates> NodeStateFlickering::HandleInput(GridNode* node, GameObject* character)
+    std::unique_ptr<NodeStates> NodeStateFlickering::HandleInput(GridNode* node, GameObject* character, GridNode* previousNode)
     {
-        node;
-        character;
-        return std::unique_ptr<NodeStates>();
+        return std::make_unique<NodeStateFlickering>(node, character, previousNode);
     }
 
     void NodeStateFlickering::Enter()
@@ -238,7 +267,8 @@ namespace dae
 
     void NodeStateFlickering::Update()
     {
-
+        if(m_Node->GetNodeInfo().type != TileType::Pit)
+        {
             if (m_FlickerCount >= 0)
             {
                 m_CurrentTime += TimeManager::GetInstance().GetElapsed();
@@ -260,8 +290,58 @@ namespace dae
                         m_Node->GetNodeInfo().textureComp->SetTexturePositionIndex({ m_Node->GetNodeInfo().startColor,  m_Node->m_Level - 2 });
                 }
             }
+        }
     }
     void NodeStateFlickering::Exit()
     {
+    }
+
+
+    std::unique_ptr<NodeStates> NodeStatePit::HandleInput(GridNode* node, GameObject* character, GridNode* previousNode)
+    {
+        return std::make_unique<NodeStatePit>(node, character, previousNode);
+    }
+
+    void NodeStatePit::Enter()
+    {
+        auto death = std::make_unique<CharacterDeathEvent>(m_Node->GetOwner()->GetParent()->GetID(), *m_PreviousNode, *m_Character);
+        EventDispatcher::GetInstance().DispatchEvent(std::move(death));
+    }
+
+    void NodeStatePit::Update()
+    {
+    }
+
+    void NodeStatePit::Exit()
+    {
+    }
+    std::unique_ptr<NodeStates> NodeStateDisc::HandleInput(GridNode* node, GameObject* character, GridNode* previousNode)
+    {
+        auto charType = character->GetComponent<CharacterComponent>()->GetType();
+        if (charType == CharacterType::QBert)
+        {
+            node;
+            character;
+            previousNode;
+            std::unique_ptr<TextureComponent> text;
+            text = std::move(node->GetOwner()->ObtainComponent<TextureComponent>());
+            node->GetNodeInfo().textureComp = nullptr;
+            character->AddComponent(std::move(text));
+            //return std::make_unique<NodeStatePit>(node, character, previousNode);
+        }
+        return std::unique_ptr<NodeStateDisc>();
+    }
+    void NodeStateDisc::Enter()
+    {
+
+    }
+
+    void NodeStateDisc::Update()
+    {
+    }
+
+    void NodeStateDisc::Exit()
+    {
+
     }
 }

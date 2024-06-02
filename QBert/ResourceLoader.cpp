@@ -51,7 +51,7 @@ namespace dae
 		rm.GetTexture("Coily Spritesheet.png");
 		rm.GetTexture("Qbert P1 Spritesheet.png");
 		rm.GetTexture("Qbert P2 Spritesheet.png");
-		//rm.GetTexture("Qbert P2 Spritesheet.png");
+		rm.GetTexture("Disk Spritesheet.png");
 		rm.GetTexture("SamSprite.png");
 		rm.GetTexture("SlickSprite.png");
 		rm.GetTexture("Egg.png");

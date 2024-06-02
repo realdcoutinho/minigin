@@ -152,12 +152,13 @@ namespace dae
 
 	void GridNavigator::CheckForPit(NodeInfo& nodeInfo)
 	{
-		if (nodeInfo.type == TileType::Pit)
-		{
-			//std::cout << "Char died to pit" << std::endl;
-			m_IsAlive = false;
-			auto death = std::make_unique<CharacterDeathEvent>(m_pGrid->GetOwnerID(), *m_PreviousNode, *GetOwner());
-			EventDispatcher::GetInstance().DispatchEvent(std::move(death));
-		}
+		nodeInfo;
+		//if (nodeInfo.type == TileType::Pit)
+		//{
+		//	//std::cout << "Char died to pit" << std::endl;
+		//	m_IsAlive = false;
+		//	auto death = std::make_unique<CharacterDeathEvent>(m_pGrid->GetOwnerID(), *m_PreviousNode, *GetOwner());
+		//	EventDispatcher::GetInstance().DispatchEvent(std::move(death));
+		//}
 	}
 }

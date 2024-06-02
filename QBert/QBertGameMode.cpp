@@ -56,6 +56,25 @@ namespace dae
 		m_pPlayers.push_back(&playerTwo);
 	}
 
+	void QBertGameMode::LoadNextScene()
+	{
+		m_pEnemyManager->Reset();
+		m_pPlayers.clear();
+		m_pEnemyListener.reset();
+		m_pCurrentScene = nullptr;
+		m_pGrid = nullptr;
+
+
+		if (m_CurrentSceneName == "LevelOneCoop")
+		{
+			StartScene("LevelTwoCoop");
+		}
+		else if (m_CurrentSceneName == "LevelTwoCoop")
+		{
+			StartScene("LevelThreeCoop");
+		}
+	}
+
 	void QBertGameMode::QBertMovement()
 	{
 		m_pEnemyManager->HuntQbert(m_pPlayers);

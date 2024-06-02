@@ -10,7 +10,9 @@
 #include "GridNode.h"
 #include "GameObjectFactory.h"
 #include "GameInfo.h"
-
+#include "GameModeManager.h"
+#include "QBertGameMode.h"
+#include "TimeManager.h"
 
 
 namespace dae
@@ -71,6 +73,15 @@ namespace dae
                     nodeInfo.lastRow = true;
                 }
 
+                if (index == 15)
+                {
+                    nodeInfo.leftDown = 0;
+                    nodeInfo.leftUp = 0;
+                    nodeInfo.rightDown = 0;
+                    nodeInfo.rightUp = 0;
+                    nodeInfo.type = TileType::Disc;
+                }
+
                 std::unique_ptr<GridNode> node = std::make_unique<GridNode>(*curTile.get(), nodeInfo, gi);
                 m_GridNodes.push_back(node.get());
                 curTile->AddComponent(std::move(node));
@@ -90,7 +101,20 @@ namespace dae
 
     void TriangularGrid::Update()
     {
-
+        if (m_CanSwitch)
+        {
+            m_SwitchTimer += TimeManager::GetInstance().GetElapsed();
+            if (m_SwitchTimer > 4.0f)
+            {
+                auto gameMode = GameModeManager::GetInstance().GetActiveGameMode();
+                auto qbertGameMode = dynamic_cast<QBertGameMode*>(gameMode);
+                if (qbertGameMode != nullptr)
+                {
+                    qbertGameMode->LoadNextScene();
+                    m_CanSwitch = false;
+                }
+			}
+        }
     }
 
     void TriangularGrid::NodeUpgraded(bool isUpgarded)
@@ -114,6 +138,7 @@ namespace dae
 			//node->SetNodeState(NodeState::Completed);
             node->SetFlickeringState();
 		}
+		m_CanSwitch = true;
     }
 
 

@@ -108,28 +108,42 @@ namespace dae
             {
                 if (nodeInteractorEvent->GetId() == listenerId)
                 {
-                    GameObject& sender = nodeInteractorEvent->GetSender();
-                    auto charComp = sender.GetComponent<CharacterComponent>();
-                    if (charComp)
-                    {
-                        auto charType = charComp->GetType();
-                        switch (charType)
-                        {
-                        case CharacterType::QBert:
-                            OnNodeEventPlayer(*nodeInteractorEvent);
-                            break;
-                        case CharacterType::Slick:
-                        case CharacterType::Sam:
-                            OnNodeEventEnemy(*nodeInteractorEvent);
-                            break;
-                        case CharacterType::Coily:
-                            OnNodeEventCoily(*nodeInteractorEvent);
-                            break;
-                        default:
-                            // Handle unexpected character types if necessary
-                            break;
-                        }
-                    }
+                    nodeInteractorEvent->GetNewNode().EnterNode(nodeInteractorEvent);
+
+                    //auto& newNode = nodeInteractorEvent->GetNewNode();
+                    //nodeInteractorEvent->GetOldNode().ExitNode(&nodeInteractorEvent->GetSender());
+                    //newNode.EnterNode(&nodeInteractorEvent->GetSender(), &nodeInteractorEvent->GetOldNode());
+
+                    //GameObject& sender = nodeInteractorEvent->GetSender();
+                    //auto charComp = sender.GetComponent<CharacterComponent>();
+                    //if (charComp)
+                    //{
+                    //    auto charType = charComp->GetType();
+                    //    switch (charType)
+                    //    {
+                    //    case CharacterType::QBert:
+                    //        //OnNodeEventPlayer(*nodeInteractorEvent);
+                    //        auto gameMode = GameModeManager::GetInstance().GetActiveGameMode();
+                    //        auto qbertGameMode = dynamic_cast<QBertGameMode*>(gameMode);
+                    //        if (qbertGameMode != nullptr)
+                    //        {
+                    //            //qbertGameMode->SetQBertNode(newNode);
+                    //            qbertGameMode->QBertMovement();
+                    //        }
+
+                    //        break;
+                    //    case CharacterType::Slick:
+                    //    case CharacterType::Sam:
+                    //        //OnNodeEventEnemy(*nodeInteractorEvent);
+                    //        break;
+                    //    case CharacterType::Coily:
+                    //        //OnNodeEventCoily(*nodeInteractorEvent);
+                    //        break;
+                    //    default:
+                    //        // Handle unexpected character types if necessary
+                    //        break;
+                    //    }
+                    //}
                 }
             }
             else if (auto upgradeNodeEvent = dynamic_cast<UpgradeNodeEvent*>(&event))
@@ -165,50 +179,43 @@ namespace dae
     }
 
 
-    //NODE LISTENER
-    void NodeListener::OnNodeEventPlayer(NodeInteractorEvent& event)
-    {
-        auto& newNode = event.GetNewNode();
+    ////NODE LISTENER
+    //void NodeListener::OnNodeEventPlayer(NodeInteractorEvent& event)
+    //{
+    //    auto& newNode = event.GetNewNode();
+    //    event.GetOldNode().ExitNode(&event.GetSender());
+    //    newNode.EnterNode(&event.GetSender(), &event.GetOldNode());
+    //    //if(newNode.GetNodeInfo().type != TileType::Pit)
+    //    //{
+    //    //    //auto scoreEvent = std::make_unique<ScoreEvent>(points, event.GetSender().GetID());
+    //    //    //EventDispatcher::GetInstance().DispatchEvent(std::move(scoreEvent));
 
-        event.GetOldNode().ExitNode(&event.GetSender());
-        int points = newNode.EnterNode(&event.GetSender());
-        if(newNode.GetNodeInfo().type != TileType::Pit)
-        {
-            //auto scoreEvent = std::make_unique<ScoreEvent>(points, event.GetSender().GetID());
-            //EventDispatcher::GetInstance().DispatchEvent(std::move(scoreEvent));
-
-            points;
-        }
+    //    //    points;
+    //    //}
 
 
-        //change this later to an event / listener system
-        auto gameMode = GameModeManager::GetInstance().GetActiveGameMode();
-        auto qbertGameMode = dynamic_cast<QBertGameMode*>(gameMode);
-        if (qbertGameMode != nullptr)
-        {
-            //qbertGameMode->SetQBertNode(newNode);
-            qbertGameMode->QBertMovement();
-		}
-    }
+    //    //change this later to an event / listener system
 
-    void NodeListener::OnNodeEventEnemy(NodeInteractorEvent& event)
-    {
-        event.GetOldNode().ExitNode(&event.GetSender());
-        auto& newNode = event.GetNewNode();
-        newNode.EnterNode(&event.GetSender());
-    }
+    //}
 
-    void NodeListener::OnNodeEventCoily(NodeInteractorEvent& event)
-    {
-        auto& newNode = event.GetNewNode();
-        event.GetOldNode().ExitNode(&event.GetSender());
-        newNode.EnterNode(&event.GetSender());
-        auto comp = event.GetSender().GetComponent<CoilyComponent>();
-        if (comp != nullptr)
-        {
-            comp->HandleInput(event.GetNewNode());
-        }
-    }
+    //void NodeListener::OnNodeEventEnemy(NodeInteractorEvent& event)
+    //{
+    //    event.GetOldNode().ExitNode(&event.GetSender());
+    //    auto& newNode = event.GetNewNode();
+    //    newNode.EnterNode(&event.GetSender());
+    //}
+
+    //void NodeListener::OnNodeEventCoily(NodeInteractorEvent& event)
+    //{
+    //    auto& newNode = event.GetNewNode();
+    //    event.GetOldNode().ExitNode(&event.GetSender());
+    //    newNode.EnterNode(&event.GetSender());
+    //    //auto comp = event.GetSender().GetComponent<CoilyComponent>();
+    //    //if (comp != nullptr)
+    //    //{
+    //    //    comp->HandleInput(event.GetNewNode());
+    //    //}
+    //}
 
     void NodeListener::OnDeathEventQBert(CharacterDeathEvent& event)
     {

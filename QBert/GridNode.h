@@ -12,7 +12,8 @@ namespace dae
 		TileTwo,
 		TileThree,
 		Disc,
-		Pit
+		Pit,
+		Zero
 	};
 
 	class TextureComponent;
@@ -36,6 +37,7 @@ namespace dae
 	class CharacterComponent;
 	class NodeStates;
 	struct GameInfo;
+	class NodeInteractorEvent;
 	class GridNode final : public BaseComponent
 	{
 	public:
@@ -48,7 +50,7 @@ namespace dae
 
 		NodeInfo& GetNodeInfo() { return m_NodeInfo; };
 
-		int EnterNode(GameObject* character);
+		int EnterNode(NodeInteractorEvent* nodeEvent);
 		void ExitNode(GameObject* character);
 		void UnResgister() { m_Characters.clear(); }
 		void SetFlickeringState();
@@ -60,7 +62,7 @@ namespace dae
 	private:
 		void CheckInCharacter(GameObject* character);
 		void CheckOutCharacter(GameObject* character);
-		int HandleInput(GameObject* character);
+		int HandleInput(GameObject* character, GridNode* previousNode = nullptr);
 
 		NodeInfo m_NodeInfo{};
 		std::unique_ptr<NodeStates> m_NodeStates;

@@ -47,11 +47,11 @@ namespace dae
 
 	void EnemyManager::Update()
 	{
-		//m_pCurrentScene->GetTimer();
-		//float elapsed = m_pCurrentScene->GetTimer().GetElapsed();
+		m_pCurrentScene->GetTimer();
+		float elapsed = m_pCurrentScene->GetTimer().GetElapsed();
 
-		//UpdateCoilySpawnTimers(elapsed);
-		//UpdateSlickSamSpawnTimers(elapsed);
+		UpdateCoilySpawnTimers(elapsed);
+		UpdateSlickSamSpawnTimers(elapsed);
 		//UpdateUggWrongwaySpawnTimers(elapsed);
 	}
 
@@ -125,6 +125,11 @@ namespace dae
 
 		pEnemy->GetComponent<DeathComponent>()->OnDeath();
 		pEnemy->GetComponent<GridNavigator>()->SetDead();
+	}
+
+	void EnemyManager::Reset()
+	{
+		DestroyAllEnemies();
 	}
 
 	void EnemyManager::UpdateCoilySpawnTimers(float elapsedSec)
