@@ -17,7 +17,7 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "TransformComponent.h"
-
+#include "TriangularGrid.h"
 
 namespace dae
 {
@@ -109,15 +109,15 @@ namespace dae
 
 
 
-    void GridNode::CheckInCharacter(GameObject* character)
+    void GridNode::CheckInCharacter(GameObject* character, bool neighbour)
     {
-        if (m_Characters.size() == 0)
-        {
-            m_Characters.push_back(character);
-            return;
-        }
-        else
-        {
+        //if (m_Characters.size() == 0)
+        //{
+        //    m_Characters.push_back(character);
+        //    return;
+        //}
+        //else
+        //{
             auto charType = character->GetComponent<CharacterComponent>()->GetType();
             bool isPlayerDead = false;
             bool isSamDead = false;
@@ -178,8 +178,6 @@ namespace dae
 
             case CharacterType::Coily:
             case CharacterType::Egg:
-            case CharacterType::Ugg:
-            case CharacterType::Wrongway:
                 for (auto& chara : m_Characters)
                 {
                     if (chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::QBert)
@@ -193,12 +191,49 @@ namespace dae
                 }
                 m_Characters.push_back(character);
                 break;
+            case CharacterType::Ugg:
+                if (neighbour)
+                {
+                    for (auto& chara : m_Characters)
+                    {
+                        if (chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::QBert)
+                        {
+                            auto enemyDeath = std::make_unique<EraseOneEnemyEvent>(character->GetID(), *character);
+                            EventDispatcher::GetInstance().DispatchEvent(std::move(enemyDeath));
+                            auto health = std::make_unique<PlayerHealthEvent>(chara->GetID(), m_NodeInfo.index);
+                            EventDispatcher::GetInstance().DispatchEvent(std::move(health));
+                            break;
+                        }
+                    }
+                    std::cout << "registered on node: " << m_NodeInfo.index << "\n";
+                    m_Characters.push_back(character);
+                }
+                else
+                {
+                    auto grid = GetOwner()->GetParent()->GetComponent<TriangularGrid>();
+                    if (!grid)
+                        return;
+                    int ldConnection = m_NodeInfo.leftDown;
+                    auto& node = grid->GetNode(ldConnection);
+                    node.CheckInCharacter(character, true);
+                }
+                break;
+            case CharacterType::Wrongway:
+                if(neighbour)
+					m_Characters.push_back(character);
+                else
+                {
+                    auto grid = GetOwner()->GetComponent<TriangularGrid>();
+                    int rdConnection = m_NodeInfo.leftDown;
+                    auto& node = grid->GetNode(rdConnection);
+                    node.CheckInCharacter(character, true);
+                }
 
             default:
                 // Handle unexpected character types if necessary
                 break;
             }
-        }
+        //}
 
 
 
@@ -315,11 +350,6 @@ namespace dae
 
     void GridDisc::Update()
     {
-        auto transComp = GetOwner()->GetTransformComponent();
-        if (transComp)
-        {
-            std::cout << "position: x = " << transComp->GetWorldPosition().x << " y = " << transComp->GetWorldPosition().y << std::endl;
-		}
     }
 }
 

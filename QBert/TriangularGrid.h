@@ -34,7 +34,10 @@ namespace dae
 		void Render() override;
 		void Update() override;
 	
-		GridNode& GetNode(int idx) { return *m_GridNodes[idx]; }
+		GridNode& GetNode(int idx) 
+		{ 
+			return *m_GridNodes[idx]; 
+		}
 		GridNode* GetNextNode(int idx, glm::vec2 direction);
 		GridNode* GetNextNode(GridNode* tile, glm::vec2 direction);
 		glm::vec2& GetStartingPosition(glm::vec2 dir = glm::vec2(0, -1));

@@ -46,7 +46,7 @@ dae::UggWrongwayComponent::UggWrongwayComponent(GameObject& pOwner, TriangularGr
 		SceneManager::GetInstance().GetActiveScene().Add(std::move(offsetObj));
 		pOwner.SetLocalPosition(node.GetNodeInfo().centerPos);
 	}
-	else
+	/*else
 	{
 		auto offsetObj = std::make_unique<GameObject>();
 		offsetObj->InitializeTransformComponent();
@@ -70,7 +70,7 @@ dae::UggWrongwayComponent::UggWrongwayComponent(GameObject& pOwner, TriangularGr
 		offsetObj->SetParent(&pOwner);
 		SceneManager::GetInstance().GetActiveScene().Add(std::move(offsetObj));
 		pOwner.SetLocalPosition(node.GetNodeInfo().centerPos);
-	}
+	}*/
 
 
 }

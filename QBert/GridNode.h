@@ -70,6 +70,8 @@ namespace dae
 		void UnResgister() { m_Characters.clear(); }
 		void SetFlickeringState();
 		void CheckOutCharacter(GameObject* character);
+		void CheckInCharacter(GameObject* character, bool neighbour = false);
+
 
 		int m_Level;
 		int m_Points = 25;
@@ -77,7 +79,6 @@ namespace dae
 		std::unique_ptr<NodeStates> m_NodeStates;
 		GameObject* m_Disc;
 	private:
-		void CheckInCharacter(GameObject* character);
 		
 		int HandleInput(GameObject* character, GridNode* previousNode = nullptr);
 
