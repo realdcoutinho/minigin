@@ -32,7 +32,6 @@ namespace dae
 	void DeathComponent::OnDeath()
 	{
 		m_IsDead = true;
-
 	}
 
 

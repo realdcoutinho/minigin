@@ -79,6 +79,7 @@ namespace dae
 			{
 				m_FirstMove = false;
 				facingdirection = { -1, 0 };
+				enemComp->HandleInput(facingdirection);
 				navComp->MoveToDirection(facingdirection);
 			}
 			else
@@ -107,6 +108,7 @@ namespace dae
 			{
 				m_FirstMove = false;
 				facingdirection = { -1, 0 };
+				enemComp->HandleInput(facingdirection);
 				navComp->MoveToDirection(facingdirection);
 			}
 			else

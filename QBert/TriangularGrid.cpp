@@ -174,153 +174,60 @@ namespace dae
         startNode3->AddComponent(std::move(node3));
         startNode3->SetParent(GetOwner());
         scene.Add(std::move(startNode3));
-
-
-
     }
 
     void TriangularGrid::CreateLeftStartNodes(Scene& scene, GameInfo& gi)
     {
         glm::vec2 pos1 = m_GridNodes[36]->GetNodeInfo().centerPos;
-        glm::vec2 pos2 = m_GridNodes[45]->GetNodeInfo().centerPos;
-        glm::vec2 pos3 = m_GridNodes[46]->GetNodeInfo().centerPos;
-
-        pos1.x -= 250.0f;
-        pos2.x -= 200.0f;
-        pos3.x -= 250.0f;
+        pos1.x -= 75.0f;
 
         std::unique_ptr<dae::GameObject> startNode1 = std::make_unique<dae::GameObject>();
         startNode1->InitializeTransformComponent();
         startNode1->SetLocalPosition(pos1.x, pos1.y);
 
         NodeInfo nodeInfo;
-        nodeInfo.leftDown = 29;
-        nodeInfo.leftUp = 29;
-        nodeInfo.rightDown = 29;
-        nodeInfo.rightUp = 29;
+        nodeInfo.leftDown = 37;
+        nodeInfo.leftUp = 37;
+        nodeInfo.rightDown = 37;
+        nodeInfo.rightUp = 37;
         nodeInfo.centerPos = pos1;
         nodeInfo.index = 58;
         nodeInfo.type = TileType::Zero;
 
         std::unique_ptr<GridNode> node1 = std::make_unique<GridNode>(*startNode1.get(), nodeInfo, gi);
         m_GridNodes.push_back(node1.get());
-        m_LeftStartNodes.push_back(node1.get());
+        m_LeftStartNode = node1.get();
         startNode1->AddComponent(std::move(node1));
         startNode1->SetParent(GetOwner());
-        scene.Add(std::move(startNode1));
-
-        std::unique_ptr<dae::GameObject> startNode2 = std::make_unique<dae::GameObject>();
-        startNode2->InitializeTransformComponent();
-        startNode2->SetLocalPosition(pos2.x, pos2.y);
-
-        NodeInfo nodeInfo2;
-        nodeInfo2.centerPos = pos2;
-        nodeInfo2.index = 59;
-        nodeInfo2.leftDown = 37;
-        nodeInfo2.leftUp = 37;
-        nodeInfo2.rightDown = 37;
-        nodeInfo2.rightUp = 37;
-        nodeInfo2.type = TileType::Zero;
-
-        std::unique_ptr<GridNode> node2 = std::make_unique<GridNode>(*startNode2.get(), nodeInfo2, gi);
-        m_GridNodes.push_back(node2.get());
-        m_LeftStartNodes.push_back(node2.get());
-        startNode2->AddComponent(std::move(node2));
-        startNode2->SetParent(GetOwner());
-        scene.Add(std::move(startNode2));
-
-        std::unique_ptr<dae::GameObject> startNode3 = std::make_unique<dae::GameObject>();
-        startNode3->InitializeTransformComponent();
-        startNode3->SetLocalPosition(pos3.x, pos3.y);
-
-        NodeInfo nodeInfo3;
-        nodeInfo3.centerPos = pos3;
-        nodeInfo3.index = 60;
-        nodeInfo3.leftDown = 38;
-        nodeInfo3.leftUp = 38;
-        nodeInfo3.rightDown = 38;
-        nodeInfo3.rightUp = 38;
-        nodeInfo3.type = TileType::Zero;
-        
-        std::unique_ptr<GridNode> node3 = std::make_unique<GridNode>(*startNode3.get(), nodeInfo3, gi);
-        m_GridNodes.push_back(node3.get());
-        m_LeftStartNodes.push_back(node3.get());
-        startNode3->AddComponent(std::move(node3));
-        startNode3->SetParent(GetOwner());
-        scene.Add(std::move(startNode3));
-
+        scene.Add(std::move(startNode1));       
+            
     }
 
     void TriangularGrid::CreateRightStartNodes(Scene& scene, GameInfo& gi)
     {
         glm::vec2 pos1 = m_GridNodes[44]->GetNodeInfo().centerPos;
-        glm::vec2 pos2 = m_GridNodes[54]->GetNodeInfo().centerPos;
-        glm::vec2 pos3 = m_GridNodes[53]->GetNodeInfo().centerPos;
-
-        pos1.x += 250.0f;
-        pos2.x += 200.0f;
-        pos3.x += 250.0f;
+        pos1.x += 75.0f;
 
         std::unique_ptr<dae::GameObject> startNode1 = std::make_unique<dae::GameObject>();
         startNode1->InitializeTransformComponent();
         startNode1->SetLocalPosition(pos1.x, pos1.y);
 
         NodeInfo nodeInfo;
-        nodeInfo.leftDown = 34;
-        nodeInfo.leftUp = 34;
-        nodeInfo.rightDown = 34;
-        nodeInfo.rightUp = 34;
+        nodeInfo.leftDown = 43;
+        nodeInfo.leftUp = 43;
+        nodeInfo.rightDown = 43;
+        nodeInfo.rightUp = 43;
         nodeInfo.centerPos = pos1;
 
-        nodeInfo.index = 61;
+        nodeInfo.index = 59;
         nodeInfo.type = TileType::Zero;
 
         std::unique_ptr<GridNode> node1 = std::make_unique<GridNode>(*startNode1.get(), nodeInfo, gi);
         m_GridNodes.push_back(node1.get());
-        m_RightStartNodes.push_back(node1.get());
+        m_RightStartNode = node1.get();
         startNode1->AddComponent(std::move(node1));
         startNode1->SetParent(GetOwner());
         scene.Add(std::move(startNode1));
-
-        std::unique_ptr<dae::GameObject> startNode2 = std::make_unique<dae::GameObject>();
-        startNode2->InitializeTransformComponent();
-        startNode2->SetLocalPosition(pos2.x, pos2.y);
-
-        NodeInfo nodeInfo2;
-        nodeInfo2.centerPos = pos2;
-        nodeInfo2.index = 62;
-        nodeInfo2.leftDown = 43;
-        nodeInfo2.leftUp = 43;
-        nodeInfo2.rightDown = 43;
-        nodeInfo2.rightUp = 43;
-        nodeInfo2.type = TileType::Zero;
-            
-        std::unique_ptr<GridNode> node2 = std::make_unique<GridNode>(*startNode2.get(), nodeInfo2, gi);
-        m_GridNodes.push_back(node2.get());
-        m_RightStartNodes.push_back(node2.get());
-        startNode2->AddComponent(std::move(node2));
-        startNode2->SetParent(GetOwner());
-        scene.Add(std::move(startNode2));
-        
-        std::unique_ptr<dae::GameObject> startNode3 = std::make_unique<dae::GameObject>();
-        startNode3->InitializeTransformComponent();
-        startNode3->SetLocalPosition(pos3.x, pos3.y);
-
-        NodeInfo nodeInfo3;
-        nodeInfo3.centerPos = pos3;
-        nodeInfo3.index = 63;
-        nodeInfo3.leftDown = 42;
-        nodeInfo3.leftUp = 42;
-        nodeInfo3.rightDown = 42;
-        nodeInfo3.rightUp = 42;
-        nodeInfo3.type = TileType::Zero;
-
-        std::unique_ptr<GridNode> node3 = std::make_unique<GridNode>(*startNode3.get(), nodeInfo3, gi);
-        m_GridNodes.push_back(node3.get());
-        m_RightStartNodes.push_back(node3.get());
-        startNode3->AddComponent(std::move(node3));
-        startNode3->SetParent(GetOwner());
-        scene.Add(std::move(startNode3));
     }
 
     void TriangularGrid::Render()
@@ -365,16 +272,14 @@ namespace dae
 		return m_TopStartNodes[random];
     }
 
-    GridNode* TriangularGrid::GetRandomLeftStartNode()
+    GridNode* TriangularGrid::GetLeftStartNode()
     {
-        int random = rand() % m_LeftStartNodes.size();
-		return m_LeftStartNodes[random];
+        return m_LeftStartNode;
     }
 
-    GridNode* TriangularGrid::GetRandomRightStartNode()
+    GridNode* TriangularGrid::GetRightStartNode()
     {
-        int random = rand() % m_RightStartNodes.size();
-        return m_RightStartNodes[random];
+        return m_RightStartNode;
     }
 
     void TriangularGrid::GridCompleted()

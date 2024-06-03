@@ -23,10 +23,6 @@ namespace dae
 		Sam,
 		Ugg,
 		Wrongway,
-		RedBall,
-		GreenBall,
-		BlueBall,
-		PurpleBall,
 	};
 
 	class GridNavigator;

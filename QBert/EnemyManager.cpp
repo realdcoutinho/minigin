@@ -37,7 +37,7 @@ namespace dae
 
 		m_SpawnTimerCoily = m_CoilyInterval;
 		m_SpawnTimerSlickSam = 5.0f;
-		m_SpawnTimerUggWrongway = m_UggWrongwayInterval;
+		m_SpawnTimerUggWrongway = 2.0f;
 		m_SpawnTimerUggWrongway = 5.0f;
 
 		if (gameInfo.gameMode == 3)
@@ -92,8 +92,8 @@ namespace dae
 
 		for (auto pEnemy : m_pEnemies)
 		{
-			pEnemy->GetComponent<DeathComponent>(true)->OnDeath();
 			pEnemy->GetComponent<GridNavigator>(true)->SetDead();
+			pEnemy->GetComponent<DeathComponent>(true)->OnDeath();
 		}
 
 		m_pEnemies.clear();
@@ -120,7 +120,7 @@ namespace dae
 		auto enemyType = pEnemy->GetComponent<CharacterComponent>()->GetType();
 		if (enemyType == CharacterType::Slick || enemyType == CharacterType::Sam)
 			m_CurrentSlickSam--;
-		else if (enemyType == CharacterType::Ugg)
+		else if (enemyType == CharacterType::Ugg || enemyType == CharacterType::Wrongway)
 			m_CurrentUggWrongway--;
 		else if (enemyType == CharacterType::Coily)
 			m_pCoily = nullptr;
@@ -180,6 +180,10 @@ namespace dae
 		if (m_MaxUggWrongway <= m_CurrentUggWrongway)
 		{
 			m_SpawnUggWrongway = false;
+		}
+		else
+		{
+			m_SpawnUggWrongway = true;
 		}
 		if (m_SpawnUggWrongway)
 		{

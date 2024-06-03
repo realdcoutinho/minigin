@@ -33,7 +33,7 @@ dae::UggWrongwayComponent::UggWrongwayComponent(GameObject& pOwner, TriangularGr
 		auto tex = m_Character->InitializeSprite(m_UggTexture, 4);
 		tex->SetScale({ 2.0f, 2.0f });
 
-		auto node = grid.GetRandomLeftStartNode();
+		auto node = grid.GetLeftStartNode();
 		std::unique_ptr<GridNavigator> gridNavigator = std::make_unique<GridNavigator>(pOwner, grid, *node);
 		m_Character->SetNavigator(gridNavigator.get());
 		pOwner.AddComponent(std::move(gridNavigator));
@@ -58,7 +58,7 @@ dae::UggWrongwayComponent::UggWrongwayComponent(GameObject& pOwner, TriangularGr
 		auto tex = m_Character->InitializeSprite(m_WrongwayTexture, 4);
 		tex->SetScale({ 2.0f, 2.0f });
 
-		auto node = grid.GetRandomRightStartNode();
+		auto node = grid.GetRightStartNode();
 		std::unique_ptr<GridNavigator> gridNavigator = std::make_unique<GridNavigator>(pOwner, grid, *node);
 		m_Character->SetNavigator(gridNavigator.get());
 		pOwner.AddComponent(std::move(gridNavigator));

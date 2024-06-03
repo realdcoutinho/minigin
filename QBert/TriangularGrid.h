@@ -53,8 +53,8 @@ namespace dae
 		void NodeUpgraded(bool isUpgarded);
 
 		GridNode* GetRandomTopStartNode();
-		GridNode* GetRandomLeftStartNode();
-		GridNode* GetRandomRightStartNode();
+		GridNode* GetLeftStartNode();
+		GridNode* GetRightStartNode();
 		
 
 	private:
@@ -71,8 +71,9 @@ namespace dae
 		int m_NrOfNodes{ 28 };
 		std::vector<GridNode*> m_GridNodes;
 		std::vector<GridNode*> m_TopStartNodes;
-		std::vector<GridNode*> m_LeftStartNodes;
-		std::vector<GridNode*> m_RightStartNodes;
+
+		GridNode* m_LeftStartNode;
+		GridNode* m_RightStartNode;
 
 		bool m_CanSwitch{ false };
 		float m_SwitchTimer{ 0.0f };

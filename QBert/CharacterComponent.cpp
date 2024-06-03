@@ -28,9 +28,18 @@ namespace dae
 		m_pGameStates = std::make_unique<LeftDown>();
 
 
-		auto death = std::make_unique<DeathComponent>(pOwner);
-		m_DeathComponent = death.get();
-		GetOwner()->AddComponent(std::move(death));
+		if(GetOwner()->GetParent())
+		{
+			auto death = std::make_unique<DeathComponent>(*GetOwner()->GetParent());
+			m_DeathComponent = death.get();
+			GetOwner()->AddComponent(std::move(death));
+		}
+		else
+		{
+			auto death = std::make_unique<DeathComponent>(pOwner);
+			m_DeathComponent = death.get();
+			GetOwner()->AddComponent(std::move(death));
+		}
 
 	}
 
@@ -44,7 +53,7 @@ namespace dae
 		m_Sprite = sprite.get();
 		GetOwner()->AddComponent(std::move(sprite));
 
-		auto death = std::make_unique<DeathComponent>(pOwner);
+		auto death = std::make_unique<DeathComponent>(*GetOwner());
 		m_DeathComponent = death.get();
 		GetOwner()->AddComponent(std::move(death));
 
