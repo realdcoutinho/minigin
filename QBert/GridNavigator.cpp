@@ -43,16 +43,16 @@ namespace dae
 	{
 		if (m_IsMoving)
 		{
-			auto transform = GetOwner()->GetComponent<TransformComponent>();
-			if (!transform)
-				return;
+			//auto transform = GetOwner()->GetComponent<TransformComponent>();
+			//if (!transform)
+			//	return;
 
 			auto& timer = TimeManager::GetInstance().GetTimer();
 			float delta = timer.GetElapsed();
 
 			Move(delta);
 
-			transform->SetPosition(m_Pos);
+			GetOwner()->SetLocalPosition(m_Pos);
 		}
 	}
 
@@ -65,17 +65,24 @@ namespace dae
 
 
 		m_PreviousNode = m_CurrentNode;
-		m_CurrentNode = &node;
+		m_MovingToNode = &node;
 		m_TargetPos = nodeInfo.centerPos;
 		m_StartPos = m_Pos;
 		m_IsMoving = true;
 		m_CanMove = false;	
 	}
 
-	void GridNavigator::MoveToDirection(const glm::vec2& direction)
+	void GridNavigator::MoveToDirection(const glm::vec2& direction, bool isDisc)
 	{
 		if(!m_IsAlive)
 		 return;
+
+		m_IsOnDisc = isDisc;
+		if (m_IsOnDisc)
+			m_MovementSpeed /= 2;
+		else
+			m_MovementSpeed = 200.0f;
+
 
 		auto nxNode = m_pGrid->GetNextNode(m_CurrentNode, direction);
 
@@ -84,6 +91,12 @@ namespace dae
 			MoveToNode(*nxNode);
 		}
 	}
+	void GridNavigator::MoveToIndex(int idx)
+	{
+		auto& node = m_pGrid->GetNode(idx);
+		MoveToNode(node);
+	}
+
 	void GridNavigator::SetNewPostion(int idx)
 	{
 		if(!m_IsAlive)
@@ -111,16 +124,16 @@ namespace dae
 
 		auto dir = m_TargetPos - m_Pos;
 		float length = glm::length(dir);
-		float moveDistance = 200.0f * delta;
+		float moveDistance = m_MovementSpeed * delta;
 
 		if (moveDistance > length)
 		{
 			m_Pos = m_TargetPos;
 			m_IsMoving = false;
 
-			//CheckForPit(m_PreviousNode->GetNodeInfo());
-
-			CheckForPit(m_CurrentNode->GetNodeInfo());
+			//CheckForPit(m_CurrentNode->GetNodeInfo());
+			
+			m_CurrentNode = m_MovingToNode;
 			auto nodeInteractor = std::make_unique<NodeInteractorEvent>(m_pGrid->GetOwnerID(), *GetOwner(), *m_PreviousNode, *m_CurrentNode);
 			EventDispatcher::GetInstance().DispatchEvent(std::move(nodeInteractor));
 

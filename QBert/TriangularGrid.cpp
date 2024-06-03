@@ -81,6 +81,15 @@ namespace dae
                     nodeInfo.rightUp = 0;
                     nodeInfo.type = TileType::Disc;
                 }
+                if (index == 0)
+                {
+                    nodeInfo.type = TileType::Zero;
+                    nodeInfo.leftDown = 4;
+                    nodeInfo.leftUp = 4;
+                    nodeInfo.rightDown = 4;
+                    nodeInfo.rightUp = 4;
+                }
+
 
                 std::unique_ptr<GridNode> node = std::make_unique<GridNode>(*curTile.get(), nodeInfo, gi);
                 m_GridNodes.push_back(node.get());

@@ -15,6 +15,7 @@
 #include "QBertComponent.h"
 #include "GameModeManager.h"
 #include "QbertGameMode.h"
+#include "GridNavigator.h"
 
 namespace dae
 {
@@ -35,22 +36,26 @@ namespace dae
 
     void NodeStates::Enter()
     {
-        auto comp = m_Character->GetComponent<CoilyComponent>();
-        if (comp != nullptr)
+        if (m_Character != nullptr)
         {
-            comp->HandleInput(*m_Node);
-        }
-        auto bert = m_Character->GetComponent<QBertComponent>();
-        if (bert != nullptr)
-        {
-            auto gameMode = GameModeManager::GetInstance().GetActiveGameMode();
-            auto qbertGameMode = dynamic_cast<QBertGameMode*>(gameMode);
-            if (qbertGameMode != nullptr)
+			auto comp = m_Character->GetComponent<CoilyComponent>();
+            if (comp != nullptr)
             {
-                //qbertGameMode->SetQBertNode(newNode);
-                qbertGameMode->QBertMovement();
+                comp->HandleInput(*m_Node);
+            }
+            auto bert = m_Character->GetComponent<QBertComponent>();
+            if (bert != nullptr)
+            {
+                auto gameMode = GameModeManager::GetInstance().GetActiveGameMode();
+                auto qbertGameMode = dynamic_cast<QBertGameMode*>(gameMode);
+                if (qbertGameMode != nullptr)
+                {
+                    //qbertGameMode->SetQBertNode(newNode);
+                    qbertGameMode->QBertMovement();
+                }
             }
 		}
+
 
 
     }
@@ -235,8 +240,7 @@ namespace dae
     void NodeStateThree::Enter()
     {
         NodeStates::Enter();
-        m_Node->GetNodeInfo().textureComp->SetTextureSegmentsY(static_cast<int>(NodeType::Three));
-        
+        m_Node->GetNodeInfo().textureComp->SetTextureSegmentsY(static_cast<int>(NodeType::Three));   
     }
 
     void NodeStateThree::Update()
@@ -323,17 +327,21 @@ namespace dae
             node;
             character;
             previousNode;
-            std::unique_ptr<TextureComponent> text;
-            text = std::move(node->GetOwner()->ObtainComponent<TextureComponent>());
-            node->GetNodeInfo().textureComp = nullptr;
-            character->AddComponent(std::move(text));
+            if (node->m_Disc)
+            {
+                node->m_Disc->SetParent(character);
+                node->m_Disc->SetLocalPosition({ 0, 20.0f, 0 });
+            }
+            character->GetComponent<GridNavigator>()->MoveToDirection({ 0, 1 }, true);
             //return std::make_unique<NodeStatePit>(node, character, previousNode);
         }
-        return std::unique_ptr<NodeStateDisc>();
+        return std::make_unique<NodeStateDisc>(node, character, previousNode);
     }
     void NodeStateDisc::Enter()
     {
-
+        NodeStates::Enter();
+        m_Node->CheckOutCharacter(m_Character);
+        m_Node->m_NodeStates = std::move(std::make_unique<NodeStatePit>(m_Node, m_Character, m_PreviousNode));
     }
 
     void NodeStateDisc::Update()
@@ -342,6 +350,34 @@ namespace dae
 
     void NodeStateDisc::Exit()
     {
+        NodeStates::Enter();
+    }
 
+    std::unique_ptr<NodeStates> NodeStateZero::HandleInput(GridNode* node, GameObject* character, GridNode* previousNode)
+    {
+        auto charType = character->GetComponent<CharacterComponent>()->GetType();
+        if (charType == CharacterType::QBert)
+        {
+            node;
+            previousNode;
+            character->GetComponent<GridNavigator>()->MoveToIndex(4);
+            auto disc = character->GetComponent<GridDisc>(true);
+            if (disc)
+            {
+				disc->GetOwner()->SetParent(nullptr);
+                disc->GetOwner()->SetActive(false);
+			}
+        }
+        return std::unique_ptr<NodeStateZero>();
+    }
+    void NodeStateZero::Enter()
+    {
+        NodeStates::Enter();
+    }
+    void NodeStateZero::Update()
+    {
+    }
+    void NodeStateZero::Exit()
+    {
     }
 }

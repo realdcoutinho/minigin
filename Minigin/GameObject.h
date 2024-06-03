@@ -36,6 +36,7 @@ namespace dae
 		void SetLocalPosition(float x, float y);
 		void SetLocalPosition(const glm::vec3& pos);
 		void SetLocalPosition(const glm::vec2& pos);
+		void SetChildrenDirty();
 		glm::vec3& GetWorldPosition();
 		glm::vec3& GetLocalPosition();
 
@@ -83,7 +84,7 @@ namespace dae
 		//}
 
 		template <class T>
-		T* GetComponent(/*bool searchChildren = false*/)
+		T* GetComponent(bool searchChildren = false)
 		{
 			auto it = std::find_if(m_pComponents.begin(), m_pComponents.end(), [](const std::unique_ptr<dae::BaseComponent>& component) {
 				return component && typeid(*component) == typeid(T);
@@ -93,6 +94,19 @@ namespace dae
 			 if (it != m_pComponents.end()) 
 			 {
 				 return dynamic_cast<T*>(it->get());
+			 }
+			 else
+			 {
+				 //search in children
+				 if (searchChildren)
+				 {
+					 for (auto child : m_Children)
+					 {
+						 T* pComp = child->GetComponent<T>(searchChildren);
+						 if (pComp)
+							 return pComp;
+					 }
+				 }
 			 }
 
 			return nullptr;

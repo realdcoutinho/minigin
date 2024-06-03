@@ -14,7 +14,9 @@
 #include "PathFinderComponent.h"
 #include "TimeManager.h"
 #include "QBertEvents.h"
-
+#include "SceneManager.h"
+#include "Scene.h"
+#include "TransformComponent.h"
 
 
 namespace dae
@@ -29,25 +31,48 @@ namespace dae
         if(m_NodeInfo.type == TileType::Pit)
 			m_NodeStates = std::make_unique<NodeStatePit>();
         else if (m_NodeInfo.type == TileType::Disc)
-			m_NodeStates = std::make_unique<NodeStateDisc>();
-
-	
-      
-        auto sprite = std::make_unique<TextureComponent>(pOwner);
-
-        if (m_NodeInfo.type == TileType::Pit)
         {
-            sprite = std::make_unique<TextureComponent>(*GetOwner(), "Inactive.png", 1);
-		}
-        else if (m_NodeInfo.type == TileType::Disc)
-        {
-			sprite = std::make_unique<TextureComponent>(*GetOwner(), "Disk Spritesheet.png", 1);
+            auto discObj = std::make_unique<GameObject>();
+            discObj->InitializeTransformComponent();
+            discObj->SetLocalPosition(0.f, 15.0f);
+            auto disc = std::make_unique<GridDisc>(*discObj);
+
+            auto sprite = std::make_unique<TextureComponent>(*discObj, "Disk Spritesheet.png", 1);
             sprite.get()->SetTextureSegments({ 30.f, 1.f });
             sprite.get()->SetTexturePositionIndex({ 0.f, 0.f });
             sprite.get()->SetScale({ 2.0f, 2.0f });
             sprite.get()->nodesTest = true;
-		}
-		else
+            disc->m_TextureComp = sprite.get();
+            discObj->AddComponent(std::move(sprite));
+            discObj->AddComponent(std::move(disc));
+
+            m_Disc = discObj.get();
+            discObj->SetParent(GetOwner());
+
+
+            m_NodeStates = std::make_unique<NodeStateDisc>();
+
+            SceneManager::GetInstance().GetActiveScene().Add(std::move(discObj));
+        }
+        else if (m_NodeInfo.type == TileType::Zero)
+            m_NodeStates = std::make_unique<NodeStateZero>();
+	
+      
+        auto sprite = std::make_unique<TextureComponent>(pOwner);
+
+  //      if (m_NodeInfo.type == TileType::Pit)
+  //      {
+  //          sprite = std::make_unique<TextureComponent>(*GetOwner(), "Inactive.png", 1);
+		//}
+  //      else if (m_NodeInfo.type == TileType::Disc)
+  //      {
+		//	//sprite = std::make_unique<TextureComponent>(*GetOwner(), "Disk Spritesheet.png", 1);
+  // //         sprite.get()->SetTextureSegments({ 30.f, 1.f });
+  // //         sprite.get()->SetTexturePositionIndex({ 0.f, 0.f });
+  // //         sprite.get()->SetScale({ 2.0f, 2.0f });
+  // //         sprite.get()->nodesTest = true;
+		//}
+		if (m_NodeInfo.type == TileType::TileOne)
         {
             sprite = std::make_unique<TextureComponent>(*GetOwner(), "Qbert Cubes.png", 2);
             sprite.get()->SetTextureSegments({ 6.f, 3.f });
@@ -55,6 +80,7 @@ namespace dae
             sprite.get()->SetScale({ 2.0f, 2.0f });
             sprite.get()->nodesTest = true;
         }
+
         m_NodeInfo.textureComp = sprite.get();
         GetOwner()->AddComponent(std::move(sprite));
     }
@@ -252,7 +278,8 @@ namespace dae
     {
         if (character)
         {
-            //search character in m_character and remove if exists
+            if (m_Characters.size() == 0)
+                return;
             for (auto it = m_Characters.begin(); it != m_Characters.end(); ++it)
             {
                 if ((*it) == character)
@@ -269,19 +296,30 @@ namespace dae
         auto state = m_NodeStates->HandleInput(this, character, previousNode);
         if (state)
         {
+            //if(m_NodeStates)
+            //    m_NodeStates->Exit();
 			//state->Exit();
 			m_NodeStates = std::move(state);
 			m_NodeStates->Enter();
-            if (m_NodeStates->GetChange())
-            {
-				return m_Points;
-			}
-            else
-            {
-				return -m_Points;
-			}
+   //         if (m_NodeStates->GetChange())
+   //         {
+			//	return m_Points;
+			//}
+   //         else
+   //         {
+			//	return -m_Points;
+			//}
 		}
         return 0;
+    }
+
+    void GridDisc::Update()
+    {
+        auto transComp = GetOwner()->GetTransformComponent();
+        if (transComp)
+        {
+            std::cout << "position: x = " << transComp->GetWorldPosition().x << " y = " << transComp->GetWorldPosition().y << std::endl;
+		}
     }
 }
 

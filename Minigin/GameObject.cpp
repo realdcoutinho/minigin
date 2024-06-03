@@ -59,16 +59,34 @@ void dae::GameObject::Render() const
 void dae::GameObject::SetLocalPosition(float x, float y)
 {
 	m_pTransformComponent->SetPosition(x, y, 0.0f);
+	SetChildrenDirty();
 }
+
 
 void dae::GameObject::SetLocalPosition(const glm::vec3& pos)
 {
 	m_pTransformComponent->SetPosition(pos);
+	SetChildrenDirty();
 }
 
 void dae::GameObject::SetLocalPosition(const glm::vec2& pos)
 {
 	m_pTransformComponent->SetPosition(pos);
+	SetChildrenDirty();
+}
+
+void dae::GameObject::SetChildrenDirty()
+{
+	for (auto& child : m_Children)
+	{
+		auto transform  = child->GetComponent<TransformComponent>();
+		if (transform)
+		{
+			transform->SetDirty();
+		}
+
+	}
+	//m_pTransformComponent->SetDirty();
 }
 
 glm::vec3& dae::GameObject::GetWorldPosition()

@@ -21,7 +21,8 @@ namespace dae
 		void Update() override;
 
 		void MoveToNode(GridNode& node);
-		void MoveToDirection(const glm::vec2& direction);
+		void MoveToDirection(const glm::vec2& direction, bool isDisc = false);
+		void MoveToIndex(int idx);
 
 
 		GridNode& GetCurrentTile() const { return *m_CurrentNode; }
@@ -40,10 +41,13 @@ namespace dae
 		TriangularGrid* m_pGrid;
 		GridNode* m_CurrentNode;
 		GridNode* m_PreviousNode;
+		GridNode* m_MovingToNode;
 
 		float m_MoveTimer = 0.0f;
 		const float m_MoveTime = 0.5f;
 		bool m_CanMove = true;
+		bool m_IsOnDisc = false;
+		float m_MovementSpeed = 200.0f;
 
 		glm::vec2 m_Pos{};
 		glm::vec2 m_StartPos{};

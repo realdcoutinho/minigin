@@ -34,6 +34,21 @@ namespace dae
 		bool lastRow{ false };
 	};
 
+	class GridDisc final : public BaseComponent
+	{
+	public:
+		GridDisc(GameObject& pOwner)
+			: BaseComponent(pOwner) {};
+		~GridDisc() = default;
+		void Render() override {};
+		void Update() override;
+		TextureComponent* m_TextureComp;
+	private:
+
+
+	};
+
+
 	class CharacterComponent;
 	class NodeStates;
 	struct GameInfo;
@@ -54,18 +69,20 @@ namespace dae
 		void ExitNode(GameObject* character);
 		void UnResgister() { m_Characters.clear(); }
 		void SetFlickeringState();
-		
+		void CheckOutCharacter(GameObject* character);
 
 		int m_Level;
 		int m_Points = 25;
 		float m_CurrentTime = 0.0f;
+		std::unique_ptr<NodeStates> m_NodeStates;
+		GameObject* m_Disc;
 	private:
 		void CheckInCharacter(GameObject* character);
-		void CheckOutCharacter(GameObject* character);
+		
 		int HandleInput(GameObject* character, GridNode* previousNode = nullptr);
 
 		NodeInfo m_NodeInfo{};
-		std::unique_ptr<NodeStates> m_NodeStates;
+
 		std::vector<GameObject*> m_Characters;
 	};
 

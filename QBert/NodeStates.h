@@ -127,11 +127,26 @@ namespace dae
 
 	class NodeStateDisc final : public NodeStates
 	{
-public:
+	public:
 		NodeStateDisc() = default;
 		//NodeStateDisc(GridNode* node, bool enemyInteraction = false)
 		//	: NodeStates(node, enemyInteraction) {}
 		NodeStateDisc(GridNode* node, GameObject* character, GridNode* previousNode = nullptr)
+			: NodeStates(node, character, previousNode) {}
+		//virtual std::unique_ptr<NodeStates> HandleInput(GridNode* node, bool enemyInteraction = false);
+		virtual std::unique_ptr<NodeStates> HandleInput(GridNode* node, GameObject* character, GridNode* previousNode = nullptr);
+		virtual void Enter() override;
+		virtual void Update() override;
+		virtual void Exit() override;
+	};
+
+	class NodeStateZero final : public NodeStates
+	{
+	public:
+		NodeStateZero() = default;
+		//NodeStateZero(GridNode* node, bool enemyInteraction = false)
+		//	: NodeStates(node, enemyInteraction) {}
+		NodeStateZero(GridNode* node, GameObject* character, GridNode* previousNode = nullptr)
 			: NodeStates(node, character, previousNode) {}
 		//virtual std::unique_ptr<NodeStates> HandleInput(GridNode* node, bool enemyInteraction = false);
 		virtual std::unique_ptr<NodeStates> HandleInput(GridNode* node, GameObject* character, GridNode* previousNode = nullptr);
