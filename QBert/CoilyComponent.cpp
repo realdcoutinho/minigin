@@ -24,7 +24,7 @@ namespace dae
 
 
 
-		auto node = grid.GetNode(4);
+		auto node = grid.GetRandomTopStartNode();
 		std::unique_ptr<GridNavigator> gridNavigator = std::make_unique<GridNavigator>(pOwner, grid, *node);
 		m_Character->SetNavigator(gridNavigator.get());
 		pOwner.AddComponent(std::move(gridNavigator));
@@ -44,6 +44,9 @@ namespace dae
 
 		m_pCoilyState = std::make_unique<EggState>();
 		m_pCoilyState->Enter();
+
+
+		GetOwner()->SetLocalPosition(node->GetNodeInfo().centerPos);
 	}
 
 	CoilyComponent::~CoilyComponent()

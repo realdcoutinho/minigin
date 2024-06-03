@@ -373,6 +373,7 @@ namespace dae
                 disc->GetOwner()->SetActive(false);
 			}
         }
+
         return std::unique_ptr<NodeStateZero>();
     }
     void NodeStateZero::Enter()

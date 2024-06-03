@@ -185,6 +185,8 @@ namespace dae
             m_Characters.push_back(character);
             break;
         case CharacterType::Ugg:
+            if (m_NodeInfo.type == TileType::Pit)
+                return;
             if (neighbour)
             {
                 for (auto& chara : m_Characters)
@@ -198,7 +200,6 @@ namespace dae
                         break;
                     }
                 }
-                std::cout << "registered on node: " << m_NodeInfo.index << "\n";
                 m_Characters.push_back(character);
             }
             else
@@ -212,6 +213,8 @@ namespace dae
             }
             break;
         case CharacterType::Wrongway:
+            if (m_NodeInfo.type == TileType::Pit)
+                return;
             if(neighbour)
             {
                 for (auto& chara : m_Characters)

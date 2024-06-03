@@ -52,11 +52,17 @@ namespace dae
 		void UnregisterAllCharacters();
 		void NodeUpgraded(bool isUpgarded);
 
-
+		GridNode* GetRandomTopStartNode();
+		GridNode* GetRandomLeftStartNode();
+		GridNode* GetRandomRightStartNode();
 		
 
 	private:
 		void CreateGridNodes(Scene& scene, GameInfo& gi);
+		void CreateTopStartNodes(Scene& scene, GameInfo& gi);
+		void CreateLeftStartNodes(Scene& scene, GameInfo& gi);
+		void CreateRightStartNodes(Scene& scene, GameInfo& gi);
+
 		void GridCompleted();
 
 
@@ -64,6 +70,9 @@ namespace dae
 		int m_CurrentCompletedNodes{ 0 };
 		int m_NrOfNodes{ 28 };
 		std::vector<GridNode*> m_GridNodes;
+		std::vector<GridNode*> m_TopStartNodes;
+		std::vector<GridNode*> m_LeftStartNodes;
+		std::vector<GridNode*> m_RightStartNodes;
 
 		bool m_CanSwitch{ false };
 		float m_SwitchTimer{ 0.0f };

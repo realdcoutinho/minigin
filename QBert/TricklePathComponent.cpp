@@ -75,38 +75,57 @@ namespace dae
 		{
 		case dae::TrickleType::Left:
 		{
-			LeftVectors vectors;
-			if (randomIndex == 0)
+			if(m_FirstMove)
 			{
-				m_Direction = vectors.LeftUp;
-				facingdirection = { 0, -1 };
-				enemComp->HandleInput(facingdirection);
-				navComp->MoveToDirection(m_Direction);
+				m_FirstMove = false;
+				facingdirection = { -1, 0 };
+				navComp->MoveToDirection(facingdirection);
 			}
 			else
-			{
-				facingdirection = { 1, 0 };
-				enemComp->HandleInput(facingdirection);
-				navComp->MoveToNextNode(false);
+			{ 
+				LeftVectors vectors;
+				if (randomIndex == 0)
+				{
+					m_Direction = vectors.LeftUp;
+					facingdirection = { 0, -1 };
+					enemComp->HandleInput(facingdirection);
+					navComp->MoveToDirection(m_Direction);
+				}
+				else
+				{
+					facingdirection = { 1, 0 };
+					enemComp->HandleInput(facingdirection);
+					navComp->MoveToNextNode(false);
+				}
 			}
+
 			break;
 		}
 		case dae::TrickleType::Right:
-		{
-			RightVectors vectors;
-			if (randomIndex == 0)
+		{	
+			if(m_FirstMove)
 			{
-				m_Direction = vectors.RightUp;
+				m_FirstMove = false;
 				facingdirection = { -1, 0 };
-				enemComp->HandleInput(facingdirection);
-				navComp->MoveToDirection(m_Direction);
+				navComp->MoveToDirection(facingdirection);
 			}
 			else
 			{
-				m_Direction = vectors.RightDown;
-				facingdirection = { 0, 1 };
-				enemComp->HandleInput(facingdirection);
-				navComp->MoveToNextNode(true);
+				RightVectors vectors;
+				if (randomIndex == 0)
+				{
+					m_Direction = vectors.RightUp;
+					facingdirection = { -1, 0 };
+					enemComp->HandleInput(facingdirection);
+					navComp->MoveToDirection(m_Direction);
+				}
+				else
+				{
+					m_Direction = vectors.RightDown;
+					facingdirection = { 0, 1 };
+					enemComp->HandleInput(facingdirection);
+					navComp->MoveToNextNode(true);
+				}
 			}
 			break;
 		}

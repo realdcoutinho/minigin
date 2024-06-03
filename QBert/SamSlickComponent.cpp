@@ -3,6 +3,7 @@
 #include "TricklePathComponent.h"
 #include "TriangularGrid.h"
 #include "GridNavigator.h"
+#include "GridNode.h"
 #include <random>
 
 
@@ -34,7 +35,7 @@ namespace dae
 
 		}
 
-		auto node = grid.GetNode(4);
+		auto node = grid.GetRandomTopStartNode();
 		std::unique_ptr<GridNavigator> gridNavigator = std::make_unique<GridNavigator>(pOwner, grid, *node);
 		m_Character->SetNavigator(gridNavigator.get());
 		pOwner.AddComponent(std::move(gridNavigator));
@@ -42,6 +43,9 @@ namespace dae
 		std::unique_ptr<TricklePathComponent> trickle = std::make_unique<TricklePathComponent>(pOwner, TrickleType::Down);
 		m_TricklePath = trickle.get();
 		pOwner.AddComponent(std::move(trickle));
+
+
+		GetOwner()->SetLocalPosition(node->GetNodeInfo().centerPos);
 	}
 
 	SamSlickComponent::~SamSlickComponent()

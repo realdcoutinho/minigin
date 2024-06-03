@@ -58,6 +58,7 @@ namespace dae
 		float m_MoveTimer = 0.0f;
 		const float m_MoveTime = 0.9f;
 		bool m_CanMove = false;
+		bool m_FirstMove = true;
 	};
 }
 

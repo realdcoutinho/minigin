@@ -53,8 +53,8 @@ namespace dae
 		m_pCurrentScene->GetTimer();
 		float elapsed = m_pCurrentScene->GetTimer().GetElapsed();
 
-		//UpdateCoilySpawnTimers(elapsed);
-		//UpdateSlickSamSpawnTimers(elapsed);
+		UpdateCoilySpawnTimers(elapsed);
+		UpdateSlickSamSpawnTimers(elapsed);
 		UpdateUggWrongwaySpawnTimers(elapsed);
 	}
 
@@ -92,8 +92,8 @@ namespace dae
 
 		for (auto pEnemy : m_pEnemies)
 		{
-			pEnemy->GetComponent<DeathComponent>()->OnDeath();
-			pEnemy->GetComponent<GridNavigator>()->SetDead();
+			pEnemy->GetComponent<DeathComponent>(true)->OnDeath();
+			pEnemy->GetComponent<GridNavigator>(true)->SetDead();
 		}
 
 		m_pEnemies.clear();
@@ -139,7 +139,7 @@ namespace dae
 	{
 		if (m_pCoily != nullptr)
 			return;
-		
+
 		if (m_SpawnCoily)
 		{
 			m_SpawnTimerCoily -= elapsedSec;
@@ -195,7 +195,7 @@ namespace dae
 
 	void EnemyManager::SpawnCoily()
 	{
-		if(!m_VersusMode)
+		if (!m_VersusMode)
 			m_pCoily = &GameObjectFactory::GetInstance().CreateCoily(*m_pCurrentScene, *m_pGrid);
 		else
 			m_pCoily = &GameObjectFactory::GetInstance().InitializePlayerTwo(*m_pCurrentScene, *m_pGrid, true);
@@ -210,7 +210,9 @@ namespace dae
 
 	void EnemyManager::SpawnUggWrongway()
 	{
-		GameObjectFactory::GetInstance().CreateUggWrongway(*m_pCurrentScene, *m_pGrid);
+		auto& enemy = GameObjectFactory::GetInstance().CreateUggWrongway(*m_pCurrentScene, *m_pGrid);
+		m_pEnemies.push_back(&enemy);
+		m_CurrentUggWrongway++;
 	}
 
 

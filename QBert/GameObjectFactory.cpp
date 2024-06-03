@@ -90,7 +90,6 @@ namespace dae
 		auto coily = std::make_unique<dae::GameObject>();
 		coily->InitializeTransformComponent();
 		auto coilyComponent = std::make_unique<dae::CoilyComponent>(*coily.get(), pGrid, isPlayable);
-		coily->SetLocalPosition(pGrid.GetStartingPosition());
 		coily->AddComponent(std::move(coilyComponent));
 
 		auto& temp = *coily.get();
@@ -103,7 +102,6 @@ namespace dae
 		auto slick = std::make_unique<dae::GameObject>();
 		slick->InitializeTransformComponent();
 		auto slickComponent = std::make_unique<dae::SamSlickComponent>(*slick.get(), pGrid);
-		slick->SetLocalPosition(pGrid.GetStartingPosition());
 		slick->AddComponent(std::move(slickComponent));
 
 		auto& temp = *slick.get();
