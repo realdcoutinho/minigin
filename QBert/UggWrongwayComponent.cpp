@@ -21,32 +21,32 @@ dae::UggWrongwayComponent::UggWrongwayComponent(GameObject& pOwner, TriangularGr
 	std::bernoulli_distribution d(0.5);
 
 	if (d(gen))
-	{
-		auto offsetObj = std::make_unique<GameObject>();
-		offsetObj->InitializeTransformComponent();
-		offsetObj->SetLocalPosition({ -25.0f, 50.0f });
+	//{
+	//	auto offsetObj = std::make_unique<GameObject>();
+	//	offsetObj->InitializeTransformComponent();
+	//	offsetObj->SetLocalPosition({ -25.0f, 50.0f });
 
 
-		auto character = std::make_unique<CharacterComponent>(*offsetObj.get(), CharacterType::Ugg);
-		m_Character = character.get();
-		GetOwner()->AddComponent(std::move(character));
-		auto tex = m_Character->InitializeSprite(m_UggTexture, 4);
-		tex->SetScale({ 2.0f, 2.0f });
+	//	auto character = std::make_unique<CharacterComponent>(*offsetObj.get(), CharacterType::Ugg);
+	//	m_Character = character.get();
+	//	GetOwner()->AddComponent(std::move(character));
+	//	auto tex = m_Character->InitializeSprite(m_UggTexture, 4);
+	//	tex->SetScale({ 2.0f, 2.0f });
 
-		auto& node = grid.GetNode(37);
-		std::unique_ptr<GridNavigator> gridNavigator = std::make_unique<GridNavigator>(pOwner, grid, node);
-		m_Character->SetNavigator(gridNavigator.get());
-		pOwner.AddComponent(std::move(gridNavigator));
+	//	auto node = grid.GetNode(37);
+	//	std::unique_ptr<GridNavigator> gridNavigator = std::make_unique<GridNavigator>(pOwner, grid, *node);
+	//	m_Character->SetNavigator(gridNavigator.get());
+	//	pOwner.AddComponent(std::move(gridNavigator));
 
-		std::unique_ptr<TricklePathComponent> trickle = std::make_unique<TricklePathComponent>(pOwner, TrickleType::Right);
-		m_TricklePath = trickle.get();
-		pOwner.AddComponent(std::move(trickle));
+	//	std::unique_ptr<TricklePathComponent> trickle = std::make_unique<TricklePathComponent>(pOwner, TrickleType::Right);
+	//	m_TricklePath = trickle.get();
+	//	pOwner.AddComponent(std::move(trickle));
 
-		offsetObj->SetParent(&pOwner);
-		SceneManager::GetInstance().GetActiveScene().Add(std::move(offsetObj));
-		pOwner.SetLocalPosition(node.GetNodeInfo().centerPos);
-	}
-	/*else
+	//	offsetObj->SetParent(&pOwner);
+	//	SceneManager::GetInstance().GetActiveScene().Add(std::move(offsetObj));
+	//	pOwner.SetLocalPosition(node->GetNodeInfo().centerPos);
+	//}
+	//else
 	{
 		auto offsetObj = std::make_unique<GameObject>();
 		offsetObj->InitializeTransformComponent();
@@ -58,8 +58,8 @@ dae::UggWrongwayComponent::UggWrongwayComponent(GameObject& pOwner, TriangularGr
 		auto tex = m_Character->InitializeSprite(m_WrongwayTexture, 4);
 		tex->SetScale({ 2.0f, 2.0f });
 
-		auto& node = grid.GetNode(43);
-		std::unique_ptr<GridNavigator> gridNavigator = std::make_unique<GridNavigator>(pOwner, grid, node);
+		auto node = grid.GetNode(43);
+		std::unique_ptr<GridNavigator> gridNavigator = std::make_unique<GridNavigator>(pOwner, grid, *node);
 		m_Character->SetNavigator(gridNavigator.get());
 		pOwner.AddComponent(std::move(gridNavigator));
 
@@ -69,8 +69,8 @@ dae::UggWrongwayComponent::UggWrongwayComponent(GameObject& pOwner, TriangularGr
 
 		offsetObj->SetParent(&pOwner);
 		SceneManager::GetInstance().GetActiveScene().Add(std::move(offsetObj));
-		pOwner.SetLocalPosition(node.GetNodeInfo().centerPos);
-	}*/
+		pOwner.SetLocalPosition(node->GetNodeInfo().centerPos);
+	}
 
 
 }

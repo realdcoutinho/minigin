@@ -93,18 +93,18 @@ namespace dae
 	}
 	void GridNavigator::MoveToIndex(int idx)
 	{
-		auto& node = m_pGrid->GetNode(idx);
-		MoveToNode(node);
+		auto node = m_pGrid->GetNode(idx);
+		MoveToNode(*node);
 	}
 
 	void GridNavigator::MoveToNextNode(bool isPositive)
 	{
 		if(!m_IsAlive)
 			return;
-		auto& nxNode = m_pGrid->GetNode(m_CurrentNode->GetNodeInfo().index + (isPositive ? 1 : -1));
-		if (&nxNode != nullptr)
+		auto nxNode = m_pGrid->GetNode(m_CurrentNode->GetNodeInfo().index + (isPositive ? 1 : -1));
+		if (nxNode != nullptr)
 		{
-			MoveToNode(nxNode);
+			MoveToNode(*nxNode);
 		}
 	}
 
@@ -113,7 +113,7 @@ namespace dae
 		if(!m_IsAlive)
 			return;
 
-		m_CurrentNode = &m_pGrid->GetNode(idx);
+		m_CurrentNode = m_pGrid->GetNode(idx);
 		m_Pos = m_CurrentNode->GetNodeInfo().centerPos;
 		m_TargetPos = m_Pos;
 		m_StartPos = m_Pos;

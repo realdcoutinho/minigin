@@ -15,8 +15,8 @@ namespace dae
 		: CharacterComponent(pOwner, texFile, charName, charType)
 	{
 
-		auto& node = grid.GetNode(4);
-		std::unique_ptr<GridNavigator> gridNavigator = std::make_unique<GridNavigator>(pOwner, grid, node);
+		auto node = grid.GetNode(4);
+		std::unique_ptr<GridNavigator> gridNavigator = std::make_unique<GridNavigator>(pOwner, grid, *node);
 		m_Navigator = gridNavigator.get();  // m_Navigator must be declared as GridNavigator*
 		pOwner.AddComponent(std::move(gridNavigator));
 

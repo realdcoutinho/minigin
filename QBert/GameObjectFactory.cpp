@@ -128,7 +128,7 @@ namespace dae
 		std::unique_ptr bert = std::make_unique<dae::GameObject>();
 		bert->InitializeTransformComponent();
 		auto playerComponent = std::make_unique<dae::QBertComponent>(*bert.get(), pGrid, startingNode, player);
-		bert->SetLocalPosition(pGrid.GetNode(startingNode).GetNodeInfo().centerPos);
+		bert->SetLocalPosition(pGrid.GetNode(startingNode)->GetNodeInfo().centerPos);
 		bert->AddComponent(std::move(playerComponent));
 
 		auto& temp = *bert.get();

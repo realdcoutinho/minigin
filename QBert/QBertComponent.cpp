@@ -39,8 +39,8 @@ namespace dae
 
 
 
-		auto& node = pGrid.GetNode(startingNode);
-		std::unique_ptr<GridNavigator> gridNavigator = std::make_unique<GridNavigator>(pOwner, pGrid, node);
+		auto node = pGrid.GetNode(startingNode);
+		std::unique_ptr<GridNavigator> gridNavigator = std::make_unique<GridNavigator>(pOwner, pGrid, *node);
 		m_Character->SetNavigator(gridNavigator.get());
 		pOwner.AddComponent(std::move(gridNavigator));
 

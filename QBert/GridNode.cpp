@@ -111,73 +111,109 @@ namespace dae
 
     void GridNode::CheckInCharacter(GameObject* character, bool neighbour)
     {
-        //if (m_Characters.size() == 0)
-        //{
-        //    m_Characters.push_back(character);
-        //    return;
-        //}
-        //else
-        //{
-            auto charType = character->GetComponent<CharacterComponent>()->GetType();
-            bool isPlayerDead = false;
-            bool isSamDead = false;
+        auto charType = character->GetComponent<CharacterComponent>()->GetType();
+        bool isPlayerDead = false;
+        bool isSamDead = false;
 
-            switch (charType)
+        switch (charType)
+        {
+        case CharacterType::QBert:
+            //search for coily in m_characters
+            for (auto& chara : m_Characters)
             {
-            case CharacterType::QBert:
-                //search for coily in m_characters
-                for (auto& chara : m_Characters)
+                if (chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Coily || chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Wrongway || chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Ugg)
                 {
-                    if (chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Coily || chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Wrongway || chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Ugg)
-                    {
-                        auto enemyDeath = std::make_unique<EraseOneEnemyEvent>(chara->GetID(), *chara);
-                        EventDispatcher::GetInstance().DispatchEvent(std::move(enemyDeath));
-                        isPlayerDead = true;
-                        auto health = std::make_unique<PlayerHealthEvent>(character->GetID(), m_NodeInfo.index);
-                        EventDispatcher::GetInstance().DispatchEvent(std::move(health));
+                    auto enemyDeath = std::make_unique<EraseOneEnemyEvent>(chara->GetID(), *chara);
+                    EventDispatcher::GetInstance().DispatchEvent(std::move(enemyDeath));
+                    isPlayerDead = true;
+                    auto health = std::make_unique<PlayerHealthEvent>(character->GetID(), m_NodeInfo.index);
+                    EventDispatcher::GetInstance().DispatchEvent(std::move(health));
 
-                        m_Characters.erase(std::remove(m_Characters.begin(), m_Characters.end(), chara), m_Characters.end());
-                        break;
-                    }
-                    if (chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Sam || chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Slick)
-                    {
-                        auto enemyDeath = std::make_unique<EraseOneEnemyEvent>(chara->GetID(), *chara);
-                        EventDispatcher::GetInstance().DispatchEvent(std::move(enemyDeath));
-                        auto scoreEvent = std::make_unique<ScoreEvent>(300, character->GetID());
-                        EventDispatcher::GetInstance().DispatchEvent(std::move(scoreEvent));
-                        m_Characters.erase(std::remove(m_Characters.begin(), m_Characters.end(), chara), m_Characters.end());
-                        break;
-                    }
+                    m_Characters.erase(std::remove(m_Characters.begin(), m_Characters.end(), chara), m_Characters.end());
+                    break;
                 }
-                if (!isPlayerDead)
-                    m_Characters.push_back(character);
-                break;
+                if (chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Sam || chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Slick)
+                {
+                    auto enemyDeath = std::make_unique<EraseOneEnemyEvent>(chara->GetID(), *chara);
+                    EventDispatcher::GetInstance().DispatchEvent(std::move(enemyDeath));
+                    auto scoreEvent = std::make_unique<ScoreEvent>(300, character->GetID());
+                    EventDispatcher::GetInstance().DispatchEvent(std::move(scoreEvent));
+                    m_Characters.erase(std::remove(m_Characters.begin(), m_Characters.end(), chara), m_Characters.end());
+                    break;
+                }
+            }
+            if (!isPlayerDead)
+                m_Characters.push_back(character);
+            break;
 
-            case CharacterType::Slick:
-            case CharacterType::Sam:
+        case CharacterType::Slick:
+        case CharacterType::Sam:
+            for (auto& chara : m_Characters)
+            {
+                if (chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::QBert)
+                {
+                    auto scoreEvent = std::make_unique<ScoreEvent>(300, chara->GetID());
+                    EventDispatcher::GetInstance().DispatchEvent(std::move(scoreEvent));
+                    isSamDead = true;
+
+                    auto enemyDeath = std::make_unique<EraseOneEnemyEvent>(character->GetID(), *character);
+                    EventDispatcher::GetInstance().DispatchEvent(std::move(enemyDeath));
+
+
+                    break;
+                }
+            }
+            if (!isSamDead)
+            {
+                m_Characters.push_back(character);
+            }
+            break;
+
+        case CharacterType::Coily:
+        case CharacterType::Egg:
+            for (auto& chara : m_Characters)
+            {
+                if (chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::QBert)
+                {
+                    auto enemyDeath = std::make_unique<EraseOneEnemyEvent>(character->GetID(), *character);
+                    EventDispatcher::GetInstance().DispatchEvent(std::move(enemyDeath));
+                    auto health = std::make_unique<PlayerHealthEvent>(chara->GetID(), m_NodeInfo.index);
+                    EventDispatcher::GetInstance().DispatchEvent(std::move(health));
+                    break;
+                }
+            }
+            m_Characters.push_back(character);
+            break;
+        case CharacterType::Ugg:
+            if (neighbour)
+            {
                 for (auto& chara : m_Characters)
                 {
                     if (chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::QBert)
                     {
-                        auto scoreEvent = std::make_unique<ScoreEvent>(300, chara->GetID());
-                        EventDispatcher::GetInstance().DispatchEvent(std::move(scoreEvent));
-                        isSamDead = true;
-
                         auto enemyDeath = std::make_unique<EraseOneEnemyEvent>(character->GetID(), *character);
                         EventDispatcher::GetInstance().DispatchEvent(std::move(enemyDeath));
-
-
+                        auto health = std::make_unique<PlayerHealthEvent>(chara->GetID(), m_NodeInfo.index);
+                        EventDispatcher::GetInstance().DispatchEvent(std::move(health));
                         break;
                     }
                 }
-                if (!isSamDead)
-                {
-                    m_Characters.push_back(character);
-                }
-                break;
-
-            case CharacterType::Coily:
-            case CharacterType::Egg:
+                std::cout << "registered on node: " << m_NodeInfo.index << "\n";
+                m_Characters.push_back(character);
+            }
+            else
+            {
+                auto grid = GetOwner()->GetParent()->GetComponent<TriangularGrid>();
+                if (!grid)
+                    return;
+                int ldConnection = m_NodeInfo.leftDown;
+                auto node = grid->GetNode(ldConnection);
+                node->CheckInCharacter(character, true);
+            }
+            break;
+        case CharacterType::Wrongway:
+            if(neighbour)
+            {
                 for (auto& chara : m_Characters)
                 {
                     if (chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::QBert)
@@ -190,23 +226,34 @@ namespace dae
                     }
                 }
                 m_Characters.push_back(character);
-                break;
+            }
+            else
+            {
+                auto grid = GetOwner()->GetParent()->GetComponent<TriangularGrid>();
+                if (!grid)
+                    return;
+                int ldConnection = m_NodeInfo.rightDown;
+                auto node = grid->GetNode(ldConnection);
+                node->CheckInCharacter(character, true);
+            }
+
+        default:
+            // Handle unexpected character types if necessary
+            break;
+        }
+    }
+
+    void GridNode::CheckOutCharacter(GameObject* character, bool neighbour)
+    {
+        if (character)
+        {
+            auto charType = character->GetComponent<CharacterComponent>()->GetType();
+
+            switch (charType)
+            {
             case CharacterType::Ugg:
                 if (neighbour)
                 {
-                    for (auto& chara : m_Characters)
-                    {
-                        if (chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::QBert)
-                        {
-                            auto enemyDeath = std::make_unique<EraseOneEnemyEvent>(character->GetID(), *character);
-                            EventDispatcher::GetInstance().DispatchEvent(std::move(enemyDeath));
-                            auto health = std::make_unique<PlayerHealthEvent>(chara->GetID(), m_NodeInfo.index);
-                            EventDispatcher::GetInstance().DispatchEvent(std::move(health));
-                            break;
-                        }
-                    }
-                    std::cout << "registered on node: " << m_NodeInfo.index << "\n";
-                    m_Characters.push_back(character);
                 }
                 else
                 {
@@ -214,105 +261,30 @@ namespace dae
                     if (!grid)
                         return;
                     int ldConnection = m_NodeInfo.leftDown;
-                    auto& node = grid->GetNode(ldConnection);
-                    node.CheckInCharacter(character, true);
+                    auto node = grid->GetNode(ldConnection);
+                    if (!node)
+                        return;
+                    node->CheckOutCharacter(character, true);
+                    return;
                 }
-                break;
             case CharacterType::Wrongway:
-                if(neighbour)
-					m_Characters.push_back(character);
+                if (neighbour)
+                {
+                }
                 else
                 {
-                    auto grid = GetOwner()->GetComponent<TriangularGrid>();
-                    int rdConnection = m_NodeInfo.leftDown;
-                    auto& node = grid->GetNode(rdConnection);
-                    node.CheckInCharacter(character, true);
+                    auto grid = GetOwner()->GetParent()->GetComponent<TriangularGrid>();
+                    if (!grid)
+                        return;
+                    int ldConnection = m_NodeInfo.rightDown;
+                    auto node = grid->GetNode(ldConnection);
+                    if (!node)
+                        return;
+                    node->CheckOutCharacter(character, true);
+                    return;
                 }
-
-            default:
-                // Handle unexpected character types if necessary
-                break;
             }
-        //}
 
-
-
-
-
-
-
-        //auto info = m_NodeInfo;
-
-        //auto charType = character->GetComponent<CharacterComponent>()->GetType();
-        //switch (charType)
-        //{
-        //case CharacterType::QBert:
-        //    if (m_NodeInfo.hasEnemy)
-        //    {
-        //        m_NodeInfo.hasCharacter = false;
-        //        //std::cout << "Qbert dies1" << std::endl;
-        //       // std::cout << "Qbert for playe1r" << std::endl;
-        //        auto health = std::make_unique<PlayerHealthEvent>(character->GetID(), 40);
-        //        EventDispatcher::GetInstance().DispatchEvent(std::move(health));
-        //        break;
-        //    }
-        //    else if (m_NodeInfo.hasSlickSam)
-        //    {
-        //        //sam deis
-        //        //points for player
-        //        //std::cout << "Sam dies1" << std::endl;
-        //       // std::cout << "Points for playe1r" << std::endl;
-        //        m_NodeInfo.hasCharacter = true;
-        //        auto scoreEvent = std::make_unique<ScoreEvent>(300, character->GetID());
-        //        EventDispatcher::GetInstance().DispatchEvent(std::move(scoreEvent));
-        //        break;
-        //    }
-        //    m_NodeInfo.hasCharacter = true;
-        //    //std::cout << "Qbert enters:" << info.index << std::endl;
-        //    break;
-        //case CharacterType::Slick:
-        //case CharacterType::Sam:
-        //    if (m_NodeInfo.hasCharacter)
-        //    {
-        //        //samslick dies
-        //        //points for player
-        //        //std::cout << "Sam dies2" << std::endl;
-
-        //        m_NodeInfo.hasSlickSam = false;
-
-        //        character->GetComponent<DeathComponent>()->OnDeath();
-        //        //auto scoreEvent = std::make_unique<ScoreEvent>(300, m_Character->GetID());
-        //        //EventDispatcher::GetInstance().DispatchEvent(std::move(scoreEvent));
-
-        //        break;
-        //    }
-        //    m_NodeInfo.hasSlickSam = true;
-        //    break;
-        //case CharacterType::Coily:
-        //case CharacterType::Egg:
-        //case CharacterType::Ugg:
-        //case CharacterType::Wrongway:
-        //    if (m_NodeInfo.hasCharacter)
-        //    {
-        //        //qbert dies
-        //        m_NodeInfo.hasCharacter = false;
-        //        m_NodeInfo.hasEnemy = false;
-        //        //std::cout << "Qbert dies2" << std::endl;
-        //        break;
-        //    }
-        //    m_NodeInfo.hasEnemy = true;
-        //    break;
-        //default:
-        //    // Handle unexpected character types if necessary
-        //    break;
-        //}
-
-    }
-
-    void GridNode::CheckOutCharacter(GameObject* character)
-    {
-        if (character)
-        {
             if (m_Characters.size() == 0)
                 return;
             for (auto it = m_Characters.begin(); it != m_Characters.end(); ++it)
@@ -352,24 +324,3 @@ namespace dae
     {
     }
 }
-
-//
-//int GridNode::HandleInput(bool enemyInteraction)
-//{
-//    auto state = m_NodeStates->HandleInput(this, enemyInteraction);
-//    if (state)
-//    {
-//        state->Exit();
-//        m_NodeStates = std::move(state);
-//        m_NodeStates->Enter();
-//        if (m_NodeStates->GetChange())
-//        {
-//            return m_Points;
-//        }
-//        else
-//        {
-//            return -m_Points;
-//        }
-//    }
-//    return 0;
-//}

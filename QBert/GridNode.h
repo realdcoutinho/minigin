@@ -69,7 +69,7 @@ namespace dae
 		void ExitNode(GameObject* character);
 		void UnResgister() { m_Characters.clear(); }
 		void SetFlickeringState();
-		void CheckOutCharacter(GameObject* character);
+		void CheckOutCharacter(GameObject* character, bool neighbour = false);
 		void CheckInCharacter(GameObject* character, bool neighbour = false);
 
 
