@@ -17,6 +17,7 @@
 #include "Input.h"
 #include "EventDispatcher.h"
 #include "GridNode.h"
+#include "UggWrongwayComponent.h"
 
 namespace dae
 {
@@ -107,6 +108,18 @@ namespace dae
 
 		auto& temp = *slick.get();
 		scene.Add(std::move(slick));
+		return temp;
+	}
+
+	GameObject& GameObjectFactory::CreateUggWrongway(Scene& scene, TriangularGrid& pGrid)
+	{
+		auto uggWrongway = std::make_unique<dae::GameObject>();
+		uggWrongway->InitializeTransformComponent();
+		auto uggWrongwayComponent = std::make_unique<dae::UggWrongwayComponent>(*uggWrongway.get(), pGrid);
+		uggWrongway->AddComponent(std::move(uggWrongwayComponent));
+
+		auto& temp = *uggWrongway.get();
+		scene.Add(std::move(uggWrongway));
 		return temp;
 	}
 

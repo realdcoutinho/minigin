@@ -23,6 +23,7 @@ namespace dae
 		void MoveToNode(GridNode& node);
 		void MoveToDirection(const glm::vec2& direction, bool isDisc = false);
 		void MoveToIndex(int idx);
+		void MoveToNextNode(bool isPositive);
 
 
 		GridNode& GetCurrentTile() const { return *m_CurrentNode; }

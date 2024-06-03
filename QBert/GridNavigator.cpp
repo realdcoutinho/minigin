@@ -97,6 +97,17 @@ namespace dae
 		MoveToNode(node);
 	}
 
+	void GridNavigator::MoveToNextNode(bool isPositive)
+	{
+		if(!m_IsAlive)
+			return;
+		auto& nxNode = m_pGrid->GetNode(m_CurrentNode->GetNodeInfo().index + (isPositive ? 1 : -1));
+		if (&nxNode != nullptr)
+		{
+			MoveToNode(nxNode);
+		}
+	}
+
 	void GridNavigator::SetNewPostion(int idx)
 	{
 		if(!m_IsAlive)

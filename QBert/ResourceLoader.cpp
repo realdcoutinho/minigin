@@ -54,6 +54,10 @@ namespace dae
 		rm.GetTexture("Disk Spritesheet.png");
 		rm.GetTexture("SamSprite.png");
 		rm.GetTexture("SlickSprite.png");
+
+		rm.GetTexture("Ugg.png");
+		rm.GetTexture("Wrongway.png");
+
 		rm.GetTexture("Egg.png");
 		rm.GetTexture("NodeTexturesLevelOne.png");
 		rm.GetTexture("NodeTexturesLevelTwo.png");

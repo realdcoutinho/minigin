@@ -128,7 +128,7 @@ namespace dae
                 //search for coily in m_characters
                 for (auto& chara : m_Characters)
                 {
-                    if (chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Coily || chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Wrongway)
+                    if (chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Coily || chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Wrongway || chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Ugg)
                     {
                         auto enemyDeath = std::make_unique<EraseOneEnemyEvent>(chara->GetID(), *chara);
                         EventDispatcher::GetInstance().DispatchEvent(std::move(enemyDeath));

@@ -92,6 +92,8 @@ namespace dae
                             break;
                         case CharacterType::Slick:
                         case CharacterType::Sam:
+                        case CharacterType::Ugg:
+                        case CharacterType::Wrongway:
                             OnDeathEvent(*deathEvent);
                             break;
                         case CharacterType::Coily:

@@ -42,7 +42,7 @@ namespace dae
 
 		bool m_SpawnCoily = false;
 		bool m_SpawnSlickSam = false;
-		bool m_SpawnUggWrongway = false;
+		bool m_SpawnUggWrongway = true;
 
 		float m_SpawnTimerCoily = 0.f;
 		float m_SpawnTimerSlickSam = 0.f;

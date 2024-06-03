@@ -227,6 +227,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClCompile Include="TileInteractor.cpp" />
     <ClCompile Include="TriangularGrid.cpp" />
     <ClCompile Include="TricklePathComponent.cpp" />
+    <ClCompile Include="UggWrongwayComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CharacterComponent.h" />
@@ -266,6 +267,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClInclude Include="TileInteractor.h" />
     <ClInclude Include="TriangularGrid.h" />
     <ClInclude Include="TricklePathComponent.h" />
+    <ClInclude Include="UggWrongwayComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

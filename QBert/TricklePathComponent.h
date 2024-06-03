@@ -48,9 +48,9 @@ namespace dae
 
 	private:
 
-		glm::vec2 TricklePath();
+		void TricklePath();
 		void MovementUpdate();
-
+		glm::vec2 m_Direction;
 		
 		TrickleType m_Type;
 

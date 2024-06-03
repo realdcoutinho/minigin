@@ -21,6 +21,7 @@ namespace dae
 		GameObject& CreateCoily(Scene& scene, TriangularGrid& pGrid, bool isPlayable = false);
 		GameObject& CreateQbert(Scene& scene, TriangularGrid& pGrid, int startingNode = 4, int player = 1);
 		GameObject& CreateSlickSam(Scene& scene, TriangularGrid& pGrid);
+		GameObject& CreateUggWrongway(Scene& scene, TriangularGrid& pGrid);
 
 		GameObject& CreateGrid(Scene& scene,GameInfo& gi);
 		GameObject& CreateTargetColorNode(Scene& scene, GameInfo& gi);

@@ -7,6 +7,7 @@
 #include "Timer.h"
 #include "GridNavigator.h"
 #include "EnemyCharacterComponent.h"
+#include "GridNode.h"
 
 namespace dae
 {
@@ -38,50 +39,88 @@ namespace dae
 
 				if (m_MoveTimer >= m_MoveTime)
 				{
-					m_MoveTimer = 0.0f;
-					m_CanMove = false;
-					glm::vec2 direction = TricklePath();
-					auto enemComp = GetOwner()->GetComponent<CharacterComponent>();
-					if (enemComp)
-						enemComp->HandleInput(direction);
-					auto navComp = GetOwner()->GetComponent<GridNavigator>();
-					if (navComp)
-					{
-						navComp->MoveToDirection(direction);
-					}
+
+						m_MoveTimer = 0.0f;
+						m_CanMove = false;
+						/*GridNode* node = */TricklePath();
+						//auto enemComp = GetOwner()->GetComponent<CharacterComponent>();
+						//if (enemComp)
+						//	enemComp->HandleInput(m_Direction);
+						//auto navComp = GetOwner()->GetComponent<GridNavigator>();
+						//if (navComp)
+						//{
+						//	navComp->MoveToIndex(node->GetNodeInfo().index);
+						//}
 				}
 			}
 		}
 	}
 
-	glm::vec2 TricklePathComponent::TricklePath()
+	void TricklePathComponent::TricklePath()
 	{
 		std::random_device rd;
 		std::mt19937 gen(rd());
 		std::uniform_int_distribution<> dis(0, 1);
 		int randomIndex = dis(gen);
 
+		auto enemComp = GetOwner()->GetComponent<CharacterComponent>();
+		auto navComp = GetOwner()->GetComponent<GridNavigator>();
+
+		if (!navComp || ! enemComp)
+			return;
+
+
 		switch (m_Type)
 		{
-			case dae::TrickleType::Left:
+		case dae::TrickleType::Left:
+		{
+			LeftVectors vectors;
+			if (randomIndex == 0)
 			{
-				LeftVectors vectors;
-				randomIndex == 0 ? vectors.LeftUp : vectors.LeftDown;
-				break;
+				m_Direction = vectors.LeftUp;
+				navComp->MoveToDirection(m_Direction);
 			}
-			case dae::TrickleType::Right:
+			else
 			{
-				RightVectors vectors;
-				return randomIndex == 0 ? vectors.RightUp : vectors.RightDown;
-				break;
+				m_Direction = vectors.LeftDown;
+				navComp->MoveToNextNode(false);
 			}
-			case dae::TrickleType::Down:
-			{
-				DownVectors vectors;
-				return randomIndex == 0 ? vectors.DownLeft : vectors.DownRight;
-				break;
-			}
+			break;
 		}
-		return glm::vec2();  // Return a default vector in case of an undefined type
+		case dae::TrickleType::Right:
+		{
+			RightVectors vectors;
+			if (randomIndex == 0)
+			{
+				m_Direction = vectors.RightUp;
+				navComp->MoveToDirection(m_Direction);
+			}
+			else
+			{
+				m_Direction = vectors.RightDown;
+				navComp->MoveToNextNode(true);
+			}
+			break;
+		}
+		case dae::TrickleType::Down:
+		{
+			DownVectors vectors;
+			if (randomIndex == 0)
+			{
+				m_Direction = vectors.DownLeft;
+				navComp->MoveToDirection(m_Direction);
+			}
+			else
+			{
+				m_Direction = vectors.DownRight;
+				navComp->MoveToDirection(m_Direction);
+			}
+			break;
+		}
+		}
+		enemComp->HandleInput(m_Direction);
 	}
+
+
+	
 }

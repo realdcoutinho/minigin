@@ -38,11 +38,14 @@ namespace dae
 		m_SpawnTimerCoily = m_CoilyInterval;
 		m_SpawnTimerSlickSam = 5.0f;
 		m_SpawnTimerUggWrongway = m_UggWrongwayInterval;
+		m_SpawnTimerUggWrongway = 5.0f;
 
 		if (gameInfo.gameMode == 3)
 			m_VersusMode = true;
 
 		m_pCoily = nullptr;
+
+		m_SpawnUggWrongway = true;
 	}
 
 	void EnemyManager::Update()
@@ -50,9 +53,9 @@ namespace dae
 		m_pCurrentScene->GetTimer();
 		float elapsed = m_pCurrentScene->GetTimer().GetElapsed();
 
-		UpdateCoilySpawnTimers(elapsed);
-		UpdateSlickSamSpawnTimers(elapsed);
-		//UpdateUggWrongwaySpawnTimers(elapsed);
+		//UpdateCoilySpawnTimers(elapsed);
+		//UpdateSlickSamSpawnTimers(elapsed);
+		UpdateUggWrongwaySpawnTimers(elapsed);
 	}
 
 
@@ -174,7 +177,7 @@ namespace dae
 
 	void EnemyManager::UpdateUggWrongwaySpawnTimers(float elapsedSec)
 	{
-		if (m_MaxUggWrongway <= 0)
+		if (m_MaxUggWrongway <= m_CurrentUggWrongway)
 		{
 			m_SpawnUggWrongway = false;
 		}
@@ -207,7 +210,7 @@ namespace dae
 
 	void EnemyManager::SpawnUggWrongway()
 	{
-		//GameObjectFactory::GetInstance().CreateUggWrongway(*m_pCurrentScene);
+		GameObjectFactory::GetInstance().CreateUggWrongway(*m_pCurrentScene, *m_pGrid);
 	}
 
 
