@@ -69,6 +69,7 @@ namespace dae
 		if (!navComp || ! enemComp)
 			return;
 
+		glm::vec2 facingdirection{};
 
 		switch (m_Type)
 		{
@@ -78,11 +79,14 @@ namespace dae
 			if (randomIndex == 0)
 			{
 				m_Direction = vectors.LeftUp;
+				facingdirection = { 0, -1 };
+				enemComp->HandleInput(facingdirection);
 				navComp->MoveToDirection(m_Direction);
 			}
 			else
 			{
-				m_Direction = vectors.LeftDown;
+				facingdirection = { 1, 0 };
+				enemComp->HandleInput(facingdirection);
 				navComp->MoveToNextNode(false);
 			}
 			break;
@@ -93,11 +97,15 @@ namespace dae
 			if (randomIndex == 0)
 			{
 				m_Direction = vectors.RightUp;
+				facingdirection = { -1, 0 };
+				enemComp->HandleInput(facingdirection);
 				navComp->MoveToDirection(m_Direction);
 			}
 			else
 			{
 				m_Direction = vectors.RightDown;
+				facingdirection = { 0, 1 };
+				enemComp->HandleInput(facingdirection);
 				navComp->MoveToNextNode(true);
 			}
 			break;
@@ -108,17 +116,19 @@ namespace dae
 			if (randomIndex == 0)
 			{
 				m_Direction = vectors.DownLeft;
+				enemComp->HandleInput(m_Direction);
 				navComp->MoveToDirection(m_Direction);
 			}
 			else
 			{
 				m_Direction = vectors.DownRight;
+				enemComp->HandleInput(m_Direction);
 				navComp->MoveToDirection(m_Direction);
 			}
 			break;
 		}
 		}
-		enemComp->HandleInput(m_Direction);
+		
 	}
 
 

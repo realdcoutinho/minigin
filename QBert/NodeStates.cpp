@@ -321,7 +321,7 @@ namespace dae
     }
     std::unique_ptr<NodeStates> NodeStateDisc::HandleInput(GridNode* node, GameObject* character, GridNode* previousNode)
     {
-        auto charType = character->GetComponent<CharacterComponent>()->GetType();
+        auto charType = character->GetComponent<CharacterComponent>(true)->GetType();
         if (charType == CharacterType::QBert)
         {
             node;
@@ -334,6 +334,11 @@ namespace dae
             }
             character->GetComponent<GridNavigator>()->MoveToDirection({ 0, 1 }, true);
             //return std::make_unique<NodeStatePit>(node, character, previousNode);
+        }
+        else
+        {
+            auto death = std::make_unique<CharacterDeathEvent>(node->GetOwner()->GetParent()->GetID(), *m_PreviousNode, *character);
+            EventDispatcher::GetInstance().DispatchEvent(std::move(death));
         }
         return std::make_unique<NodeStateDisc>(node, character, previousNode);
     }

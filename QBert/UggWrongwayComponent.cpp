@@ -6,6 +6,8 @@
 #include "GridNode.h"
 #include "GameObject.h"
 #include <random>
+#include "SceneManager.h"
+#include "Scene.h"
 
 dae::UggWrongwayComponent::UggWrongwayComponent(GameObject& pOwner, TriangularGrid& grid)
 	:BaseComponent(pOwner)
@@ -20,7 +22,12 @@ dae::UggWrongwayComponent::UggWrongwayComponent(GameObject& pOwner, TriangularGr
 
 	if (d(gen))
 	{
-		auto character = std::make_unique<CharacterComponent>(pOwner, CharacterType::Ugg);
+		auto offsetObj = std::make_unique<GameObject>();
+		offsetObj->InitializeTransformComponent();
+		offsetObj->SetLocalPosition({ -25.0f, 50.0f });
+
+
+		auto character = std::make_unique<CharacterComponent>(*offsetObj.get(), CharacterType::Ugg);
 		m_Character = character.get();
 		GetOwner()->AddComponent(std::move(character));
 		auto tex = m_Character->InitializeSprite(m_UggTexture, 4);
@@ -35,11 +42,17 @@ dae::UggWrongwayComponent::UggWrongwayComponent(GameObject& pOwner, TriangularGr
 		m_TricklePath = trickle.get();
 		pOwner.AddComponent(std::move(trickle));
 
+		offsetObj->SetParent(&pOwner);
+		SceneManager::GetInstance().GetActiveScene().Add(std::move(offsetObj));
 		pOwner.SetLocalPosition(node.GetNodeInfo().centerPos);
 	}
 	else
 	{
-		auto character = std::make_unique<CharacterComponent>(pOwner, CharacterType::Wrongway);
+		auto offsetObj = std::make_unique<GameObject>();
+		offsetObj->InitializeTransformComponent();
+		offsetObj->SetLocalPosition({ 25.0f, 50.0f });
+
+		auto character = std::make_unique<CharacterComponent>(*offsetObj.get(), CharacterType::Wrongway);
 		m_Character = character.get();
 		GetOwner()->AddComponent(std::move(character));
 		auto tex = m_Character->InitializeSprite(m_WrongwayTexture, 4);
@@ -54,6 +67,8 @@ dae::UggWrongwayComponent::UggWrongwayComponent(GameObject& pOwner, TriangularGr
 		m_TricklePath = trickle.get();
 		pOwner.AddComponent(std::move(trickle));
 
+		offsetObj->SetParent(&pOwner);
+		SceneManager::GetInstance().GetActiveScene().Add(std::move(offsetObj));
 		pOwner.SetLocalPosition(node.GetNodeInfo().centerPos);
 	}
 

@@ -126,8 +126,8 @@ namespace dae
 			m_pCoily = nullptr;
 
 
-		pEnemy->GetComponent<DeathComponent>()->OnDeath();
-		pEnemy->GetComponent<GridNavigator>()->SetDead();
+		pEnemy->GetComponent<DeathComponent>(true)->OnDeath();
+		pEnemy->GetComponent<GridNavigator>(true)->SetDead();
 	}
 
 	void EnemyManager::Reset()
