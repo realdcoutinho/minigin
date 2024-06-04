@@ -156,13 +156,7 @@
     <ClInclude Include="Subject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CharacterComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="ScoreComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="HealthComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="HUDComponent.h">
@@ -322,12 +316,6 @@
     </ClCompile>
     <ClCompile Include="HUDComponent.cpp">
       <Filter>Components\HUD</Filter>
-    </ClCompile>
-    <ClCompile Include="CharacterComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="HealthComponent.cpp">
-      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="ScoreComponent.cpp">
       <Filter>Components</Filter>

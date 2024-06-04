@@ -27,6 +27,7 @@ namespace dae
 		void DestroyEnemy(GameObject* pEnemy);
 
 		void Reset();
+		void Restart();
 
 	private:
 
@@ -44,6 +45,8 @@ namespace dae
 		bool m_SpawnSlickSam = false;
 		bool m_SpawnUggWrongway = true;
 
+		bool m_KeepUpdate{ true };
+
 		float m_SpawnTimerCoily = 0.f;
 		float m_SpawnTimerSlickSam = 0.f;
 		float m_SpawnTimerUggWrongway = 0.f;
@@ -58,9 +61,10 @@ namespace dae
 		float m_SlickSamInterval = 0.f;
 		float m_UggWrongwayInterval = 0.f;
 
-		Scene* m_pCurrentScene;
+		Scene* m_pCurrentScene = nullptr;
 		GameObject* m_pCoily;
 		TriangularGrid* m_pGrid;
+		GameInfo* m_pGameInfo;
 
 		std::vector<GameObject*> m_pEnemies;
 	};

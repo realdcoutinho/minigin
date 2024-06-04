@@ -42,7 +42,7 @@ namespace dae
 
 	void HUDComponent::SetValue(int value)
 	{
-		m_Value += value;
+		m_Value = value;
 		std::stringstream stream;
 		stream << m_Value;
 		std::string newText = m_Text + stream.str();

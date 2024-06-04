@@ -18,10 +18,11 @@
 #include "Scene.h"
 #include "TransformComponent.h"
 #include "TriangularGrid.h"
+#include "Scene.h"
 
 namespace dae
 {
-    GridNode::GridNode(GameObject& pOwner, NodeInfo info, GameInfo& gameInfo)
+    GridNode::GridNode(GameObject& pOwner, NodeInfo info, GameInfo& gameInfo, Scene* scene)
         : BaseComponent(pOwner),
         m_NodeInfo(info),
         m_Level(gameInfo.level)
@@ -52,7 +53,7 @@ namespace dae
 
             m_NodeStates = std::make_unique<NodeStateDisc>();
 
-            SceneManager::GetInstance().GetActiveScene().Add(std::move(discObj));
+            scene->Add(std::move(discObj));
         }
         else if (m_NodeInfo.type == TileType::Zero)
             m_NodeStates = std::make_unique<NodeStateZero>();

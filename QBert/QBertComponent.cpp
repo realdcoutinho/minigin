@@ -8,34 +8,57 @@
 #include "QBertGameMode.h"
 #include "GameModeManager.h"
 #include "RespawnComponent.h"
+#include "GameMode.h"
+#include "GameInfo.h"
+#include "GameInfoLoader.h"
+#include "Scene.h"
+#include "GameModeManager.h"
+#include "QBertGameMode.h"
 
 namespace dae
 {
 	QBertComponent::QBertComponent(GameObject& pOwner, TriangularGrid& pGrid, int startingNode, int player)
-		: BaseComponent(pOwner)
+		: BaseComponent(pOwner),
+		m_PlayerNumber{ player }
 	{
-		auto score = std::make_unique<ScoreComponent>(pOwner);
-		auto health = std::make_unique<HealthComponent>(pOwner, 3);
+		auto gameMode = GameModeManager::GetInstance().GetActiveGameMode();
+		auto qbertGameMode = dynamic_cast<QBertGameMode*>(gameMode);
+		if (qbertGameMode == nullptr)	
+			return;
+
+
+
+		auto character = std::make_unique<CharacterComponent>(pOwner, CharacterType::QBert);
+		m_Character = character.get();
+		GetOwner()->AddComponent(std::move(character));
+
+
+		int scorePoints{};
+		int healthPoints{};
+		if(player == 1)
+		{
+			scorePoints = qbertGameMode->GetPlayerOneScore();
+			healthPoints = qbertGameMode->GetPlayerOneLives();
+			auto tex = m_Character->InitializeSprite(m_QBertTextureFile1, 4);
+			tex->SetScale({ 2.0f, 2.0f });
+		}
+		if(player == 2)
+		{
+			scorePoints = qbertGameMode->GetPlayerTwoScore();
+			healthPoints = qbertGameMode->GetPlayerTwoLives();
+			auto tex = m_Character->InitializeSprite(m_QBertTextureFile2, 4);
+			tex->SetScale({ 2.0f, 2.0f });
+		}
+
+
+		auto score = std::make_unique<ScoreComponent>(pOwner, scorePoints);
+		auto health = std::make_unique<HealthComponent>(pOwner, healthPoints);
 
 		m_Score = score.get();
 		m_Health = health.get();
 
 		GetOwner()->AddComponent(std::move(score));
 		GetOwner()->AddComponent(std::move(health));
-
-		auto character = std::make_unique<CharacterComponent>(pOwner, CharacterType::QBert);
-		m_Character = character.get();
-		GetOwner()->AddComponent(std::move(character));
-		if(player == 1)
-		{
-			auto tex = m_Character->InitializeSprite(m_QBertTextureFile1, 4);
-			tex->SetScale({ 2.0f, 2.0f });
-		}
-		else
-		{
-			auto tex = m_Character->InitializeSprite(m_QBertTextureFile2, 4);
-			tex->SetScale({ 2.0f, 2.0f });
-		}
 
 
 

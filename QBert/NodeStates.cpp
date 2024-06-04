@@ -93,7 +93,8 @@ namespace dae
         auto charType = character->GetComponent<CharacterComponent>()->GetType();
         if (charType == CharacterType::QBert)
         {
-            auto scoreEvent = std::make_unique<ScoreEvent>(25, character->GetID());
+            int score = 25;
+            auto scoreEvent = std::make_unique<ScoreEvent>(score, character->GetID());
             EventDispatcher::GetInstance().DispatchEvent(std::move(scoreEvent));
 
             if (node->m_Level == 1)

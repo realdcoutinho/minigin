@@ -44,6 +44,19 @@ void dae::SceneManager::FixedUpdate()
 }
 
 
+void dae::SceneManager::DestroyAllScenes()
+{
+	//SETS ALL SCENES TO NULLPTR
+	for (auto scene : m_scenes)
+	{
+		scene->RemoveAll();
+		scene = nullptr;
+	}
+	m_scenes.clear();
+	m_pActiveScene = nullptr;
+
+}
+
 dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
 {
 	//const auto& scene = std::make_unique<Scene>(name);
@@ -54,6 +67,22 @@ dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
 	const auto& scene = std::make_shared<Scene>(name);
 	m_scenes.push_back(scene);
 	return *scene;
+
+	//	// Find if a scene with the same name already exists
+	//auto it = std::find_if(m_scenes.begin(), m_scenes.end(), [&name](const std::shared_ptr<Scene>& scene) {
+	//	return scene->GetSceneName() == name;
+	//	});
+
+	//// If it exists, remove it
+	//if (it != m_scenes.end()) {
+	//	m_scenes.erase(it);
+	//}
+
+	//// Create the new scene
+	//const auto& scene = std::make_shared<Scene>(name);
+	//m_scenes.push_back(scene);
+
+	//return *scene;
 
 
 }

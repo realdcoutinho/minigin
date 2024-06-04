@@ -20,6 +20,8 @@
 #include "Scene.h"
 #include "Timer.h"
 #include "TimeManager.h"
+#include "SelectModeComponent.h"
+#include "GameOverComponent.h"
 
 namespace dae
 {
@@ -93,6 +95,8 @@ namespace dae
 	private:
 		GameObject& m_pActor;
 	};
+
+
 
 
 	class MovementCommand : public GameObjectCommand
@@ -251,6 +255,66 @@ namespace dae
 
 	};
 
+
+	class ChooseGameMode : public GameObjectCommandAxis
+	{
+		public:
+			ChooseGameMode(GameObject& pActor)
+				: GameObjectCommandAxis(pActor)
+				, m_directionVector{ 0,0 }
+			{
+			};
+
+		glm::vec2 m_directionVector;
+
+		void Execute()
+		{
+			MoveActor(m_directionVector);
+		}
+
+		void MoveActor(glm::vec2 dir)
+		{
+			if (dir.x == 0 && dir.y == 0)
+				return;
+
+			glm::vec2 loc = { dir.x, -dir.y };
+
+			auto actor = GetActor();
+			actor->GetComponent<SelectModeComponent>()->HandleInput(loc);
+
+		}
+
+		void SetDirection(glm::vec2 direction)
+		{
+			m_directionVector = direction;
+		}
+	};
+
+
+
+	class SelectGameModeCommand : public GameObjectCommand
+	{
+	public:
+		SelectGameModeCommand(GameObject& pActor)
+			: GameObjectCommand(pActor)
+		{};
+			virtual void Execute()
+		{
+			GetActor()->GetComponent<SelectModeComponent>()->SelectMode();
+		}
+	};
+
+	class ResartGame : public GameObjectCommand
+	{
+	public:
+		ResartGame(GameObject& pActor)
+			: GameObjectCommand(pActor)
+		{};
+		virtual void Execute()
+		{
+			GetActor()->GetComponent<GameOverComponent>()->RestartGame();
+		}
+	};
 
 	class GridMovement : public GameObjectCommandAxis
 	{

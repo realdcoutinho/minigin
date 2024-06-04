@@ -63,19 +63,22 @@ namespace dae
 
 	}
 
-	void HUDLivesComponent::Hit()
+	void HUDLivesComponent::Set(int value)
 	{
-		--m_Lives;
+		m_Lives = value;
 		if (m_Lives == 2)
 		{
 			m_LivesThreeGO->SetActive(false);
 		}
 		else if (m_Lives == 1)
 		{
+			m_LivesThreeGO->SetActive(false);
 			m_LivesTwoGO->SetActive(false);
 		}
 		else if (m_Lives == 0)
 		{
+			m_LivesThreeGO->SetActive(false);
+			m_LivesTwoGO->SetActive(false);
 			m_LivesOneGO->SetActive(false);
 		}
 	}

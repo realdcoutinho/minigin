@@ -29,6 +29,9 @@ namespace dae
 		~SceneManager() override;
 
 		void SetActiveTimer();
+
+		void DestroyAllScenes();
+
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;

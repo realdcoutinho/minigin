@@ -36,9 +36,9 @@ namespace dae
 		m_UggWrongwayInterval = gameInfo.uggInterval;
 
 		m_SpawnTimerCoily = m_CoilyInterval;
-		m_SpawnTimerSlickSam = 5.0f;
-		m_SpawnTimerUggWrongway = 2.0f;
-		m_SpawnTimerUggWrongway = 5.0f;
+		m_SpawnTimerSlickSam = 8.0f;
+		m_SpawnTimerUggWrongway = 6.0f;
+		m_SpawnTimerUggWrongway = 6.0f;
 
 		if (gameInfo.gameMode == 3)
 			m_VersusMode = true;
@@ -46,10 +46,20 @@ namespace dae
 		m_pCoily = nullptr;
 
 		m_SpawnUggWrongway = true;
+
+		m_KeepUpdate = true;
+
+		m_pGameInfo = &gameInfo;
 	}
 
 	void EnemyManager::Update()
 	{
+		if(!m_KeepUpdate)
+			return;
+
+		if(!m_pCurrentScene)
+			return;
+		
 		m_pCurrentScene->GetTimer();
 		float elapsed = m_pCurrentScene->GetTimer().GetElapsed();
 
@@ -133,6 +143,12 @@ namespace dae
 	void EnemyManager::Reset()
 	{
 		DestroyAllEnemies();
+		m_KeepUpdate = false;
+	}
+
+	void EnemyManager::Restart()
+	{
+		m_KeepUpdate = true;
 	}
 
 	void EnemyManager::UpdateCoilySpawnTimers(float elapsedSec)
@@ -202,7 +218,7 @@ namespace dae
 		if (!m_VersusMode)
 			m_pCoily = &GameObjectFactory::GetInstance().CreateCoily(*m_pCurrentScene, *m_pGrid);
 		else
-			m_pCoily = &GameObjectFactory::GetInstance().InitializePlayerTwo(*m_pCurrentScene, *m_pGrid, true);
+			m_pCoily = &GameObjectFactory::GetInstance().InitializePlayerTwo(*m_pCurrentScene, *m_pGrid, *m_pGameInfo);
 	}
 
 	void EnemyManager::SpawnSlickSam()

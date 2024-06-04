@@ -24,6 +24,7 @@ namespace dae
 
 		int GetHealthValue() const;
 		int GetScoreValue() const;
+		int GetPlayerNumber() { return m_PlayerNumber; };
 
 	private:
 		CharacterComponent* m_Character;
@@ -33,6 +34,7 @@ namespace dae
 		const std::string m_QBertTextureFile1{ "Qbert P1 Spritesheet.png" };
 		const std::string m_QBertTextureFile2{ "Qbert P2 Spritesheet.png" };
 
+		int m_PlayerNumber =1;
 	};
 }
 

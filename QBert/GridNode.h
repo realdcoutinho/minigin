@@ -53,10 +53,11 @@ namespace dae
 	class NodeStates;
 	struct GameInfo;
 	class NodeInteractorEvent;
+	class Scene;
 	class GridNode final : public BaseComponent
 	{
 	public:
-		GridNode(GameObject& pOwner, NodeInfo info, GameInfo& gameInfo);
+		GridNode(GameObject& pOwner, NodeInfo info, GameInfo& gameInfo, Scene* scene = nullptr);
 
 		~GridNode() = default;
 

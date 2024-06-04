@@ -27,10 +27,14 @@ namespace dae
 		void Initialize(GameInfoLoader* infoLoader) { m_pGameInfoLoader = infoLoader; };
 		void Update(float elapsed) override;
 
+		void LoadStartScene();
+		void Restart();
 
 		void StartScene(const std::string sceneName);
+		void LoadScene(const std::string sceneName);
+		void GameOver();
+		
 		void LoadNextScene();
-		void SetQBertNode(GridNode& node);
 
 
 		void QBertMovement();
@@ -38,9 +42,20 @@ namespace dae
 
 		TriangularGrid* GetGrid() const { return m_pGrid; };
 
+		void ResetEnemyManager();
+
+		int GetPlayerOneLives() const { return m_PlayerOneLives; };
+		int GetPlayerOneScore() const { return m_PlayerOneScore; };
+		int GetPlayerTwoLives() const { return m_PlayerTwoLives; };
+		int GetPlayerTwoScore() const { return m_PlayerTwoScore; };
+
+		void SetPlayerLives(int lives, int player);
+		void SetPlayerScore(int score, int player);
+
 	private:
 
-		void LoadGrid();
+		void CreatePlayers(Scene& scene);
+
 
 		TriangularGrid* m_pGrid;
 
@@ -58,7 +73,11 @@ namespace dae
 		std::vector<GameObject*> m_pPlayers;
 
 
-		int m_QBertLives;
+		int m_PlayerOneLives{ 3 };
+		int m_PlayerOneScore{ 0 };
+		int m_PlayerTwoLives{ 3 };
+		int m_PlayerTwoScore{ 0 };
+
 
 	};
 

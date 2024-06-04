@@ -14,7 +14,7 @@ namespace dae
 		void Render() override;
 		void Update() override;
 
-		void Hit();
+		void Set(int value);
 
 	private:
 		int m_Lives;

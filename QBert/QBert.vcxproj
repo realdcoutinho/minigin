@@ -204,6 +204,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClCompile Include="GameInfoLoader.cpp" />
     <ClCompile Include="GameLauncher.cpp" />
     <ClCompile Include="GameObjectFactory.cpp" />
+    <ClCompile Include="GameOverComponent.cpp" />
     <ClCompile Include="GridNavigator.cpp" />
     <ClCompile Include="GridNode.cpp" />
     <ClCompile Include="HealthComponent.cpp" />
@@ -223,6 +224,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClCompile Include="RespawnComponent.cpp" />
     <ClCompile Include="SamSlickComponent.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
+    <ClCompile Include="SelectModeComponent.cpp" />
+    <ClCompile Include="SelectModeStates.cpp" />
     <ClCompile Include="ServicesLoader.cpp" />
     <ClCompile Include="TileInteractor.cpp" />
     <ClCompile Include="TriangularGrid.cpp" />
@@ -243,6 +246,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClInclude Include="GameInfoLoader.h" />
     <ClInclude Include="GameLauncher.h" />
     <ClInclude Include="GameObjectFactory.h" />
+    <ClInclude Include="GameOverComponent.h" />
     <ClInclude Include="GridNavigator.h" />
     <ClInclude Include="GridNode.h" />
     <ClInclude Include="HealthComponent.h" />
@@ -262,6 +266,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClInclude Include="RespawnComponent.h" />
     <ClInclude Include="SamSlickComponent.h" />
     <ClInclude Include="ScoreComponent.h" />
+    <ClInclude Include="SelectModeComponent.h" />
+    <ClInclude Include="SelectModeStates.h" />
     <ClInclude Include="ServicesLoader.h" />
     <ClInclude Include="SoundLibrary.h" />
     <ClInclude Include="TileInteractor.h" />

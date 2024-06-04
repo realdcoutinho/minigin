@@ -28,33 +28,69 @@ namespace dae
 		m_pEnemyManager->Update();
 	}
 
+	void QBertGameMode::LoadStartScene()
+	{
+		auto& sm = SceneManager::GetInstance();
+		//sm.DestroyAllScenes();
+		auto& startScene = sm.CreateScene("StartScene");
+		sm.SetActiveScene(startScene);
+		m_pCurrentScene = &sm.GetActiveScene();
+
+		GameObjectFactory::GetInstance().CreateStartMenu(startScene);
+	}
+
+	void QBertGameMode::Restart()
+	{
+		m_PlayerOneLives = 3;
+		m_PlayerTwoLives = 3;
+		m_PlayerOneScore = 0;
+		m_PlayerTwoScore = 0;
+		m_pEnemyManager->Reset();
+		m_pPlayers.clear();
+		m_pEnemyListener.reset();
+		LoadStartScene();
+	}
+
 	void QBertGameMode::StartScene(const std::string sceneName)
 	{
-		std::cout << "QBertGameMode started scene " << sceneName << std::endl;
-		m_CurrentSceneName = sceneName;
 		auto& sm = SceneManager::GetInstance();
+		m_CurrentSceneName = sceneName;
 		sm.SetActiveScene(sceneName);
 		m_pCurrentScene = &sm.GetActiveScene();
 
+	}
 
-		m_CurrentGameInfo = m_pGameInfoLoader->GetGameInfo(m_CurrentSceneName);
-		auto& grid = GameObjectFactory::GetInstance().CreateGrid(*m_pCurrentScene, m_CurrentGameInfo);
+	void QBertGameMode::LoadScene(const std::string sceneName)
+	{
+		std::cout << "QBertGameMode started scene " << sceneName << std::endl;
+		auto& sm = SceneManager::GetInstance();
+		auto& scene = sm.CreateScene(sceneName);
+		sm.SetActiveScene(scene);
+
+
+		m_CurrentGameInfo = m_pGameInfoLoader->GetGameInfo(sceneName);
+		auto& grid = GameObjectFactory::GetInstance().CreateGrid(scene, m_CurrentGameInfo);
 		m_pGrid = grid.GetComponent<TriangularGrid>();
 
 		m_pEnemyManager->SetNewData(m_CurrentGameInfo);
 		m_pEnemyManager->SetTriangularGrid(*m_pGrid);
-		m_pEnemyManager->SetCurrentScene(m_pCurrentScene);
+		m_pEnemyManager->SetCurrentScene(&scene);
 
 		m_pEnemyListener = std::make_shared<EnemyListener>(m_pEnemyManager.get());
 		EventDispatcher::GetInstance().SubscribeListener(m_pEnemyListener);
 
-
-
-		auto& playerOne = GameObjectFactory::GetInstance().InitializePlayerOne(*m_pCurrentScene, *m_pGrid);
-		m_pPlayers.push_back(&playerOne);
-		auto& playerTwo = GameObjectFactory::GetInstance().InitializePlayerTwo(*m_pCurrentScene, *m_pGrid);
-		m_pPlayers.push_back(&playerTwo);
+		CreatePlayers(scene);
 	}
+
+	void QBertGameMode::GameOver()
+	{
+		auto& sm = SceneManager::GetInstance();
+		auto& scene = sm.CreateScene("Game Over");
+		sm.SetActiveScene(scene);
+
+		GameObjectFactory::GetInstance().CreateGameOver(scene, m_PlayerOneScore, m_PlayerTwoScore);
+	}
+
 
 	void QBertGameMode::LoadNextScene()
 	{
@@ -73,6 +109,14 @@ namespace dae
 		{
 			StartScene("LevelThreeCoop");
 		}
+		if (m_CurrentSceneName == "LevelOneSolo")
+		{
+			StartScene("LevelTwoSolo");
+		}
+		else if (m_CurrentSceneName == "LevelTwoSolo")
+		{
+			StartScene("LevelThreeSolo");
+		}
 	}
 
 	void QBertGameMode::QBertMovement()
@@ -86,6 +130,51 @@ namespace dae
 			player->GetComponent<TextureComponent>()->SetRender(render);
 		}
 
+	}
+	void QBertGameMode::ResetEnemyManager()
+	{
+		m_pEnemyManager->Reset();
+	}
+
+	void QBertGameMode::SetPlayerLives(int lives, int player)
+	{
+		if (player == 1)
+		{
+			m_PlayerOneLives = lives;
+		}
+		else if (player == 2)
+		{
+			m_PlayerTwoLives = lives;
+		}
+	}
+
+	void QBertGameMode::SetPlayerScore(int score, int player)
+	{
+		if (player == 1)
+		{
+			m_PlayerOneScore = score;
+		}
+		else if (player == 2)
+		{
+			m_PlayerTwoScore = score;
+		}
+	}
+
+	void QBertGameMode::CreatePlayers(Scene& scene)
+	{
+		if(m_PlayerOneLives > 0)	
+		{
+			auto& playerOne = GameObjectFactory::GetInstance().InitializePlayerOne(scene, *m_pGrid, m_CurrentGameInfo);
+			m_pPlayers.push_back(&playerOne);
+		}
+		if (m_CurrentGameInfo.gameMode > 1)
+		{
+			if(m_PlayerTwoLives > 0)
+			{
+				auto& playerTwo = GameObjectFactory::GetInstance().InitializePlayerTwo(scene, *m_pGrid, m_CurrentGameInfo);
+				m_pPlayers.push_back(&playerTwo);
+			}
+		}
 	}
 }
 

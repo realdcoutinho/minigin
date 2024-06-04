@@ -8,6 +8,9 @@
 #include <memory>
 #include "QbertEvents.h"
 #include "EventDispatcher.h"
+#include "GameModeManager.h"
+#include "QBertGameMode.h"
+#include "QBertComponent.h"
 
 
 namespace dae
@@ -16,6 +19,8 @@ namespace dae
 		:BaseComponent(pOwner),
 		m_Score{ intialPoints }
 	{
+		auto scoreEvent = std::make_unique<ScoreEventHUD>(m_Score, GetOwnerID());
+		EventDispatcher::GetInstance().DispatchEvent(std::move(scoreEvent));
 	}
 
 	ScoreComponent::~ScoreComponent()
@@ -26,13 +31,17 @@ namespace dae
 	void ScoreComponent::SetScore(int score)
 	{
 		m_Score += score;
-		//auto id = GetOwner()->GetID();
-		//auto eventRef = std::make_unique<TemplateEvent<int>>(id, GetOwner(), EventType::ScoreChange, m_Score);
-		//EventManager::GetInstance().AddEvent(std::move(eventRef));
+		auto scoreEvent = std::make_unique<ScoreEventHUD>(m_Score, GetOwnerID());
+		EventDispatcher::GetInstance().DispatchEvent(std::move(scoreEvent));
 
-
-		//std::unique_ptr<IEvent> event1 = std::make_unique<PlayerScoredEvent>(m_Score, GetOwnerID());  // Event for player 1
-		//EventDispatcher::GetInstance().QueueEvent(std::move(event1));
+		auto gameMode = GameModeManager::GetInstance().GetActiveGameMode();
+		auto qbertGameMode = dynamic_cast<QBertGameMode*>(gameMode);
+		if (qbertGameMode != nullptr)
+		{
+			qbertGameMode->GetGrid()->UnregisterAllCharacters();
+			int playerNumber = GetOwner()->GetComponent<QBertComponent>()->GetPlayerNumber();
+			qbertGameMode->SetPlayerScore(m_Score, playerNumber);
+		}
 	}
 
 	int ScoreComponent::GetScore() const

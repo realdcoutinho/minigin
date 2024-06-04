@@ -24,52 +24,103 @@ namespace dae
 {
     void ScoreListener::OnEvent(IEvent& event)
     {
-        // We know that this listener is listening to PlayerScoredEvent
-        auto& playerScoredEvent = dynamic_cast<ScoreEvent&>(event);
-        // Check if the event is for this listener
-        if (playerScoredEvent.getPlayerId() == listenerId)
+        try
         {
-            if (m_Object.GetComponent<HUDComponent>())
+
+            if (auto playerScoredEvent = dynamic_cast<ScoreEvent*>(&event))
             {
-                m_Object.GetComponent<HUDComponent>()->SetValue(playerScoredEvent.getScore());
+                if (playerScoredEvent->getPlayerId() == listenerId)
+                {
+                    if (m_Object.GetComponent<ScoreComponent>())
+                    {
+                        m_Object.GetComponent<ScoreComponent>()->SetScore(playerScoredEvent->getScore());
+                    }
+                }
+
             }
-            if (m_Object.GetComponent<ScoreComponent>())
+            else if (auto HUDScoredEvent = dynamic_cast<ScoreEventHUD*>(&event))
             {
-                m_Object.GetComponent<ScoreComponent>()->SetScore(playerScoredEvent.getScore());
+                if(HUDScoredEvent->getPlayerId() == listenerId)
+                { 
+                    if (m_Object.GetComponent<HUDComponent>())
+                    {
+                        m_Object.GetComponent<HUDComponent>()->SetValue(HUDScoredEvent->getScore());
+                    }
+                }
             }
+            else
+            {
+                // Handle unexpected events if necessary
+            }
+
+        }
+        catch (const std::bad_cast& e)
+        {
+            // Handle or log the casting error
+            std::cerr << "Casting error occurred: " << e.what() << '\n';
         }
     }
 
     std::vector<std::type_index> ScoreListener::GetSupportedEvents()
     {
-        return { std::type_index(typeid(ScoreEvent)) };
+        return
+        {
+
+            std::type_index(typeid(ScoreEvent)),
+            std::type_index(typeid(ScoreEventHUD))
+        };
     }
 
     void HealthListener::OnEvent(IEvent& event)
     {
-        // We know that this listener is listening to PlayerHealthEvent
-		auto& playerHealthEvent = dynamic_cast<PlayerHealthEvent&>(event);
-		// Check if the event is for this listener
-        if (playerHealthEvent.getPlayerId() == listenerId)
+        try
         {
-            if (m_Object.GetComponent<HUDLivesComponent>())
+            // We know that this listener is listening to PlayerHealthEvent
+            if (auto playerHealthEvent = dynamic_cast<PlayerHealthEvent*>(&event))
             {
-                m_Object.GetComponent<HUDLivesComponent>()->Hit();
-			}
-            if (m_Object.GetComponent<HealthComponent>())
-            {
-                int index = playerHealthEvent.getLastNodeIdx();
-                auto healthComp = m_Object.GetComponent<HealthComponent>();
-                healthComp->TakeHit();
-                healthComp->Respawn(index);
+                // Check if the event is for this listener
+                if (playerHealthEvent->getPlayerId() == listenerId)
+                {
+                    if (m_Object.GetComponent<HealthComponent>())
+                    {
+                        int index = playerHealthEvent->getLastNodeIdx();
+                        auto healthComp = m_Object.GetComponent<HealthComponent>();
+                        healthComp->TakeHit();
+                        healthComp->Respawn(index);
 
-			}
-		}
+                    }
+                }
+            }
+            else if (auto healthChangeEventHUD = dynamic_cast<HealthChangeEventHUD*>(&event))
+            {
+                if (healthChangeEventHUD->getPlayerId() == listenerId)
+                {
+                    if (m_Object.GetComponent<HUDLivesComponent>())
+                    {
+                        m_Object.GetComponent<HUDLivesComponent>()->Set(healthChangeEventHUD->getValue());
+                    }
+                }
+            }
+            else
+            {
+                // Handle unexpected events if necessary
+            }
+        }
+        catch (const std::bad_cast& e)
+        {
+			// Handle or log the casting error
+			std::cerr << "Casting error occurred: " << e.what() << '\n';
+        }
+
     }
 
     std::vector<std::type_index> HealthListener::GetSupportedEvents()
     {
-        return { std::type_index(typeid(PlayerHealthEvent)) };
+        return 
+        {
+            std::type_index(typeid(PlayerHealthEvent)),
+            std::type_index(typeid(HealthChangeEventHUD))
+        };
     }
 
     void NodeListener::OnEvent(IEvent& event)
@@ -111,41 +162,6 @@ namespace dae
                 if (nodeInteractorEvent->GetId() == listenerId)
                 {
                     nodeInteractorEvent->GetNewNode().EnterNode(nodeInteractorEvent);
-
-                    //auto& newNode = nodeInteractorEvent->GetNewNode();
-                    //nodeInteractorEvent->GetOldNode().ExitNode(&nodeInteractorEvent->GetSender());
-                    //newNode.EnterNode(&nodeInteractorEvent->GetSender(), &nodeInteractorEvent->GetOldNode());
-
-                    //GameObject& sender = nodeInteractorEvent->GetSender();
-                    //auto charComp = sender.GetComponent<CharacterComponent>();
-                    //if (charComp)
-                    //{
-                    //    auto charType = charComp->GetType();
-                    //    switch (charType)
-                    //    {
-                    //    case CharacterType::QBert:
-                    //        //OnNodeEventPlayer(*nodeInteractorEvent);
-                    //        auto gameMode = GameModeManager::GetInstance().GetActiveGameMode();
-                    //        auto qbertGameMode = dynamic_cast<QBertGameMode*>(gameMode);
-                    //        if (qbertGameMode != nullptr)
-                    //        {
-                    //            //qbertGameMode->SetQBertNode(newNode);
-                    //            qbertGameMode->QBertMovement();
-                    //        }
-
-                    //        break;
-                    //    case CharacterType::Slick:
-                    //    case CharacterType::Sam:
-                    //        //OnNodeEventEnemy(*nodeInteractorEvent);
-                    //        break;
-                    //    case CharacterType::Coily:
-                    //        //OnNodeEventCoily(*nodeInteractorEvent);
-                    //        break;
-                    //    default:
-                    //        // Handle unexpected character types if necessary
-                    //        break;
-                    //    }
-                    //}
                 }
             }
             else if (auto upgradeNodeEvent = dynamic_cast<UpgradeNodeEvent*>(&event))
@@ -179,45 +195,6 @@ namespace dae
 
                 };
     }
-
-
-    ////NODE LISTENER
-    //void NodeListener::OnNodeEventPlayer(NodeInteractorEvent& event)
-    //{
-    //    auto& newNode = event.GetNewNode();
-    //    event.GetOldNode().ExitNode(&event.GetSender());
-    //    newNode.EnterNode(&event.GetSender(), &event.GetOldNode());
-    //    //if(newNode.GetNodeInfo().type != TileType::Pit)
-    //    //{
-    //    //    //auto scoreEvent = std::make_unique<ScoreEvent>(points, event.GetSender().GetID());
-    //    //    //EventDispatcher::GetInstance().DispatchEvent(std::move(scoreEvent));
-
-    //    //    points;
-    //    //}
-
-
-    //    //change this later to an event / listener system
-
-    //}
-
-    //void NodeListener::OnNodeEventEnemy(NodeInteractorEvent& event)
-    //{
-    //    event.GetOldNode().ExitNode(&event.GetSender());
-    //    auto& newNode = event.GetNewNode();
-    //    newNode.EnterNode(&event.GetSender());
-    //}
-
-    //void NodeListener::OnNodeEventCoily(NodeInteractorEvent& event)
-    //{
-    //    auto& newNode = event.GetNewNode();
-    //    event.GetOldNode().ExitNode(&event.GetSender());
-    //    newNode.EnterNode(&event.GetSender());
-    //    //auto comp = event.GetSender().GetComponent<CoilyComponent>();
-    //    //if (comp != nullptr)
-    //    //{
-    //    //    comp->HandleInput(event.GetNewNode());
-    //    //}
-    //}
 
     void NodeListener::OnDeathEventQBert(CharacterDeathEvent& event)
     {

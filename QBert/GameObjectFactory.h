@@ -15,11 +15,11 @@ namespace dae
 		public:
 		GameObjectFactory() = default;
 
-		GameObject& InitializePlayerOne(Scene& scene, TriangularGrid& pGrid, int startingNode = 4);
-		GameObject& InitializePlayerTwo(Scene& scene, TriangularGrid& pGrid, bool isVersus = false);
+		GameObject& InitializePlayerOne(Scene& scene, TriangularGrid& pGrid, GameInfo& gi);
+		GameObject& InitializePlayerTwo(Scene& scene, TriangularGrid& pGrid, GameInfo& gi);
 
 		GameObject& CreateCoily(Scene& scene, TriangularGrid& pGrid, bool isPlayable = false);
-		GameObject& CreateQbert(Scene& scene, TriangularGrid& pGrid, int startingNode = 4, int player = 1);
+		GameObject& CreateQbert(Scene& scene, TriangularGrid& pGrid, int startingNode, int player);
 		GameObject& CreateSlickSam(Scene& scene, TriangularGrid& pGrid);
 		GameObject& CreateUggWrongway(Scene& scene, TriangularGrid& pGrid);
 
@@ -28,8 +28,11 @@ namespace dae
 
 		GameObject& CreateHUDScore(Scene& scene, glm::vec2& pos, int initialScore = 0);
 		GameObject& CreateHUDLives(Scene& scene, glm::vec2& pos, int initialLives = 3);
-		GameObject& CreateHUDLevel(Scene& scene,int initialLevel = 1);
+		GameObject& CreateHUDLevel(Scene& scene, int initialLevel = 1);
 		GameObject& CreateHUDFPS(Scene& scene);
+
+		GameObject& CreateStartMenu(Scene& scene);
+		GameObject& CreateGameOver(Scene& scene, int playerOneScore, int playerTwoScore);
 
 		//GameObject& CreateGridNode(Scene& scene, GameInfo& gi, glm::vec2& pos, int col, int row, int rows, int width, int height, int index);
 	private:

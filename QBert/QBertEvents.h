@@ -54,6 +54,28 @@ namespace dae
 		int playerId;
 	};
 
+	class ScoreEventHUD final : public IEvent
+	{
+
+
+	public:
+		ScoreEventHUD(int s, int id) : IEvent(), score(s), playerId(id)
+		{
+		}
+		// Method to get the score
+		int getScore() const {
+			return score;
+		}
+
+		// Method to get the player ID
+		int getPlayerId() const {
+			return playerId;
+		}
+	private:
+		int score;
+		int playerId;
+	};
+
 	class PlayerHealthEvent final : public IEvent
 	{
 	public:
@@ -74,6 +96,28 @@ namespace dae
 	private:
 		int playerId;
 		int lastNodeIdx;
+	};
+
+	class HealthChangeEventHUD final : public IEvent
+	{
+	public:
+		HealthChangeEventHUD(int id, int value) : IEvent(), playerId(id), value(value)
+		{
+		}
+
+		// Method to get the player ID
+		int getPlayerId() const {
+			return playerId;
+		}
+
+		// Method to get the last node index
+		int getValue() const {
+			return value;
+		}
+
+	private:
+		int playerId;
+		int value;
 	};
 
 	class CharacterDeathEvent : public IEvent

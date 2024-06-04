@@ -43,7 +43,14 @@ namespace dae
 		rm.GetTexture("Qbert Cubes.png");
 		rm.GetTexture("Active.png");
 		rm.GetTexture("Game Title.png");
+		rm.GetTexture("Game Options.png");
+		rm.GetTexture("Selection Arrow.png");
 		rm.GetTexture("P1 Controls.png");
+
+		rm.GetTexture("Game Over Title.png");
+		rm.GetTexture("Score.png");
+		rm.GetTexture("Restart.png");
+
 
 		
 		rm.GetTexture("P2 QBert Controls.png");

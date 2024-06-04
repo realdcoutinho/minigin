@@ -30,7 +30,7 @@ namespace dae
 		void LoadInstructionsScene(SceneManager& sm);
 
 
-		void LoadGameSceneOne(SceneManager& sm);
+		//void LoadGameSceneOne(SceneManager& sm);
 		//void LoadMainMenu();
 		//void LoadPauseMenu();
 	};

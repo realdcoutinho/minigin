@@ -93,7 +93,7 @@ namespace dae
                     nodeInfo.rightUp = 4;
                 }
 
-                std::unique_ptr<GridNode> node = std::make_unique<GridNode>(*curTile.get(), nodeInfo, gi);
+                std::unique_ptr<GridNode> node = std::make_unique<GridNode>(*curTile.get(), nodeInfo, gi, &scene);
                 m_GridNodes.push_back(node.get());
                 curTile->AddComponent(std::move(node));
                 curTile->SetParent(GetOwner());
@@ -261,9 +261,16 @@ namespace dae
             m_CurrentCompletedNodes--;
 
         if (m_CurrentCompletedNodes == m_NrOfNodes)
+        {
             GridCompleted();
+            auto gameMode = GameModeManager::GetInstance().GetActiveGameMode();
+            auto qbertGameMode = dynamic_cast<QBertGameMode*>(gameMode);
+            if (qbertGameMode != nullptr)
+            {
+                qbertGameMode->ResetEnemyManager();
+            }
 
-        std::cout << "Current completed nodes: " << m_CurrentCompletedNodes << std::endl;
+        }
     }
 
     GridNode* TriangularGrid::GetRandomTopStartNode()
@@ -284,10 +291,8 @@ namespace dae
 
     void TriangularGrid::GridCompleted()
     {
-        std::cout << "Grid completed" << std::endl;
         for (auto node : m_GridNodes)
         {
-			//node->SetNodeState(NodeState::Completed);
             node->SetFlickeringState();
 		}
 		m_CanSwitch = true;

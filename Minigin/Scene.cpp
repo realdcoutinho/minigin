@@ -37,6 +37,7 @@ void Scene::Remove(GameObject* object)
 	//object;
 	//m_objects.erase(std::remove(m_objects.begin(), m_objects.end(), object), m_objects.end());
 
+
 	object;
 
 	//auto newEnd = std::remove_if(m_objects.begin(), m_objects.end(),
