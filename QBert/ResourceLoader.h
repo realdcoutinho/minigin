@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 namespace dae
 {
 	class ResourceManager;
@@ -14,6 +15,8 @@ namespace dae
 		void LoadFonts(ResourceManager& rm);
 		void LoadAudio(ResourceManager& rm);
 		void LoadTextures(ResourceManager& rm);
+
+		const std::string m_FilePath = "Sounds/";
 
 	};
 

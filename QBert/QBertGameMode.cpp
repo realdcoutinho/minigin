@@ -14,6 +14,8 @@
 #include "InputManager.h"
 #include "Input.h"
 #include "LevelState.h"
+#include "ServiceLocator.h"
+#include "SoundLibrary.h"
 
 namespace dae
 {
@@ -55,6 +57,9 @@ namespace dae
 		m_pEnemyManager->Reset();
 		m_pPlayers.clear();
 		m_pEnemyListener.reset();
+		//std::string restart{ "Restart" };
+		//SetLevelState(restart);
+		m_pLevelState = std::make_shared<LevelState>();
 		LoadStartScene();
 	}
 
@@ -97,6 +102,17 @@ namespace dae
 		sm.SetActiveScene(scene);
 
 		GameObjectFactory::GetInstance().CreateGameOver(scene, m_PlayerOneScore, m_PlayerTwoScore);
+	}
+
+
+
+	void QBertGameMode::VictoryScene()
+	{
+		auto& sm = SceneManager::GetInstance();
+		auto& scene = sm.CreateScene("Victory Scene");
+		sm.SetActiveScene(scene);
+
+		GameObjectFactory::GetInstance().CreateVictoryScene(scene, m_PlayerOneScore, m_PlayerTwoScore);
 	}
 
 
@@ -172,6 +188,12 @@ namespace dae
 	{
 		std::string pause{ "PauseScreen" };
 		SetLevelState(pause);
+	}
+
+	void QBertGameMode::PlayerDied()
+	{
+		std::string over{ "Game Over" };
+		SetLevelState(over);
 	}
 
 

@@ -14,6 +14,8 @@
 #include "TriangularGrid.h"
 #include "QBertComponent.h"
 
+
+
 namespace dae
 {
 	HealthComponent::HealthComponent(GameObject& pOwner, int initialHealht)
@@ -34,11 +36,21 @@ namespace dae
 		{
 			--m_Health;
 
+
+
+
 			//send event to update HUD
 			auto healthChange = std::make_unique<HealthChangeEventHUD>(GetOwnerID(), m_Health);
 			EventDispatcher::GetInstance().DispatchEvent(std::move(healthChange));
 
-
+			auto gameMode = GameModeManager::GetInstance().GetActiveGameMode();
+			auto qbertGameMode = dynamic_cast<QBertGameMode*>(gameMode);
+			if (qbertGameMode != nullptr)
+			{
+				qbertGameMode->GetGrid()->UnregisterAllCharacters();
+				int playerNumber = GetOwner()->GetComponent<QBertComponent>()->GetPlayerNumber();
+				qbertGameMode->SetPlayerLives(m_Health, playerNumber);
+			}
 		}
 	}
 
@@ -54,17 +66,8 @@ namespace dae
 			auto qbertGameMode = dynamic_cast<QBertGameMode*>(gameMode);
 			if (qbertGameMode != nullptr)
 			{
-				qbertGameMode->GameOver();
-				//qbertGameMode->GetGrid()->UnregisterAllCharacters();
-				//int playerNumber = GetOwner()->GetComponent<QBertComponent>()->GetPlayerNumber();
-				//qbertGameMode->SetPlayerLives(m_Health, playerNumber);
+				qbertGameMode->PlayerDied();
 			}
-
-			//GetOwner()->GetComponent<DeathComponent>()->OnDeath();
-			//auto allEnemiesDeath = std::make_unique<EraseAllEnemiesEvent>(GetOwnerID());
-			//EventDispatcher::GetInstance().DispatchEvent(std::move(allEnemiesDeath));
-
-
 		}
 	}
 

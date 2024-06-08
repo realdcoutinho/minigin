@@ -22,6 +22,7 @@ namespace dae
 		virtual void SetVolume(const float volume) = 0;
 		virtual void Mute() = 0;
 		virtual void StopAll() = 0;
+		virtual void StopSound(sound_id soundId) = 0;
 	};
 
 	class Audio final : public IAudio
@@ -39,6 +40,7 @@ namespace dae
 		virtual void SetVolume(const float volume) override;
 		virtual void Mute() override;
 		virtual void StopAll() override;
+		virtual void StopSound(sound_id soundId) override;
 
 	private:
 		void ProcessQueue();
@@ -57,6 +59,7 @@ namespace dae
 		virtual void SetVolume(const float volume) override;
 		virtual void Mute() override;
 		virtual void StopAll() override;
+		virtual void StopSound(sound_id soundId) override;
 	};
 
 	class LoggerAudio final : public IAudio
@@ -68,6 +71,7 @@ namespace dae
 		virtual void SetVolume(const float volume) override;
 		virtual void Mute() override;
 		virtual void StopAll() override;
+		virtual void StopSound(sound_id soundId) override;
 
 	private:
 		std::unique_ptr<IAudio> m_pAudioReal;

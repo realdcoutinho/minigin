@@ -4,7 +4,7 @@
 #include <iostream>
 #include "CoilyComponent.h"
 #include "GridNode.h"
-
+#include "CharacterComponent.h"
 
 namespace dae
 {
@@ -49,9 +49,14 @@ namespace dae
         if (m_Coily)
         {
             m_State = CoilyForm::Snake;
-            std::cout << "Coily is now a snake" << std::endl;
+            auto obj = m_Coily->GetOwner();
+            if (obj)
+            {
+                auto charComp = obj->GetComponent<CharacterComponent>();
+                if (charComp)
+                    charComp->SetType(CharacterType::Coily);
+            }
             m_Coily->Evolve();
-            //m_Coily->Hunt();
 
 		}
     }

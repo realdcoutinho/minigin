@@ -89,7 +89,7 @@ namespace dae
 
 	void CharacterComponent::SetType(CharacterType type)
 	{
-		type;
+		m_Type = type;
 	}
 
 	TextureComponent* CharacterComponent::InitializeSprite(const std::string& texFile, int segments)

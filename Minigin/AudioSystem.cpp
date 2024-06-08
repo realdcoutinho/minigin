@@ -40,6 +40,14 @@ namespace dae
 			}
 		}
 
+		void StopSound(sound_id soundId) const
+		{
+			int channel = ResourceManager::GetInstance().GetChannel(soundId);
+			if (channel != -1) {
+				Mix_HaltChannel(channel);
+			}
+		}
+
 		void SetVolume(float volume)
 		{
 			m_CurrentVolume += volume;
@@ -123,6 +131,15 @@ namespace dae
 		m_Cond.notify_one();
 	}
 
+	void Audio::StopSound(sound_id soundId)
+	{
+		std::lock_guard<std::mutex> lock(m_Mutex);
+		m_Action.push([this, soundId]() {
+			pImpl->StopSound(soundId);
+			});
+		m_Cond.notify_one();
+	}
+
 	void Audio::StopAll()
 	{
 		std::lock_guard<std::mutex> lock(m_Mutex);
@@ -177,6 +194,11 @@ namespace dae
 	{
 	}
 
+	void NullAudio::StopSound(sound_id soundId)
+	{
+		soundId;
+	}
+
 
 	LoggerAudio::LoggerAudio(std::unique_ptr<IAudio>&& pAudioReal)
 		: m_pAudioReal(std::move(pAudioReal))
@@ -207,5 +229,13 @@ namespace dae
 		m_pAudioReal->StopAll();
 		std::cout << "All sounds stopped" << std::endl;
 	}
+
+
+	void LoggerAudio::StopSound(sound_id soundId)
+	{
+		m_pAudioReal->StopSound(soundId);
+		std::cout << "Sound stopped" << std::endl;
+	}
+
 }
 

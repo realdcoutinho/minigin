@@ -5,7 +5,9 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "TimeManager.h"
-
+#include "ServiceLocator.h"
+#include "AudioSystem.h"
+#include "SoundLibrary.h"
 
 namespace dae 
 {
@@ -22,6 +24,7 @@ namespace dae
 
 	std::shared_ptr<LevelState> LevelState::HandleInput(std::string& nextScene)
 	{
+
 		return std::make_shared<LevelInstructionsState>(nextScene);
 	}
 
@@ -48,6 +51,7 @@ namespace dae
 
 	void LevelInstructionsState::Enter()
 	{
+
 		if (m_CurrentScene == "LevelOneSolo")
 			m_GameMode->SetTitleScene(m_LevelSoloInstructions);
 		if (m_CurrentScene == "LevelOneCoop")
@@ -74,6 +78,8 @@ namespace dae
 	{
 		if (nextScene == m_PauseScreen)
 			return  std::make_shared<GamePauseState>(std::type_index(typeid(LevelOneState)), nextScene, m_CurrentScene);
+		if (nextScene == m_GameOver)
+			return std::make_shared<GameOverState>(nextScene);
 		else
 			return std::make_shared<LevelTwoState>(nextScene);
 	}
@@ -83,7 +89,11 @@ namespace dae
 		if (m_FromPaused)
 			m_GameMode->SetTitleScene(m_CurrentScene);
 		else
+		{
+			auto& soundSystem = dae::ServiceLocator::GetAudioService();
+			soundSystem->PlaySound(static_cast<unsigned short>(SoundID::LevelScreenTune), 1);
 			m_GameMode->SetTitleScene(m_LevelTitle);
+		}
 
 	}
 
@@ -112,6 +122,8 @@ namespace dae
 	{
 		if (nextScene == m_PauseScreen)
 			return  std::make_shared<GamePauseState>(std::type_index(typeid(LevelTwoState)), nextScene, m_CurrentScene);
+		if (nextScene == m_GameOver)
+			return std::make_shared<GameOverState>(nextScene);
 		else
 			return std::make_shared<LevelThreeState>(nextScene);
 	}
@@ -121,7 +133,11 @@ namespace dae
 		if (m_FromPaused)
 			m_GameMode->SetTitleScene(m_CurrentScene);
 		else
+		{
+			auto& soundSystem = dae::ServiceLocator::GetAudioService();
+			soundSystem->PlaySound(static_cast<unsigned short>(SoundID::LevelScreenTune), 1);
 			m_GameMode->SetTitleScene(m_LevelTitle);
+		}
 	}
 
 	void LevelTwoState::Update()
@@ -149,8 +165,12 @@ namespace dae
 	{
 		if (nextScene == m_PauseScreen)
 			return  std::make_shared<GamePauseState>(std::type_index(typeid(LevelThreeState)), nextScene, m_CurrentScene);
+		if (nextScene == m_VictoryScene)
+			return std::make_shared<GameCompleteState>(nextScene);
+		if (nextScene == m_GameOver)
+			return std::make_shared<GameOverState>(nextScene);
 		else
-			return std::shared_ptr<LevelThreeState>();
+			return std::make_shared<GameCompleteState>(nextScene);
 	}
 
 	void LevelThreeState::Enter()
@@ -158,7 +178,11 @@ namespace dae
 		if (m_FromPaused)
 			m_GameMode->SetTitleScene(m_CurrentScene);
 		else
+		{
+			auto& soundSystem = dae::ServiceLocator::GetAudioService();
+			soundSystem->PlaySound(static_cast<unsigned short>(SoundID::LevelScreenTune), 1);
 			m_GameMode->SetTitleScene(m_LevelTitle);
+		}
 
 	}
 
@@ -172,16 +196,21 @@ namespace dae
 	}
 	void LevelThreeState::NextLevel()
 	{
+		m_GameMode->SetLevelState(m_VictoryScene);
 	}
+
 	std::shared_ptr<LevelState> GameOverState::HandleInput(std::string& nextScene)
 	{
 		nextScene;
 
 		return std::shared_ptr<GameOverState>();
 	}
+
 	void GameOverState::Enter()
 	{
+		m_GameMode->GameOver();
 	}
+
 	void GameOverState::Update()
 	{
 	}
@@ -194,12 +223,14 @@ namespace dae
 	std::shared_ptr<LevelState> GameCompleteState::HandleInput(std::string& nextScene)
 	{
 		nextScene;
-
 		return std::shared_ptr<GameCompleteState>();
 	}
+
 	void GameCompleteState::Enter()
 	{
+		m_GameMode->VictoryScene();
 	}
+
 	void GameCompleteState::Update()
 	{
 	}
@@ -211,7 +242,8 @@ namespace dae
 	}
 	std::shared_ptr<LevelState> GamePauseState::HandleInput(std::string& nextScene)
 	{
-		nextScene;
+		if(nextScene == m_Restart)
+			return std::make_shared<LevelState>();
 		if (m_IncomingState == typeid(LevelOneState)) 
 			return std::make_shared<LevelOneState>(m_PreviousScene, true);
 		else if (m_IncomingState == typeid(LevelTwoState)) 

@@ -3,6 +3,9 @@
 #include "GameModeManager.h"
 #include "GameMode.h"
 #include "QBertGameMode.h"
+#include "ServiceLocator.h"
+#include "AudioSystem.h"
+#include "SoundLibrary.h"
 
 namespace dae
 {
@@ -14,6 +17,12 @@ namespace dae
 		auto qbertGameMode = dynamic_cast<QBertGameMode*>(gameMode);
 		if (qbertGameMode)
 			m_GameMode = qbertGameMode;
+	}
+
+	void SelectModeStates::Enter()
+	{
+		auto& soundSystem = dae::ServiceLocator::GetAudioService();
+		soundSystem->PlaySound(static_cast<unsigned short>(SoundID::ChangeSelection), 1);
 	}
 
 	std::unique_ptr<SelectModeStates> dae::SoloMode::HandleInput(GameObject* character, const glm::vec2& input)
@@ -31,6 +40,7 @@ namespace dae
 
 	void SoloMode::Enter()
 	{
+		SelectModeStates::Enter();
 		m_ArrowHead->SetLocalPosition({ 150, 250 });
 	}
 
@@ -63,6 +73,7 @@ namespace dae
 
 	void CoopMode::Enter()
 	{
+		SelectModeStates::Enter();
 		m_ArrowHead->SetLocalPosition({ 150, 300 });
 	}
 
@@ -96,6 +107,7 @@ namespace dae
 
 	void VersusMode::Enter()
 	{
+		SelectModeStates::Enter();
 		m_ArrowHead->SetLocalPosition({ 150, 350 });
 	}
 

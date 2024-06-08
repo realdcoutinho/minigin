@@ -32,9 +32,34 @@ namespace dae
 
 	void ResourceLoader::LoadAudio(ResourceManager& rm)
 	{
-		rm.GetSound("overworld.wav"); //they need to be initialized in a psecific order
-		rm.GetSound("wow.wav");
-		rm.GetSound("brickBreak.wav");
+		//rm.GetSound("overworld.wav"); //they need to be initialized in a psecific order
+		//rm.GetSound("wow.wav");
+		//rm.GetSound("brickBreak.wav");
+
+		rm.GetSound(m_FilePath + "Change Selection.wav");
+		rm.GetSound(m_FilePath + "Clear Disks.wav");
+		rm.GetSound(m_FilePath + "Coily Egg Jump.wav");
+		rm.GetSound(m_FilePath + "Coily Fall.wav");
+		rm.GetSound(m_FilePath + "Coily Snake Jump.wav");
+		rm.GetSound(m_FilePath + "Demo Sound.wav");
+		rm.GetSound(m_FilePath + "Disk Land.wav");
+		rm.GetSound(m_FilePath + "Disk Lift.wav");
+		rm.GetSound(m_FilePath + "Level Screen Tune.wav");
+		rm.GetSound(m_FilePath + "Other Foes Jump.wav");
+		rm.GetSound(m_FilePath + "QBert Fall.wav");
+		rm.GetSound(m_FilePath + "QBert Hit.wav");
+		rm.GetSound(m_FilePath + "QBert Jump.wav");
+		rm.GetSound(m_FilePath + "Round Complete Tune.wav");
+		rm.GetSound(m_FilePath + "SlickSamCaught.wav");
+		rm.GetSound(m_FilePath + "Sweating.wav");
+
+
+
+
+
+
+
+
 	}
 
 	void ResourceLoader::LoadTextures(ResourceManager& rm)
@@ -52,6 +77,7 @@ namespace dae
 		rm.GetTexture("InstructionsVS.png");
 
 		rm.GetTexture("Pause Screen.png");
+		rm.GetTexture("Victory Title.png");
 
 		rm.GetTexture("Game Over Title.png");
 

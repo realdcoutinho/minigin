@@ -16,7 +16,7 @@ namespace dae
 	{
 		ServiceLocator::Initialize();
 		//std::unique_ptr<Audio> audio = std::make_unique<Audio>();
-		std::unique_ptr<NullAudio> audio = std::make_unique<NullAudio>();
+		std::unique_ptr<Audio> audio = std::make_unique<Audio>();
 
 		ServiceLocator::RegisterAudioService(std::move(audio));
 		//ServiceLocator::RegisterService(dae::ServiceType::Audio, std::move(audio));

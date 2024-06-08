@@ -64,7 +64,7 @@ namespace dae
 		float elapsed = m_pCurrentScene->GetTimer().GetElapsed();
 
 		UpdateCoilySpawnTimers(elapsed);
-		//UpdateSlickSamSpawnTimers(elapsed);
+		UpdateSlickSamSpawnTimers(elapsed);
 		//UpdateUggWrongwaySpawnTimers(elapsed);
 	}
 
@@ -132,7 +132,7 @@ namespace dae
 			m_CurrentSlickSam--;
 		else if (enemyType == CharacterType::Ugg || enemyType == CharacterType::Wrongway)
 			m_CurrentUggWrongway--;
-		else if (enemyType == CharacterType::Coily)
+		else if (enemyType == CharacterType::Coily || enemyType == CharacterType::Egg)
 			m_pCoily = nullptr;
 
 

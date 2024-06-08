@@ -7,6 +7,7 @@ namespace dae
 	void ServiceLocator::Initialize()
 	{
 		m_pAudioService = std::make_unique<NullAudio>();
+		//m_pAudioService = std::make_unique<Audio>();
 
 		//m_NullServices[ServiceType::Audio] = std::make_unique<NullAudio>();
 		//m_NullServices[ServiceType::Video] = nullptr;
@@ -22,7 +23,7 @@ namespace dae
 	std::unique_ptr<IAudio> ServiceLocator::m_pAudioService = nullptr;
 	void ServiceLocator::RegisterAudioService(std::unique_ptr<IAudio> pService)
 	{ 
-		if (m_pAudioService == nullptr)
+		if (pService == nullptr)
 		{
 			m_pAudioService = std::move(m_pAudioService);
 		}

@@ -32,16 +32,19 @@ namespace dae
 		void Restart();
 		void StartGame();
 		void PauseGame();
+		void GameOver();
+		void VictoryScene();
 
 		void StartScene(const std::string sceneName);
 		void LoadScene(const std::string sceneName);
-		void GameOver();
+
 		
 		void LoadNextScene();
-
+		void PlayerDied();
 
 		void QBertMovement();
 		void CanBertRender(bool render);
+		
 
 		TriangularGrid* GetGrid() const { return m_pGrid; };
 

@@ -27,6 +27,8 @@ namespace dae
 		std::string m_CurrentScene;
 		std::string m_PreviousScene;
 		std::string m_PauseScreen{ "PauseScreen" };
+		std::string m_Restart{ "Restart" };
+		std::string m_GameOver{ "Game Over" };
 
 		QBertGameMode* m_GameMode;
 
@@ -127,6 +129,7 @@ namespace dae
 		virtual void NextLevel() override;
 	private:
 		const std::string m_LevelTitle{ "LevelThreeTitle" };
+		std::string m_VictoryScene{ "Victory Scene" };
 
 	};
 

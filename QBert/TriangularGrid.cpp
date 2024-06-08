@@ -14,6 +14,9 @@
 #include "QBertGameMode.h"
 #include "TimeManager.h"
 
+#include "ServiceLocator.h"
+#include "AudioSystem.h"
+#include "SoundLibrary.h"
 
 namespace dae
 {
@@ -76,7 +79,7 @@ namespace dae
                     nodeInfo.lastRow = true;
                 }
 
-                if (index == 15)
+                if (index == 1)
                 {
                     nodeInfo.leftDown = 0;
                     nodeInfo.leftUp = 0;
@@ -291,6 +294,9 @@ namespace dae
 
     void TriangularGrid::GridCompleted()
     {
+        auto& soundSystem = dae::ServiceLocator::GetAudioService();
+        soundSystem->PlaySound(static_cast<unsigned short>(SoundID::RoundCompleteTune), 1);
+
         for (auto node : m_GridNodes)
         {
             node->SetFlickeringState();

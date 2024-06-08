@@ -15,7 +15,7 @@ namespace dae
 		SelectModeStates(GameObject* character, const glm::vec2& input);
 		virtual ~SelectModeStates() = default;
 		virtual std::unique_ptr<SelectModeStates> HandleInput(GameObject* character, const glm::vec2& input) = 0;
-		virtual void Enter() override = 0;
+		virtual void Enter() override;
 		virtual void Update() override = 0;
 		virtual void Exit() override = 0;
 		virtual void SelectGameMode() = 0;

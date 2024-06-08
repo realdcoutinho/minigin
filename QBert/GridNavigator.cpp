@@ -133,6 +133,8 @@ namespace dae
 	void GridNavigator::Move(float delta)
 	{
 
+
+
 		auto dir = m_TargetPos - m_Pos;
 		float length = glm::length(dir);
 		float moveDistance = m_MovementSpeed * delta;

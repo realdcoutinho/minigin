@@ -20,6 +20,10 @@
 #include "TriangularGrid.h"
 #include "Scene.h"
 
+#include "ServiceLocator.h"
+#include "AudioSystem.h"
+#include "SoundLibrary.h"
+
 namespace dae
 {
     GridNode::GridNode(GameObject& pOwner, NodeInfo info, GameInfo& gameInfo, Scene* scene)
@@ -116,13 +120,30 @@ namespace dae
         bool isPlayerDead = false;
         bool isSamDead = false;
 
+
+        auto& soundSystem = dae::ServiceLocator::GetAudioService();
+        bool isPit = false;
+        if (m_NodeInfo.type == TileType::Pit)
+            isPit = true;
+
+        bool isDisc = false;
+        if (m_NodeInfo.type == TileType::Disc)
+            isDisc = true;
+
+        bool isZero = false;
+        if (m_NodeInfo.type == TileType::Zero)
+            isZero = true;
+
         switch (charType)
         {
         case CharacterType::QBert:
             //search for coily in m_characters
+
+            
+
             for (auto& chara : m_Characters)
             {
-                if (chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Coily || chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Wrongway || chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Ugg)
+                if (chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Coily || chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Egg || chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Wrongway || chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Ugg)
                 {
                     auto enemyDeath = std::make_unique<EraseOneEnemyEvent>(chara->GetID(), *chara);
                     EventDispatcher::GetInstance().DispatchEvent(std::move(enemyDeath));
@@ -131,6 +152,9 @@ namespace dae
                     EventDispatcher::GetInstance().DispatchEvent(std::move(health));
 
                     m_Characters.erase(std::remove(m_Characters.begin(), m_Characters.end(), chara), m_Characters.end());
+
+                    soundSystem->PlaySound(static_cast<unsigned short>(SoundID::QBertHit), 1);
+
                     break;
                 }
                 if (chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Sam || chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::Slick)
@@ -140,11 +164,28 @@ namespace dae
                     auto scoreEvent = std::make_unique<ScoreEvent>(300, character->GetID());
                     EventDispatcher::GetInstance().DispatchEvent(std::move(scoreEvent));
                     m_Characters.erase(std::remove(m_Characters.begin(), m_Characters.end(), chara), m_Characters.end());
+
+                    soundSystem->PlaySound(static_cast<unsigned short>(SoundID::QBertJump), 1);
+                    soundSystem->PlaySound(static_cast<unsigned short>(SoundID::SlickSamCaught), 1);
+
                     break;
                 }
             }
             if (!isPlayerDead)
                 m_Characters.push_back(character);
+
+            if(isPit)
+                soundSystem->PlaySound(static_cast<unsigned short>(SoundID::QBertFall), 1);
+            if(isDisc)
+                soundSystem->PlaySound(static_cast<unsigned short>(SoundID::DiskLift), 1);
+            if (isZero)
+            {
+                soundSystem->StopSound(static_cast<unsigned short>(SoundID::DiskLift));
+                soundSystem->PlaySound(static_cast<unsigned short>(SoundID::DiskLand), 1);
+            }
+            else
+               soundSystem->PlaySound(static_cast<unsigned short>(SoundID::QBertJump), 1);
+
             break;
 
         case CharacterType::Slick:
@@ -159,6 +200,7 @@ namespace dae
 
                     auto enemyDeath = std::make_unique<EraseOneEnemyEvent>(character->GetID(), *character);
                     EventDispatcher::GetInstance().DispatchEvent(std::move(enemyDeath));
+                    soundSystem->PlaySound(static_cast<unsigned short>(SoundID::SlickSamCaught), 1);
 
 
                     break;
@@ -167,10 +209,34 @@ namespace dae
             if (!isSamDead)
             {
                 m_Characters.push_back(character);
+                if (!isPit)
+                    soundSystem->PlaySound(static_cast<unsigned short>(SoundID::OtherFoesJump), 1);
             }
             break;
 
         case CharacterType::Coily:
+            for (auto& chara : m_Characters)
+            {
+                if (chara->GetComponent<CharacterComponent>()->GetType() == CharacterType::QBert)
+                {
+                    auto enemyDeath = std::make_unique<EraseOneEnemyEvent>(character->GetID(), *character);
+                    EventDispatcher::GetInstance().DispatchEvent(std::move(enemyDeath));
+                    auto health = std::make_unique<PlayerHealthEvent>(chara->GetID(), m_NodeInfo.index);
+                    EventDispatcher::GetInstance().DispatchEvent(std::move(health));
+                    soundSystem->PlaySound(static_cast<unsigned short>(SoundID::QBertHit), 1);
+                    break;
+                }
+            }
+            m_Characters.push_back(character);
+            //soundSystem->PlaySound(static_cast<unsigned short>(SoundID::CoilySnakeJump), 1);
+
+
+            if (!isPit && !isDisc)
+                soundSystem->PlaySound(static_cast<unsigned short>(SoundID::CoilySnakeJump), 1);
+            if(isDisc)
+                soundSystem->PlaySound(static_cast<unsigned short>(SoundID::CoilyFall), 1);
+
+            break;
         case CharacterType::Egg:
             for (auto& chara : m_Characters)
             {
@@ -180,10 +246,14 @@ namespace dae
                     EventDispatcher::GetInstance().DispatchEvent(std::move(enemyDeath));
                     auto health = std::make_unique<PlayerHealthEvent>(chara->GetID(), m_NodeInfo.index);
                     EventDispatcher::GetInstance().DispatchEvent(std::move(health));
+                    soundSystem->PlaySound(static_cast<unsigned short>(SoundID::QBertHit), 1);
+
                     break;
                 }
             }
             m_Characters.push_back(character);
+            if (!isPit)
+                soundSystem->PlaySound(static_cast<unsigned short>(SoundID::CoilyEggJump), 1);
             break;
         case CharacterType::Ugg:
             if (m_NodeInfo.type == TileType::Pit)
@@ -198,10 +268,12 @@ namespace dae
                         EventDispatcher::GetInstance().DispatchEvent(std::move(enemyDeath));
                         auto health = std::make_unique<PlayerHealthEvent>(chara->GetID(), m_NodeInfo.index);
                         EventDispatcher::GetInstance().DispatchEvent(std::move(health));
+                        soundSystem->PlaySound(static_cast<unsigned short>(SoundID::QBertHit), 1);
                         break;
                     }
                 }
                 m_Characters.push_back(character);
+                soundSystem->PlaySound(static_cast<unsigned short>(SoundID::OtherFoesJump), 1);
             }
             else
             {
@@ -226,10 +298,13 @@ namespace dae
                         EventDispatcher::GetInstance().DispatchEvent(std::move(enemyDeath));
                         auto health = std::make_unique<PlayerHealthEvent>(chara->GetID(), m_NodeInfo.index);
                         EventDispatcher::GetInstance().DispatchEvent(std::move(health));
+                        soundSystem->PlaySound(static_cast<unsigned short>(SoundID::QBertHit), 1);
+
                         break;
                     }
                 }
                 m_Characters.push_back(character);
+                soundSystem->PlaySound(static_cast<unsigned short>(SoundID::OtherFoesJump), 1);
             }
             else
             {

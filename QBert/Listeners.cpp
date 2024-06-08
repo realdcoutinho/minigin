@@ -148,6 +148,7 @@ namespace dae
                             OnDeathEvent(*deathEvent);
                             break;
                         case CharacterType::Coily:
+                        case CharacterType::Egg:
                             OnDeathEventCoily(*deathEvent);
                             break;
                         default:
@@ -207,6 +208,12 @@ namespace dae
         auto coily = event.GetSender().GetComponent<CoilyComponent>();
         auto qbertHunt = coily->GetTargetQbert();
         int points = coily->GetPoints();
+
+
+
+
+
+
 
 
         auto scoreEvent = std::make_unique<ScoreEvent>(points, qbertHunt->GetID());

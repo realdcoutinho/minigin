@@ -16,7 +16,7 @@ namespace dae
 		: BaseComponent(pOwner)
 		, m_IsPlayableChar(playableChar)
 	{
-		auto character = std::make_unique<CharacterComponent>(pOwner, CharacterType::Coily);
+		auto character = std::make_unique<CharacterComponent>(pOwner, CharacterType::Egg);
 		m_Character = character.get();
 		GetOwner()->AddComponent(std::move(character));
 		m_Character->InitializeSprite(m_EggTextureFile, 1);
