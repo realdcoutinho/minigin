@@ -47,6 +47,12 @@ namespace dae
 		rm.GetTexture("Selection Arrow.png");
 		rm.GetTexture("P1 Controls.png");
 
+		rm.GetTexture("InstructionsSolo.png");
+		rm.GetTexture("InstructionsCoop.png");
+		rm.GetTexture("InstructionsVS.png");
+
+		rm.GetTexture("Pause Screen.png");
+
 		rm.GetTexture("Game Over Title.png");
 
 		rm.GetTexture("Level 01 Title.png");

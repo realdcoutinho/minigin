@@ -22,6 +22,9 @@
 #include "TimeManager.h"
 #include "SelectModeComponent.h"
 #include "GameOverComponent.h"
+#include "GameMode.h"
+#include "GameModeManager.h"
+#include "QBertGameMode.h"
 
 namespace dae
 {
@@ -312,9 +315,48 @@ namespace dae
 		{};
 		virtual void Execute()
 		{
-			GetActor()->GetComponent<GameOverComponent>()->RestartGame();
+			if(GetActor())
+				GetActor()->GetComponent<GameOverComponent>()->RestartGame();
+			else
+			{
+				auto gameMode = GameModeManager::GetInstance().GetActiveGameMode();
+				auto qbertGameMode = dynamic_cast<QBertGameMode*>(gameMode);
+				if (qbertGameMode)
+					qbertGameMode->Restart();
+			}
 		}
 	};
+
+	class StartGame : public GameObjectCommand
+	{
+	public:
+		StartGame(GameObject& pActor)
+			: GameObjectCommand(pActor)
+		{};
+		virtual void Execute()
+		{
+			auto gameMode = GameModeManager::GetInstance().GetActiveGameMode();
+			auto qbertGameMode = dynamic_cast<QBertGameMode*>(gameMode);
+			if (qbertGameMode)
+				qbertGameMode->StartGame();
+		}
+	};
+
+	class PauseGame : public GameObjectCommand
+	{
+	public:
+		PauseGame (GameObject& pActor)
+			: GameObjectCommand(pActor)
+		{};
+		virtual void Execute()
+		{
+			auto gameMode = GameModeManager::GetInstance().GetActiveGameMode();
+			auto qbertGameMode = dynamic_cast<QBertGameMode*>(gameMode);
+			if (qbertGameMode)
+				qbertGameMode->PauseGame();
+		}
+	};
+
 
 	class GridMovement : public GameObjectCommandAxis
 	{

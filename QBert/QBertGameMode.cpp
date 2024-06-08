@@ -22,6 +22,8 @@ namespace dae
 		name;
 
 		CreateTitleScenes();
+		CreateInstructionsScenes();
+		CreatePauseScreen();
 		m_pEnemyManager = std::make_shared<EnemyManager>();
 		m_pLevelState = std::make_shared<LevelState>();
 	}
@@ -55,6 +57,7 @@ namespace dae
 		m_pEnemyListener.reset();
 		LoadStartScene();
 	}
+
 
 	void QBertGameMode::StartScene(const std::string sceneName)
 	{
@@ -106,24 +109,6 @@ namespace dae
 		m_pGrid = nullptr;
 
 		m_pLevelState->NextLevel();
-
-
-		//if (m_CurrentSceneName == "LevelOneCoop")
-		//{
-		//	StartScene("LevelTwoCoop");
-		//}
-		//else if (m_CurrentSceneName == "LevelTwoCoop")
-		//{
-		//	StartScene("LevelThreeCoop");
-		//}
-		//if (m_CurrentSceneName == "LevelOneSolo")
-		//{
-		//	StartScene("LevelTwoSolo");
-		//}
-		//else if (m_CurrentSceneName == "LevelTwoSolo")
-		//{
-		//	StartScene("LevelThreeSolo");
-		//}
 	}
 
 	void QBertGameMode::QBertMovement()
@@ -178,6 +163,19 @@ namespace dae
 		}
 	}
 
+	void QBertGameMode::StartGame()
+	{
+		m_pLevelState->NextLevel();
+	}
+
+	void QBertGameMode::PauseGame()
+	{
+		std::string pause{ "PauseScreen" };
+		SetLevelState(pause);
+	}
+
+
+
 	void QBertGameMode::SetTitleScene(const std::string& startScene)
 	{
 		auto& sm = SceneManager::GetInstance();
@@ -211,8 +209,27 @@ namespace dae
 		auto& sceneTwo = sm.CreateScene("LevelTwoTitle");
 		GameObjectFactory::GetInstance().CreateLevelTwoTitle(sceneTwo);
 
-		auto& sceneThree = sm.CreateScene("LevelTwoTitle");
+		auto& sceneThree = sm.CreateScene("LevelThreeTitle");
 		GameObjectFactory::GetInstance().CreateLevelThreeTitle(sceneThree);
+	}
+
+	void QBertGameMode::CreateInstructionsScenes()
+	{
+		auto& sm = SceneManager::GetInstance();
+		auto& sceneOne = sm.CreateScene("LevelSoloInstructions");
+		GameObjectFactory::GetInstance().CreateLevelSoloInstructions(sceneOne);
+
+		auto& sceneTwo = sm.CreateScene("LevelCoopInstructions");
+		GameObjectFactory::GetInstance().CreateLevelCoopInstructions(sceneTwo);
+
+		auto& sceneThree = sm.CreateScene("LevelVSInstructions");
+		GameObjectFactory::GetInstance().CreateLevelVSInstructions(sceneThree);
+	}
+	void QBertGameMode::CreatePauseScreen()
+	{
+		auto& sm = SceneManager::GetInstance();
+		auto& pauseScreen = sm.CreateScene("PauseScreen");
+		GameObjectFactory::GetInstance().CreatePauseScreen(pauseScreen);
 	}
 }
 

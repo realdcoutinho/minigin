@@ -22,22 +22,14 @@ namespace dae
 
 	std::shared_ptr<LevelState> LevelState::HandleInput(std::string& nextScene)
 	{
-		return std::make_shared<LevelOneState>(nextScene);
+		return std::make_shared<LevelInstructionsState>(nextScene);
 	}
 
-	void LevelOneState::Enter()
+	void LevelState::Update()
 	{
-		m_GameMode->SetTitleScene(m_LevelTitle);
-		//auto& sm = SceneManager::GetInstance();
-		//auto scene = sm.GetSceneByName(m_LevelTitle);
-		//sm.SetActiveScene(scene);
-
-
-	}
-
-	void LevelOneState::Update()
-	{
-		if(m_Activate)
+		if (m_FromPaused)
+			return;
+		if (m_Activate)
 		{
 			m_CurrentTime += TimeManager::GetInstance().GlobalElapsed();
 			if (m_CurrentTime >= m_TimeSwitch)
@@ -46,6 +38,58 @@ namespace dae
 				m_Activate = false;
 			}
 		}
+	}
+
+
+	std::shared_ptr<LevelState> LevelInstructionsState::HandleInput(std::string& nextScene)
+	{
+		return std::make_shared<LevelOneState>(nextScene);
+	}
+
+	void LevelInstructionsState::Enter()
+	{
+		if (m_CurrentScene == "LevelOneSolo")
+			m_GameMode->SetTitleScene(m_LevelSoloInstructions);
+		if (m_CurrentScene == "LevelOneCoop")
+			m_GameMode->SetTitleScene(m_LevelCoopInstructions);
+		if (m_CurrentScene == "LevelOneVS")
+			m_GameMode->SetTitleScene(m_LevelVSInstructions);
+	}
+
+	void LevelInstructionsState::Update()
+	{
+	}
+
+	void LevelInstructionsState::Exit()
+	{
+	}
+
+	void LevelInstructionsState::NextLevel()
+	{
+		m_GameMode->SetLevelState(m_CurrentScene);
+	}
+
+
+	std::shared_ptr<LevelState> LevelOneState::HandleInput(std::string& nextScene)
+	{
+		if (nextScene == m_PauseScreen)
+			return  std::make_shared<GamePauseState>(std::type_index(typeid(LevelOneState)), nextScene, m_CurrentScene);
+		else
+			return std::make_shared<LevelTwoState>(nextScene);
+	}
+
+	void LevelOneState::Enter()
+	{
+		if (m_FromPaused)
+			m_GameMode->SetTitleScene(m_CurrentScene);
+		else
+			m_GameMode->SetTitleScene(m_LevelTitle);
+
+	}
+
+	void LevelOneState::Update()
+	{
+		LevelState::Update();
 	}
 
 	void LevelOneState::Exit()
@@ -62,52 +106,67 @@ namespace dae
 			m_GameMode->SetLevelState(m_LevelTwoVS);
 	}
 
-	std::shared_ptr<LevelState> LevelOneState::HandleInput(std::string& nextScene)
-	{
-		return std::make_shared<LevelTwoState>(nextScene);
-	}
+
 
 	std::shared_ptr<LevelState> LevelTwoState::HandleInput(std::string& nextScene)
 	{
-		return std::make_shared<LevelTwoState>(nextScene);
+		if (nextScene == m_PauseScreen)
+			return  std::make_shared<GamePauseState>(std::type_index(typeid(LevelTwoState)), nextScene, m_CurrentScene);
+		else
+			return std::make_shared<LevelThreeState>(nextScene);
 	}
 
 	void LevelTwoState::Enter()
 	{
-		m_GameMode->SetTitleScene(m_LevelTitle);
+		if (m_FromPaused)
+			m_GameMode->SetTitleScene(m_CurrentScene);
+		else
+			m_GameMode->SetTitleScene(m_LevelTitle);
 	}
 
 	void LevelTwoState::Update()
 	{
-		if (m_Activate)
-		{
-			m_CurrentTime += TimeManager::GetInstance().GlobalElapsed();
-			if (m_CurrentTime >= m_TimeSwitch)
-			{
-				m_GameMode->LoadScene(m_CurrentScene);
-				m_Activate = false;
-			}
-		}
+		LevelState::Update();
 	}
 
 	void LevelTwoState::Exit()
 	{
 	}
+
 	void LevelTwoState::NextLevel()
 	{
+		if (m_CurrentScene == "LevelTwoSolo")
+			m_GameMode->SetLevelState(m_LevelThreeSolo);
+		if (m_CurrentScene == "LevelTwoCoop")
+			m_GameMode->SetLevelState(m_LevelThreeCoop);
+		if (m_CurrentScene == "LevelTwoVS")
+			m_GameMode->SetLevelState(m_LevelThreeVS);
 	}
+
+
+
 	std::shared_ptr<LevelState> LevelThreeState::HandleInput(std::string& nextScene)
 	{
-		nextScene;
-
-		return std::shared_ptr<LevelThreeState>();
+		if (nextScene == m_PauseScreen)
+			return  std::make_shared<GamePauseState>(std::type_index(typeid(LevelThreeState)), nextScene, m_CurrentScene);
+		else
+			return std::shared_ptr<LevelThreeState>();
 	}
+
 	void LevelThreeState::Enter()
 	{
+		if (m_FromPaused)
+			m_GameMode->SetTitleScene(m_CurrentScene);
+		else
+			m_GameMode->SetTitleScene(m_LevelTitle);
+
 	}
+
 	void LevelThreeState::Update()
 	{
+		LevelState::Update();
 	}
+
 	void LevelThreeState::Exit()
 	{
 	}
@@ -153,12 +212,20 @@ namespace dae
 	std::shared_ptr<LevelState> GamePauseState::HandleInput(std::string& nextScene)
 	{
 		nextScene;
+		if (m_IncomingState == typeid(LevelOneState)) 
+			return std::make_shared<LevelOneState>(m_PreviousScene, true);
+		else if (m_IncomingState == typeid(LevelTwoState)) 
+			return std::make_shared<LevelTwoState>(m_PreviousScene, true);
+		else if (m_IncomingState == typeid(LevelThreeState))
+			return std::make_shared<LevelThreeState>(m_PreviousScene, true);
 
 		return std::shared_ptr<GamePauseState>();
 	}
 	void GamePauseState::Enter()
 	{
+		m_GameMode->SetTitleScene(m_CurrentScene);
 	}
+
 	void GamePauseState::Update()
 	{
 	}
@@ -169,6 +236,7 @@ namespace dae
 	void GamePauseState::NextLevel()
 	{
 	}
+
 
 }
 

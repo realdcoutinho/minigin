@@ -57,6 +57,10 @@ namespace dae
 		input.AddAxisCommand(controller1, std::move(movementCommandBert));
 
 
+		auto pauseCommand = std::make_unique<PauseGame>(bert);
+		input.AddActionCommand(SDL_SCANCODE_P, SDL_KEYDOWN, std::move(pauseCommand));
+
+
 		//auto& input = scene.GetSceneInput();
 		//auto movementCoilyCommand = std::make_unique<GridMovement>(bert);
 		//input.AddAxisCommand(std::move(movementCoilyCommand));
@@ -403,6 +407,92 @@ namespace dae
 
 		auto gameTitle = std::make_unique<TextureComponent>(*mainObj.get(), "Level 03 Title.png", 1);
 		mainObj->AddComponent(std::move(gameTitle));
+
+		auto& temp = *mainObj.get();
+		scene.Add(std::move(mainObj));
+
+		return temp;
+	}
+
+	GameObject& GameObjectFactory::CreateLevelSoloInstructions(Scene& scene)
+	{
+		auto mainObj = std::make_unique<dae::GameObject>();
+		mainObj->InitializeTransformComponent();
+		mainObj->SetLocalPosition(0, 0);
+
+		auto instructions = std::make_unique<TextureComponent>(*mainObj.get(), "InstructionsSolo.png", 1);
+		instructions->SetScale({ 1.f, 1.f });
+		mainObj->AddComponent(std::move(instructions));
+
+
+		auto& input = scene.GetSceneInput();
+		auto startCommand = std::make_unique<StartGame>(*mainObj.get());
+		input.AddActionCommand(SDL_SCANCODE_RETURN, SDL_KEYDOWN, std::move(startCommand));
+
+		auto& temp = *mainObj.get();
+		scene.Add(std::move(mainObj));
+
+		return temp;
+	}
+
+	GameObject& GameObjectFactory::CreateLevelCoopInstructions(Scene& scene)
+	{
+		auto mainObj = std::make_unique<dae::GameObject>();
+		mainObj->InitializeTransformComponent();
+		mainObj->SetLocalPosition(0, 0);
+
+		auto instructions = std::make_unique<TextureComponent>(*mainObj.get(), "InstructionsCoop.png", 1);
+		mainObj->AddComponent(std::move(instructions));
+
+		auto& input = scene.GetSceneInput();
+		auto startCommand = std::make_unique<StartGame>(*mainObj.get());
+		input.AddActionCommand(SDL_SCANCODE_RETURN, SDL_KEYDOWN, std::move(startCommand));
+
+		auto& temp = *mainObj.get();
+		scene.Add(std::move(mainObj));
+
+		return temp;
+	}
+
+	GameObject& GameObjectFactory::CreateLevelVSInstructions(Scene& scene)
+	{
+		auto mainObj = std::make_unique<dae::GameObject>();
+		mainObj->InitializeTransformComponent();
+		mainObj->SetLocalPosition(0, 0);
+
+		auto instructions = std::make_unique<TextureComponent>(*mainObj.get(), "InstructionsVS.png", 1);
+		mainObj->AddComponent(std::move(instructions));
+
+		auto& input = scene.GetSceneInput();
+		auto startCommand = std::make_unique<StartGame>(*mainObj.get());
+		input.AddActionCommand(SDL_SCANCODE_RETURN, SDL_KEYDOWN, std::move(startCommand));
+
+		auto& temp = *mainObj.get();
+		scene.Add(std::move(mainObj));
+
+		return temp;
+	}
+
+	GameObject& GameObjectFactory::CreatePauseScreen(Scene& scene)
+	{
+		auto mainObj = std::make_unique<dae::GameObject>();
+		mainObj->InitializeTransformComponent();
+		mainObj->SetLocalPosition(0, 0);
+
+		auto instructions = std::make_unique<TextureComponent>(*mainObj.get(), "Pause Screen.png", 1);
+		mainObj->AddComponent(std::move(instructions));
+
+		//auto& input = scene.GetSceneInput();
+		//auto startCommand = std::make_unique<StartGame>(*mainObj.get());
+		//input.AddActionCommand(SDL_SCANCODE_RETURN, SDL_KEYDOWN, std::move(startCommand));
+
+		auto& input = scene.GetSceneInput();
+		auto restartCommand = std::make_unique<ResartGame>(*mainObj.get());
+		input.AddActionCommand(SDL_SCANCODE_ESCAPE, SDL_KEYDOWN, std::move(restartCommand));
+
+		auto pauseCommand = std::make_unique<PauseGame>(*mainObj.get());
+		input.AddActionCommand(SDL_SCANCODE_P, SDL_KEYDOWN, std::move(pauseCommand));
+
 
 		auto& temp = *mainObj.get();
 		scene.Add(std::move(mainObj));

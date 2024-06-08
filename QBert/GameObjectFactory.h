@@ -38,6 +38,13 @@ namespace dae
 		GameObject& CreateLevelTwoTitle(Scene& scene);
 		GameObject& CreateLevelThreeTitle(Scene& scene);
 
+		GameObject& CreateLevelSoloInstructions(Scene& scene);
+		GameObject& CreateLevelCoopInstructions(Scene& scene);
+		GameObject& CreateLevelVSInstructions(Scene& scene);
+
+		GameObject& CreatePauseScreen(Scene& scene);
+
+
 		//GameObject& CreateGridNode(Scene& scene, GameInfo& gi, glm::vec2& pos, int col, int row, int rows, int width, int height, int index);
 	private:
 		friend class Singleton<GameObjectFactory>;

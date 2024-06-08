@@ -30,6 +30,8 @@ namespace dae
 
 		void LoadStartScene();
 		void Restart();
+		void StartGame();
+		void PauseGame();
 
 		void StartScene(const std::string sceneName);
 		void LoadScene(const std::string sceneName);
@@ -54,13 +56,15 @@ namespace dae
 		void SetPlayerScore(int score, int player);
 
 		void SetLevelState(std::string& startScene);
-		void SetTitleScene(const std::string& startScene);
 
+		void SetTitleScene(const std::string& startScene);
 	private:
 
 		void CreatePlayers(Scene& scene);
 
 		void CreateTitleScenes();
+		void CreateInstructionsScenes();
+		void CreatePauseScreen();
 
 
 		TriangularGrid* m_pGrid;
