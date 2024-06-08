@@ -8,7 +8,7 @@
 
 namespace dae
 {
-	GameOverComponent::GameOverComponent(dae::GameObject& pOwner, int score1, int score2)
+	FinalScoreComponent::FinalScoreComponent(dae::GameObject& pOwner, int score1, int score2)
 		:BaseComponent(pOwner)
 		, m_Score1(score1)
 		, m_Score2(score2)
@@ -35,13 +35,13 @@ namespace dae
 
 
 	}
-	void GameOverComponent::Render()
+	void FinalScoreComponent::Render()
 	{
 	}
-	void GameOverComponent::Update()
+	void FinalScoreComponent::Update()
 	{
 	}
-	void GameOverComponent::RestartGame()
+	void FinalScoreComponent::RestartGame()
 	{
 		m_pGameMode->Restart();
 	}

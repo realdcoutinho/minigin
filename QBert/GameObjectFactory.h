@@ -33,6 +33,7 @@ namespace dae
 
 		GameObject& CreateStartMenu(Scene& scene);
 		GameObject& CreateGameOver(Scene& scene, int playerOneScore, int playerTwoScore);
+		GameObject& CreateVictoryScene(Scene& scene, int playerOneScore, int playerTwoScore);
 
 		GameObject& CreateLevelOneTitle(Scene& scene);
 		GameObject& CreateLevelTwoTitle(Scene& scene);

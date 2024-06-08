@@ -26,6 +26,8 @@
 #include "GameModeManager.h"
 #include "QBertGameMode.h"
 
+
+
 namespace dae
 {
 	class Controller;
@@ -315,15 +317,10 @@ namespace dae
 		{};
 		virtual void Execute()
 		{
-			if(GetActor())
-				GetActor()->GetComponent<GameOverComponent>()->RestartGame();
-			else
-			{
-				auto gameMode = GameModeManager::GetInstance().GetActiveGameMode();
-				auto qbertGameMode = dynamic_cast<QBertGameMode*>(gameMode);
-				if (qbertGameMode)
-					qbertGameMode->Restart();
-			}
+			auto gameMode = GameModeManager::GetInstance().GetActiveGameMode();
+			auto qbertGameMode = dynamic_cast<QBertGameMode*>(gameMode);
+			if (qbertGameMode)
+				qbertGameMode->Restart();
 		}
 	};
 
@@ -380,6 +377,8 @@ namespace dae
 			{
 				lastTime = currentTime;
 				MoveActor(m_directionVector);
+
+
 			}
 			//MoveActor(m_directionVector);
 		}

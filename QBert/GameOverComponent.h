@@ -8,11 +8,11 @@ namespace dae
 	class TextureComponent;
 	class TextComponent;
 	class QBertGameMode;
-	class GameOverComponent final : public dae::BaseComponent
+	class FinalScoreComponent final : public dae::BaseComponent
 	{
 	public:
-		GameOverComponent(dae::GameObject& pOwner, int score1, int score2);
-		virtual ~GameOverComponent() = default;
+		FinalScoreComponent(dae::GameObject& pOwner, int score1, int score2);
+		virtual ~FinalScoreComponent() = default;
 
 
 		virtual void Render() override;

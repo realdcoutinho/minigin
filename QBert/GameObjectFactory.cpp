@@ -336,7 +336,7 @@ namespace dae
 
 		auto restartObj = std::make_unique<GameObject>();
 		restartObj->InitializeTransformComponent();
-		restartObj->SetLocalPosition(80, 450);
+		restartObj->SetLocalPosition(10, 450);
 
 		auto restartTexture = std::make_unique<TextureComponent>(*restartObj.get(), "Restart.png", 1);
 		restartObj->AddComponent(std::move(restartTexture));
@@ -349,7 +349,7 @@ namespace dae
 		scoreObj->InitializeTransformComponent();
 		scoreObj->SetLocalPosition(150, 320);
 
-		auto scoreComponent = std::make_unique<GameOverComponent>(*scoreObj.get(), playerOneScore, playerTwoScore);
+		auto scoreComponent = std::make_unique<FinalScoreComponent>(*scoreObj.get(), playerOneScore, playerTwoScore);
 		scoreObj->AddComponent(std::move(scoreComponent));
 
 		auto& input = scene.GetSceneInput();
@@ -363,6 +363,61 @@ namespace dae
 		auto& temp = *gameOverObj.get();
 		scene.Add(std::move(mainObj));
 		scene.Add(std::move(gameOverObj));
+		scene.Add(std::move(scoreTextureObj));
+		scene.Add(std::move(scoreObj));
+		scene.Add(std::move(restartObj));
+		return temp;
+	}
+
+	GameObject& GameObjectFactory::CreateVictoryScene(Scene& scene, int playerOneScore, int playerTwoScore)
+	{
+		auto mainObj = std::make_unique<dae::GameObject>();
+		mainObj->InitializeTransformComponent();
+		mainObj->SetLocalPosition(0, 0);
+
+		auto victoryObj = std::make_unique<GameObject>();
+		victoryObj->InitializeTransformComponent();
+		victoryObj->SetLocalPosition(175, 50);
+
+		auto victoryTexture = std::make_unique<TextureComponent>(*victoryObj.get(), "Victory Title.png", 1);
+		victoryObj->AddComponent(std::move(victoryTexture));
+
+		auto scoreTextureObj = std::make_unique<GameObject>();
+		scoreTextureObj->InitializeTransformComponent();
+		scoreTextureObj->SetLocalPosition(220, 250);
+
+		auto scoreTexture = std::make_unique<TextureComponent>(*scoreTextureObj.get(), "Score.png", 1);
+		scoreTextureObj->AddComponent(std::move(scoreTexture));
+
+		auto restartObj = std::make_unique<GameObject>();
+		restartObj->InitializeTransformComponent();
+		restartObj->SetLocalPosition(10, 450);
+
+		auto restartTexture = std::make_unique<TextureComponent>(*restartObj.get(), "Restart.png", 1);
+		restartObj->AddComponent(std::move(restartTexture));
+
+
+
+
+
+		auto scoreObj = std::make_unique<GameObject>();
+		scoreObj->InitializeTransformComponent();
+		scoreObj->SetLocalPosition(150, 320);
+
+		auto scoreComponent = std::make_unique<FinalScoreComponent>(*scoreObj.get(), playerOneScore, playerTwoScore);
+		scoreObj->AddComponent(std::move(scoreComponent));
+
+		auto& input = scene.GetSceneInput();
+		auto restartCommand = std::make_unique<ResartGame>(*scoreObj.get());
+		input.AddActionCommand(SDL_SCANCODE_ESCAPE, SDL_KEYDOWN, std::move(restartCommand));
+
+
+		scoreTextureObj->SetParent(mainObj.get());
+		victoryObj->SetParent(mainObj.get());
+		restartObj->SetParent(mainObj.get());
+		auto& temp = *victoryObj.get();
+		scene.Add(std::move(mainObj));
+		scene.Add(std::move(victoryObj));
 		scene.Add(std::move(scoreTextureObj));
 		scene.Add(std::move(scoreObj));
 		scene.Add(std::move(restartObj));
