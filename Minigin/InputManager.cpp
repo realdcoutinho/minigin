@@ -18,11 +18,13 @@ bool dae::InputManager::ProcessInput()
 	input.Process();
 	Update();
 
+	bool running = true;
+
 	SDL_Event e;
 	while (SDL_PollEvent(&e))
 	{
 		if (e.type == SDL_QUIT) {
-			return false;
+			running = false;
 		}
 		if (e.type == SDL_KEYDOWN) 
 		{
@@ -47,7 +49,7 @@ bool dae::InputManager::ProcessInput()
 
 
 	
-	return true;
+	return running;
 }
 
 void dae::InputManager::Update()

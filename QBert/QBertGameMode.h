@@ -34,6 +34,8 @@ namespace dae
 		void PauseGame();
 		void GameOver();
 		void VictoryScene();
+		void ExitGame() { m_IsGameRunning = false;};
+		bool IsGameRunning() { return m_IsGameRunning; }
 
 		void StartScene(const std::string sceneName);
 		void LoadScene(const std::string sceneName);
@@ -86,7 +88,7 @@ namespace dae
 
 		std::vector<GameObject*> m_pPlayers;
 
-
+		bool m_IsGameRunning = true;
 		int m_PlayerOneLives{ 3 };
 		int m_PlayerOneScore{ 0 };
 		int m_PlayerTwoLives{ 3 };

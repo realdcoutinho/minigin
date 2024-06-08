@@ -23,32 +23,24 @@ namespace dae
 
 	void EnemyManager::SetNewData(GameInfo& gameInfo)
 	{
-		m_SpawnCoily = gameInfo.spawnCoily;
-		m_SpawnSlickSam = gameInfo.spawnSam;
-		m_SpawnUggWrongway = gameInfo.spawnUgg;
-
-		//m_MaxCoily = gameInfo.maxCoily;
-		//m_MaxSlickSam = gameInfo.maxSam;
-		//m_MaxUggWrongway = gameInfo.maxUgg;
+		m_CanSpawnCoily = gameInfo.spawnCoily;
+		m_CanSpawnSlickSam = gameInfo.spawnSam;
+		m_CanSpawnUggWrongway = gameInfo.spawnUgg;
 
 		m_CoilyInterval = gameInfo.coilyInterval;
 		m_SlickSamInterval = gameInfo.samInterval;
 		m_UggWrongwayInterval = gameInfo.uggInterval;
 
-		m_SpawnTimerCoily = m_CoilyInterval;
-		m_SpawnTimerSlickSam = 8.0f;
-		m_SpawnTimerUggWrongway = 6.0f;
-		m_SpawnTimerUggWrongway = 6.0f;
+		m_SpawnTimerCoily = 0.f;
+		m_SpawnTimerSlickSam = 0.f;
+		m_SpawnTimerUggWrongway = 0.f;
 
 		if (gameInfo.gameMode == 3)
 			m_VersusMode = true;
 
 		m_pCoily = nullptr;
 
-		m_SpawnUggWrongway = true;
-
 		m_KeepUpdate = true;
-
 		m_pGameInfo = &gameInfo;
 	}
 
@@ -65,7 +57,7 @@ namespace dae
 
 		UpdateCoilySpawnTimers(elapsed);
 		UpdateSlickSamSpawnTimers(elapsed);
-		//UpdateUggWrongwaySpawnTimers(elapsed);
+		UpdateUggWrongwaySpawnTimers(elapsed);
 	}
 
 
@@ -88,7 +80,7 @@ namespace dae
 
 		m_pCoily->SetActive(false);
 		m_pCoily = nullptr;
-		m_SpawnCoily = true;
+		m_CanSpawnCoily = true;
 	}
 
 	void EnemyManager::DestroyAllEnemies()
@@ -107,13 +99,13 @@ namespace dae
 		}
 
 		m_pEnemies.clear();
-		m_SpawnCoily = true;
-		m_SpawnSlickSam = true;
-		m_SpawnUggWrongway = true;
+		m_CanSpawnCoily = m_pGameInfo->spawnCoily;
+		m_CanSpawnSlickSam = m_pGameInfo->spawnSam;
+		m_CanSpawnUggWrongway = m_pGameInfo->spawnUgg;
 
-		m_SpawnTimerCoily = m_CoilyInterval;
-		m_SpawnTimerSlickSam = m_SlickSamInterval;
-		m_SpawnTimerUggWrongway = m_UggWrongwayInterval;
+		m_SpawnTimerCoily = 0;
+		m_SpawnTimerSlickSam = 0;
+		m_SpawnTimerUggWrongway = 0;
 
 		m_CurrentSlickSam = 0;
 		m_CurrentUggWrongway = 0;
@@ -156,13 +148,12 @@ namespace dae
 		if (m_pCoily != nullptr)
 			return;
 
-		if (m_SpawnCoily)
+		if (m_CanSpawnCoily)
 		{
-			m_SpawnTimerCoily -= elapsedSec;
-			if (m_SpawnTimerCoily <= 0.f)
+			m_SpawnTimerCoily += elapsedSec;
+			if (m_SpawnTimerCoily >= m_CoilyInterval)
 			{
-				m_SpawnTimerCoily = m_CoilyInterval;
-				m_SpawnTimerCoily = 10.0f;
+				m_SpawnTimerCoily = 0;
 				SpawnCoily();
 			}
 		}
@@ -172,20 +163,18 @@ namespace dae
 	{
 		if (m_MaxSlickSam <= m_CurrentSlickSam)
 		{
-			m_SpawnSlickSam = false;
+			m_CanSpawnSlickSam = false;
 		}
 		else
 		{
-			m_SpawnSlickSam = true;
+			m_CanSpawnSlickSam = true;
 		}
-		if (m_SpawnSlickSam)
+		if (m_CanSpawnSlickSam)
 		{
-			m_SpawnTimerSlickSam -= elapsedSec;
-			//if (m_SpawnTimerSlickSam <= 0.f)
-			if (m_SpawnTimerSlickSam <= 0.f)
+			m_SpawnTimerSlickSam += elapsedSec;
+			if (m_SpawnTimerSlickSam >= m_SlickSamInterval)
 			{
-				//m_SpawnSlickSam = false;
-				m_SpawnTimerSlickSam = 2.0f;
+				m_SpawnTimerSlickSam = 0.0f;
 				SpawnSlickSam();
 			}
 		}
@@ -193,21 +182,14 @@ namespace dae
 
 	void EnemyManager::UpdateUggWrongwaySpawnTimers(float elapsedSec)
 	{
-		if (m_MaxUggWrongway <= m_CurrentUggWrongway)
+		if (m_CanSpawnUggWrongway)
 		{
-			m_SpawnUggWrongway = false;
-		}
-		else
-		{
-			m_SpawnUggWrongway = true;
-		}
-		if (m_SpawnUggWrongway)
-		{
-			m_SpawnTimerUggWrongway -= elapsedSec;
-			if (m_SpawnTimerUggWrongway <= 0.f)
+			if (m_MaxUggWrongway <= m_CurrentUggWrongway)
+				return;
+			m_SpawnTimerUggWrongway += elapsedSec;
+			if (m_SpawnTimerUggWrongway <= m_UggWrongwayInterval)
 			{
-				//m_SpawnUggWrongway = false;
-				m_SpawnTimerUggWrongway = 2.0f;
+				m_SpawnTimerUggWrongway = 0.0f;
 				SpawnUggWrongway();
 			}
 		}

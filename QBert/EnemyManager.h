@@ -41,9 +41,9 @@ namespace dae
 
 		bool m_VersusMode = false;
 
-		bool m_SpawnCoily = false;
-		bool m_SpawnSlickSam = false;
-		bool m_SpawnUggWrongway = true;
+		bool m_CanSpawnCoily = false;
+		bool m_CanSpawnSlickSam = false;
+		bool m_CanSpawnUggWrongway = true;
 
 		bool m_KeepUpdate{ true };
 

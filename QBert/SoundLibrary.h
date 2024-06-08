@@ -8,8 +8,8 @@ enum class SoundID : unsigned short
 	CoilyFall = 4,				//done
 	CoilySnakeJump = 5,			//done
 	DemoSound = 6,
-	DiskLand = 7,
-	DiskLift = 8,
+	DiskLand = 7,				//done
+	DiskLift = 8,				//done
 	LevelScreenTune = 9,		//done
 	OtherFoesJump = 10,			//done
 	QBertFall = 11,				//done

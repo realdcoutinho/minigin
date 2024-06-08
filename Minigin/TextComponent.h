@@ -6,6 +6,9 @@
 #include "Transform.h"
 #include <glm/glm.hpp>
 
+#include "SDL.h"
+#include "SDL_ttf.h"
+
 struct _TTF_Font;
 namespace dae
 { 
@@ -16,7 +19,7 @@ namespace dae
 	{
 	public:
 		//TextComponent(std::unique_ptr<GameObject> pOwner, const std::string& text, std::shared_ptr<Font> pFont/*, int posX, int posY, int posZ = 1 */);
-		TextComponent(GameObject& pOwner, const std::string& text, _TTF_Font* pFont);
+		TextComponent(GameObject& pOwner, const std::string& text, _TTF_Font* pFont, const SDL_Color& color = { 255, 255, 255, 255 });
 
 		~TextComponent();
 
@@ -30,11 +33,13 @@ namespace dae
 
 		TextComponent* SetText(const std::string& text);
 
+
 	protected:
 
 		std::shared_ptr<TextureComponent> m_texture;
 
 	private:
+		 const SDL_Color m_TextColor;
 		std::string m_Text;
 		_TTF_Font* m_Font;
 		bool m_needsUpdate;

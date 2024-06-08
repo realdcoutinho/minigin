@@ -286,7 +286,24 @@ namespace dae
 		auto optionsTexture = std::make_unique<TextureComponent>(*optionsObject.get(), "Game Options.png", 1);
 		optionsObject.get()->AddComponent(std::move(optionsTexture));
 
+
 		optionsObject->SetParent(screenObject.get());
+
+
+		auto quitObject = std::make_unique<GameObject>();
+		quitObject.get()->InitializeTransformComponent();
+		quitObject.get()->SetLocalPosition(290, 415);
+		 
+
+		const SDL_Color color = { 255, 216, 102, 255 };
+		auto font = ResourceManager::GetInstance().GetFont("Minecraft.ttf", 37);
+		auto quit = std::make_unique<TextComponent>(*quitObject.get(), "Quit", font, color);
+		quitObject.get()->AddComponent(std::move(quit));
+
+		quitObject->SetParent(screenObject.get());
+
+
+
 
 		auto arrowObj = std::make_unique<GameObject>();
 		arrowObj->InitializeTransformComponent();
@@ -299,8 +316,15 @@ namespace dae
 		auto movementArrow = std::make_unique<ChooseGameMode>(*arrowObj.get());
 		input.AddAxisCommand(std::move(movementArrow));
 
+		auto moveArrow = std::make_unique<ChooseGameMode>(*arrowObj.get());
+		unsigned int controller1 = dae::InputManager::GetInstance().GetControllerIdx();
+		input.AddAxisCommand(controller1, std::move(moveArrow));
+
 		auto selectCommand = std::make_unique<SelectGameModeCommand>(*arrowObj.get());
 		input.AddActionCommand(SDL_SCANCODE_RETURN, SDL_KEYDOWN, std::move(selectCommand));
+
+		auto selectCommandPAD = std::make_unique<SelectGameModeCommand>(*arrowObj.get());
+		input.AddActionCommand(controller1, Controller::ControllerButton::A, std::move(selectCommandPAD));
 
 		arrowObj->AddComponent(std::move(arrowComp));
 		arrowObj->SetParent(screenObject.get());
@@ -311,6 +335,7 @@ namespace dae
 		scene.Add(std::move(titleObject));
 		scene.Add(std::move(optionsObject));
 		scene.Add(std::move(arrowObj));
+		scene.Add(std::move(quitObject));
 		return temp;
 	}
 
@@ -355,6 +380,11 @@ namespace dae
 		auto& input = scene.GetSceneInput();
 		auto restartCommand = std::make_unique<ResartGame>(*scoreObj.get());
 		input.AddActionCommand(SDL_SCANCODE_ESCAPE, SDL_KEYDOWN, std::move(restartCommand));
+
+		unsigned int controller1 = dae::InputManager::GetInstance().GetControllerIdx();
+
+		auto restartComd = std::make_unique<ResartGame>(*mainObj.get());
+		input.AddActionCommand(controller1, Controller::ControllerButton::Y, std::move(restartComd));
 
 
 		scoreTextureObj->SetParent(mainObj.get());
@@ -410,6 +440,11 @@ namespace dae
 		auto& input = scene.GetSceneInput();
 		auto restartCommand = std::make_unique<ResartGame>(*scoreObj.get());
 		input.AddActionCommand(SDL_SCANCODE_ESCAPE, SDL_KEYDOWN, std::move(restartCommand));
+
+		unsigned int controller1 = dae::InputManager::GetInstance().GetControllerIdx();
+
+		auto restartComd = std::make_unique<ResartGame>(*mainObj.get());
+		input.AddActionCommand(controller1, Controller::ControllerButton::Y, std::move(restartComd));
 
 
 		scoreTextureObj->SetParent(mainObj.get());
@@ -484,6 +519,11 @@ namespace dae
 		auto startCommand = std::make_unique<StartGame>(*mainObj.get());
 		input.AddActionCommand(SDL_SCANCODE_RETURN, SDL_KEYDOWN, std::move(startCommand));
 
+		auto startComd = std::make_unique<StartGame>(*mainObj.get());
+		auto selectCommandPAD = std::make_unique<SelectGameModeCommand>(*mainObj.get());
+		unsigned int controller1 = dae::InputManager::GetInstance().GetControllerIdx();
+		input.AddActionCommand(controller1, Controller::ControllerButton::A, std::move(startComd));
+
 		auto& temp = *mainObj.get();
 		scene.Add(std::move(mainObj));
 
@@ -502,6 +542,11 @@ namespace dae
 		auto& input = scene.GetSceneInput();
 		auto startCommand = std::make_unique<StartGame>(*mainObj.get());
 		input.AddActionCommand(SDL_SCANCODE_RETURN, SDL_KEYDOWN, std::move(startCommand));
+
+		auto startComd = std::make_unique<StartGame>(*mainObj.get());
+		auto selectCommandPAD = std::make_unique<SelectGameModeCommand>(*mainObj.get());
+		unsigned int controller1 = dae::InputManager::GetInstance().GetControllerIdx();
+		input.AddActionCommand(controller1, Controller::ControllerButton::A, std::move(startComd));
 
 		auto& temp = *mainObj.get();
 		scene.Add(std::move(mainObj));
@@ -522,6 +567,11 @@ namespace dae
 		auto startCommand = std::make_unique<StartGame>(*mainObj.get());
 		input.AddActionCommand(SDL_SCANCODE_RETURN, SDL_KEYDOWN, std::move(startCommand));
 
+		auto startComd = std::make_unique<StartGame>(*mainObj.get());
+		auto selectCommandPAD = std::make_unique<SelectGameModeCommand>(*mainObj.get());
+		unsigned int controller1 = dae::InputManager::GetInstance().GetControllerIdx();
+		input.AddActionCommand(controller1, Controller::ControllerButton::A, std::move(startComd));
+
 		auto& temp = *mainObj.get();
 		scene.Add(std::move(mainObj));
 
@@ -537,16 +587,21 @@ namespace dae
 		auto instructions = std::make_unique<TextureComponent>(*mainObj.get(), "Pause Screen.png", 1);
 		mainObj->AddComponent(std::move(instructions));
 
-		//auto& input = scene.GetSceneInput();
-		//auto startCommand = std::make_unique<StartGame>(*mainObj.get());
-		//input.AddActionCommand(SDL_SCANCODE_RETURN, SDL_KEYDOWN, std::move(startCommand));
-
 		auto& input = scene.GetSceneInput();
+
 		auto restartCommand = std::make_unique<ResartGame>(*mainObj.get());
 		input.AddActionCommand(SDL_SCANCODE_ESCAPE, SDL_KEYDOWN, std::move(restartCommand));
 
 		auto pauseCommand = std::make_unique<PauseGame>(*mainObj.get());
 		input.AddActionCommand(SDL_SCANCODE_P, SDL_KEYDOWN, std::move(pauseCommand));
+
+		unsigned int controller1 = dae::InputManager::GetInstance().GetControllerIdx();
+
+		auto restartComd = std::make_unique<ResartGame>(*mainObj.get());
+		input.AddActionCommand(controller1, Controller::ControllerButton::Y, std::move(restartComd));
+
+		auto pauseComd = std::make_unique<PauseGame>(*mainObj.get());
+		input.AddActionCommand(controller1, Controller::ControllerButton::Start, std::move(pauseComd));
 
 
 		auto& temp = *mainObj.get();
@@ -556,66 +611,3 @@ namespace dae
 	}
 
 }
-
-	//GameObject& GameObjectFactory::CreateGridNode(Scene& scene, GameInfo& gi, glm::vec2& pos, int col, int row, int rows, int width, int height, int index)
-	//{
-	//	std::unique_ptr nodeObj = std::make_unique<dae::GameObject>();
-	//	nodeObj->InitializeTransformComponent();
-	//	nodeObj->SetLocalPosition(pos.x, pos.y);
-	//
-	//	pos.x += width;
-	//
-	//	NodeInfo nodeInfo;
-	//	nodeInfo.leftDown = (row == (rows) - 1) ? -1 : index + row + 1;
-	//	nodeInfo.leftUp = (col == 0) ? -1 : index - (row + 1);
-	//	nodeInfo.rightDown = (row == (rows) - 1) ? -1 : nodeInfo.leftDown + 1;
-	//	nodeInfo.rightUp = (col == row) ? -1 : index - row;
-	//	nodeInfo.centerPos = { pos.x - width / 2.f - 20.0f, pos.x - height / 2.f + 20.0f };
-	//	nodeInfo.index = index;
-	//
-	//	nodeInfo.type = TileType::TileOne;
-	//	if (row == 7)
-	//	{
-	//		nodeInfo.lastRow = true;
-	//	}
-	//
-	//
-	//	std::unique_ptr<GridNode> node = std::make_unique<GridNode>(*nodeObj.get(), nodeInfo, gi);
-	//	nodeObj->AddComponent(std::move(node));
-	//
-	//	auto& temp = *nodeObj.get();
-	//	scene.Add(std::move(nodeObj));
-	//	return temp;
-	//
-	//
-	//
-	//	//std::unique_ptr curTile = std::make_unique<dae::GameObject>();
-	//		   //curTile->InitializeTransformComponent();
-	//		   //curTile->SetLocalPosition(pos.x, pos.y);
-	//
-	//		   //pos.x += width;
-	//
-	//		   //NodeInfo nodeInfo;
-	//		   //nodeInfo.leftDown = (row == (m_Rows) - 1) ? -1 : index + row + 1;
-	//		   //nodeInfo.leftUp = (col == 0) ? -1 : index - (row + 1);
-	//		   //nodeInfo.rightDown = (row == (m_Rows) - 1) ? -1 : nodeInfo.leftDown + 1;
-	//		   //nodeInfo.rightUp = (col == row) ? -1 : index - row;
-	//		   //nodeInfo.centerPos = { pos.x - width / 2.f - 20.0f, pos.y - height / 2.f + 20.0f };
-	//		   //nodeInfo.index = index;
-	//
-	//		   //nodeInfo.type = TileType::TileOne;
-	//		   //if (row == 7)
-	//		   //{
-	//		   //    nodeInfo.lastRow = true;
-	//		   //}
-	//
-	//
-	//		   //std::unique_ptr<GridNode> node = std::make_unique<GridNode>(*curTile.get(), nodeInfo, gi);
-	//		   //m_GridNodes.push_back(node.get());
-	//		   //curTile->AddComponent(std::move(node));
-	//		   //scene.Add(std::move(curTile));
-	//
-	//}
-
-
-

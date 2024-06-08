@@ -10,6 +10,8 @@ namespace dae
 	public:
 		virtual void Update(float elapsed) = 0;
 		virtual ~GameMode() = default;
+
+		virtual bool IsGameRunning() = 0;
 	};
 
 }

@@ -56,6 +56,11 @@ namespace dae
         inFile.read(reinterpret_cast<char*>(&gameInfo.samInterval), sizeof(gameInfo.samInterval));
         inFile.read(reinterpret_cast<char*>(&gameInfo.coilyInterval), sizeof(gameInfo.coilyInterval));
         inFile.read(reinterpret_cast<char*>(&gameInfo.uggInterval), sizeof(gameInfo.uggInterval));
+       
+        inFile.read(reinterpret_cast<char*>(&gameInfo.discOne), sizeof(gameInfo.discOne));
+        inFile.read(reinterpret_cast<char*>(&gameInfo.discTwo), sizeof(gameInfo.discTwo));
+        inFile.read(reinterpret_cast<char*>(&gameInfo.discThree), sizeof(gameInfo.discThree));
+
 
         inFile.close();
 

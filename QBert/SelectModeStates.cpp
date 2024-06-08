@@ -100,7 +100,7 @@ namespace dae
 		}
 		if (input.x == 0 && input.y == -1)
 		{
-			return std::make_unique<SoloMode>(character, input);
+			return std::make_unique<QuitMode>(character, input);
 		}
 		return std::make_unique<VersusMode>(character, input);
 	}
@@ -127,5 +127,37 @@ namespace dae
 
 
 
+
+	std::unique_ptr<SelectModeStates> QuitMode::HandleInput(GameObject* character, const glm::vec2& input)
+	{
+		if (input.x == 0 && input.y == 1)
+		{
+			return std::make_unique<VersusMode>(character, input);
+		}
+		if (input.x == 0 && input.y == -1)
+		{
+			return std::make_unique<SoloMode>(character, input);
+		}
+		return std::make_unique<QuitMode>(character, input);
+	}
+
+	void QuitMode::Enter()
+	{
+		SelectModeStates::Enter();
+		m_ArrowHead->SetLocalPosition({ 150, 390 });
+	}
+
+	void QuitMode::Update()
+	{
+	}
+
+	void QuitMode::Exit()
+	{
+	}
+
+	void QuitMode::SelectGameMode()
+	{
+		m_GameMode->ExitGame();
+	}
 
 }

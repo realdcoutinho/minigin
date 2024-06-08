@@ -26,6 +26,8 @@ namespace dae
 		std::string m_SoloMode{ "LevelOneSolo" };
 		std::string m_CoopMode{ "LevelOneCoop" };
 		std::string m_VersusMode{ "LevelOneVS" };
+		std::string m_QuitMode{ "Quit" };
+
 
 		QBertGameMode* m_GameMode;
 	};
@@ -75,6 +77,22 @@ namespace dae
 		{
 		}
 		virtual ~VersusMode() = default;
+		virtual std::unique_ptr<SelectModeStates> HandleInput(GameObject* character, const glm::vec2& input) override;
+		virtual void Enter() override;
+		virtual void Update() override;
+		virtual void Exit() override;
+		virtual void SelectGameMode() override;
+	};
+
+	class QuitMode final : public SelectModeStates
+	{
+	public:
+		QuitMode() = default;
+		QuitMode(GameObject* character, const glm::vec2& input)
+			: SelectModeStates(character, input)
+		{
+		}
+		virtual ~QuitMode() = default;
 		virtual std::unique_ptr<SelectModeStates> HandleInput(GameObject* character, const glm::vec2& input) override;
 		virtual void Enter() override;
 		virtual void Update() override;

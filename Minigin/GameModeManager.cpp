@@ -8,4 +8,12 @@ namespace dae
 		if(m_ActiveGameMode != nullptr)
 			m_ActiveGameMode->Update(elapsed);
 	}
+
+	bool GameModeManager::IsGameRunning()
+	{
+		if (m_ActiveGameMode != nullptr)
+			return m_ActiveGameMode->IsGameRunning();
+		else
+			return false;
+	}
 }

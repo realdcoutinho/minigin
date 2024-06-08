@@ -19,6 +19,8 @@ namespace dae
 		GameMode* GetActiveGameMode() const { return m_ActiveGameMode; }
 
 		void Update(float elapsed);
+
+		bool IsGameRunning();
 	private:
 		friend class Singleton<GameModeManager>;
 		GameModeManager() = default;

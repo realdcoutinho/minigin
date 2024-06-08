@@ -10,19 +10,13 @@
 
 namespace dae
 {
-	//dae::TextComponent::TextComponent(std::unique_ptr<GameObject> pOwner, const std::string& text, std::shared_ptr<Font> pFont/*, int posX, int posY, int posZ*/)
-	//	: BaseComponent(pOwner.get()),
-	//	m_Font{ std::move(pFont) }
-	//	, m_Text{ text }
-	//	, m_needsUpdate(true)
-	//{
-	//}
 
-	dae::TextComponent::TextComponent(GameObject& pOwner, const std::string& text, _TTF_Font* pFont/*, int posX, int posY, int posZ = 1 */)
+	TextComponent::TextComponent(GameObject& pOwner, const std::string& text, _TTF_Font* pFont, const SDL_Color& color)
 		: BaseComponent(pOwner)
 		, m_Font{ pFont }
 		, m_Text{ text }
-		, m_needsUpdate(true)
+		, m_needsUpdate(true),
+		m_TextColor(color)
 	{
 	}
 
@@ -56,8 +50,8 @@ namespace dae
 	{
 		if (m_needsUpdate)
 		{
-			const SDL_Color color = { 255,255,255,255 }; // only white text is supported now
-			const auto surf = TTF_RenderText_Blended(m_Font, m_Text.c_str(), color);
+			//const SDL_Color color = { 255,255,255,255 }; // only white text is supported now
+			const auto surf = TTF_RenderText_Blended(m_Font, m_Text.c_str(), m_TextColor);
 			if (surf == nullptr)
 			{
 				throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());

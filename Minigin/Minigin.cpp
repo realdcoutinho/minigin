@@ -120,12 +120,22 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	{
 		const auto currentTime = std::chrono::high_resolution_clock::now();
 		const float deltaTime = std::chrono::duration<float>(currentTime - last_time).count();
-		
+
 		lag += deltaTime;
 		timeManager.Update(deltaTime);
 
 
-		doContinue = input.ProcessInput();
+
+		bool inputState = input.ProcessInput();
+		bool gameRunning = gameModeManager.IsGameRunning();
+
+		if (!inputState || !gameRunning)
+			doContinue = false;
+
+
+;
+
+
 		gameModeManager.Update(deltaTime);
 		//while (lag >= fixed_time_step)
 		//{
@@ -152,6 +162,9 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		last_time = currentTime;
 
 		//sceneManager.FixedUpdate();
+
+
+
 	}
 
 	//eventManager.Shutdown();

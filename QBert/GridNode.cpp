@@ -37,9 +37,22 @@ namespace dae
 			m_NodeStates = std::make_unique<NodeStatePit>();
         else if (m_NodeInfo.type == TileType::Disc)
         {
+            int index = m_NodeInfo.index;
+            std::vector<int> nums = { 2, 5, 9, 14, 20, 27, 35, 44 }; 
+
+
+
             auto discObj = std::make_unique<GameObject>();
             discObj->InitializeTransformComponent();
-            discObj->SetLocalPosition(0.f, 15.0f);
+            if (std::find(nums.begin(), nums.end(), index) != nums.end()) 
+            {
+                discObj->SetLocalPosition(12.f, 15.0f);
+
+            }
+            else 
+            {
+                discObj->SetLocalPosition(9.f, 15.0f);
+            }
             auto disc = std::make_unique<GridDisc>(*discObj);
 
             auto sprite = std::make_unique<TextureComponent>(*discObj, "Disk Spritesheet.png", 1);
@@ -65,18 +78,6 @@ namespace dae
       
         auto sprite = std::make_unique<TextureComponent>(pOwner);
 
-  //      if (m_NodeInfo.type == TileType::Pit)
-  //      {
-  //          sprite = std::make_unique<TextureComponent>(*GetOwner(), "Inactive.png", 1);
-		//}
-  //      else if (m_NodeInfo.type == TileType::Disc)
-  //      {
-		//	//sprite = std::make_unique<TextureComponent>(*GetOwner(), "Disk Spritesheet.png", 1);
-  // //         sprite.get()->SetTextureSegments({ 30.f, 1.f });
-  // //         sprite.get()->SetTexturePositionIndex({ 0.f, 0.f });
-  // //         sprite.get()->SetScale({ 2.0f, 2.0f });
-  // //         sprite.get()->nodesTest = true;
-		//}
 		if (m_NodeInfo.type == TileType::TileOne)
         {
             sprite = std::make_unique<TextureComponent>(*GetOwner(), "Qbert Cubes.png", 2);

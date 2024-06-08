@@ -40,12 +40,16 @@ namespace dae
         int yOffset = 20;
         int index = 0;
 
+        int discOne = gi.discOne;
+        int discTwo = gi.discTwo;
+        int discThree = gi.discThree;
+
         glm::vec2 pos{ windowWidth / 2.f - gridNodeSize / 2.f, yOffset };
         yOffset = 20;
 
         for (int row = 0; row < (m_Rows); ++row)
         {
-            pos.x = windowWidth / 2.f - (row + 1) * gridNodeSize/2;
+            pos.x = windowWidth / 2.f - (row + 1) * gridNodeSize / 2;
             for (int col = 0; col <= row; ++col)
             {
                 std::unique_ptr<dae::GameObject> curTile = std::make_unique<dae::GameObject>();
@@ -79,7 +83,7 @@ namespace dae
                     nodeInfo.lastRow = true;
                 }
 
-                if (index == 1)
+                if (index == discOne || index == discTwo || index == discThree)
                 {
                     nodeInfo.leftDown = 0;
                     nodeInfo.leftUp = 0;
