@@ -34,6 +34,10 @@ namespace dae
 		GameObject& CreateStartMenu(Scene& scene);
 		GameObject& CreateGameOver(Scene& scene, int playerOneScore, int playerTwoScore);
 
+		GameObject& CreateLevelOneTitle(Scene& scene);
+		GameObject& CreateLevelTwoTitle(Scene& scene);
+		GameObject& CreateLevelThreeTitle(Scene& scene);
+
 		//GameObject& CreateGridNode(Scene& scene, GameInfo& gi, glm::vec2& pos, int col, int row, int rows, int width, int height, int index);
 	private:
 		friend class Singleton<GameObjectFactory>;

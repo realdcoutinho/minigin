@@ -13,19 +13,24 @@
 #include "GameCommand.h"
 #include "InputManager.h"
 #include "Input.h"
+#include "LevelState.h"
 
 namespace dae
 {
 	QBertGameMode::QBertGameMode(const std::string& name)
 	{
 		name;
+
+		CreateTitleScenes();
 		m_pEnemyManager = std::make_shared<EnemyManager>();
+		m_pLevelState = std::make_shared<LevelState>();
 	}
 
 	void QBertGameMode::Update(float elapsed)
 	{
 		elapsed;
 		m_pEnemyManager->Update();
+		m_pLevelState->Update();
 	}
 
 	void QBertGameMode::LoadStartScene()
@@ -100,23 +105,25 @@ namespace dae
 		m_pCurrentScene = nullptr;
 		m_pGrid = nullptr;
 
+		m_pLevelState->NextLevel();
 
-		if (m_CurrentSceneName == "LevelOneCoop")
-		{
-			StartScene("LevelTwoCoop");
-		}
-		else if (m_CurrentSceneName == "LevelTwoCoop")
-		{
-			StartScene("LevelThreeCoop");
-		}
-		if (m_CurrentSceneName == "LevelOneSolo")
-		{
-			StartScene("LevelTwoSolo");
-		}
-		else if (m_CurrentSceneName == "LevelTwoSolo")
-		{
-			StartScene("LevelThreeSolo");
-		}
+
+		//if (m_CurrentSceneName == "LevelOneCoop")
+		//{
+		//	StartScene("LevelTwoCoop");
+		//}
+		//else if (m_CurrentSceneName == "LevelTwoCoop")
+		//{
+		//	StartScene("LevelThreeCoop");
+		//}
+		//if (m_CurrentSceneName == "LevelOneSolo")
+		//{
+		//	StartScene("LevelTwoSolo");
+		//}
+		//else if (m_CurrentSceneName == "LevelTwoSolo")
+		//{
+		//	StartScene("LevelThreeSolo");
+		//}
 	}
 
 	void QBertGameMode::QBertMovement()
@@ -160,6 +167,25 @@ namespace dae
 		}
 	}
 
+	void QBertGameMode::SetLevelState(std::string& startScene)
+	{
+		auto levelState = m_pLevelState->HandleInput(startScene);
+		if (levelState)
+		{
+			m_pLevelState->Exit();
+			m_pLevelState = levelState;
+			m_pLevelState->Enter();
+		}
+	}
+
+	void QBertGameMode::SetTitleScene(const std::string& startScene)
+	{
+		auto& sm = SceneManager::GetInstance();
+		auto& scene = sm.GetSceneByName(startScene);
+		sm.SetActiveScene(scene);
+
+	}
+
 	void QBertGameMode::CreatePlayers(Scene& scene)
 	{
 		if(m_PlayerOneLives > 0)	
@@ -175,6 +201,18 @@ namespace dae
 				m_pPlayers.push_back(&playerTwo);
 			}
 		}
+	}
+	void QBertGameMode::CreateTitleScenes()
+	{
+		auto& sm = SceneManager::GetInstance();
+		auto& sceneOne = sm.CreateScene("LevelOneTitle");
+		GameObjectFactory::GetInstance().CreateLevelOneTitle(sceneOne);
+
+		auto& sceneTwo = sm.CreateScene("LevelTwoTitle");
+		GameObjectFactory::GetInstance().CreateLevelTwoTitle(sceneTwo);
+
+		auto& sceneThree = sm.CreateScene("LevelTwoTitle");
+		GameObjectFactory::GetInstance().CreateLevelThreeTitle(sceneThree);
 	}
 }
 

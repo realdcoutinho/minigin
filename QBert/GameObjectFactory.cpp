@@ -365,6 +365,51 @@ namespace dae
 		return temp;
 	}
 
+	GameObject& GameObjectFactory::CreateLevelOneTitle(Scene& scene)
+	{
+		auto mainObj = std::make_unique<dae::GameObject>();
+		mainObj->InitializeTransformComponent();
+		mainObj->SetLocalPosition(75, 150);
+
+		auto gameTitle = std::make_unique<TextureComponent>(*mainObj.get(), "Level 01 Title.png", 1);
+		mainObj->AddComponent(std::move(gameTitle));
+
+		auto& temp = *mainObj.get();
+		scene.Add(std::move(mainObj));
+
+		return temp;
+	}
+
+	GameObject& GameObjectFactory::CreateLevelTwoTitle(Scene& scene)
+	{
+		auto mainObj = std::make_unique<dae::GameObject>();
+		mainObj->InitializeTransformComponent();
+		mainObj->SetLocalPosition(75, 150);
+
+		auto gameTitle = std::make_unique<TextureComponent>(*mainObj.get(), "Level 02 Title.png", 1);
+		mainObj->AddComponent(std::move(gameTitle));
+
+		auto& temp = *mainObj.get();
+		scene.Add(std::move(mainObj));
+
+		return temp;
+	}
+
+	GameObject& GameObjectFactory::CreateLevelThreeTitle(Scene& scene)
+	{
+		auto mainObj = std::make_unique<dae::GameObject>();
+		mainObj->InitializeTransformComponent();
+		mainObj->SetLocalPosition(75, 150);
+
+		auto gameTitle = std::make_unique<TextureComponent>(*mainObj.get(), "Level 03 Title.png", 1);
+		mainObj->AddComponent(std::move(gameTitle));
+
+		auto& temp = *mainObj.get();
+		scene.Add(std::move(mainObj));
+
+		return temp;
+	}
+
 }
 
 	//GameObject& GameObjectFactory::CreateGridNode(Scene& scene, GameInfo& gi, glm::vec2& pos, int col, int row, int rows, int width, int height, int index)

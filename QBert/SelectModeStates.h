@@ -20,7 +20,7 @@ namespace dae
 		virtual void Exit() override = 0;
 		virtual void SelectGameMode() = 0;
 	protected:
-		GameObject* m_Character;
+		GameObject* m_ArrowHead;
 		glm::vec2 m_Input;
 
 		std::string m_SoloMode{ "LevelOneSolo" };

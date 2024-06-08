@@ -16,6 +16,7 @@ namespace dae
 	class GridNode;
 	class TriangularGrid;
 	class EnemyListener;
+	class LevelState;
 	class QBertGameMode final : public GameMode
 	{	
 		template <typename T, typename std::enable_if<std::is_base_of<GameMode, T>::value>::type*>
@@ -52,9 +53,14 @@ namespace dae
 		void SetPlayerLives(int lives, int player);
 		void SetPlayerScore(int score, int player);
 
+		void SetLevelState(std::string& startScene);
+		void SetTitleScene(const std::string& startScene);
+
 	private:
 
 		void CreatePlayers(Scene& scene);
+
+		void CreateTitleScenes();
 
 
 		TriangularGrid* m_pGrid;
@@ -69,6 +75,7 @@ namespace dae
 		GridNode* m_pQBertNode;
 
 		std::shared_ptr<EnemyListener> m_pEnemyListener;
+		std::shared_ptr<LevelState> m_pLevelState;
 
 		std::vector<GameObject*> m_pPlayers;
 

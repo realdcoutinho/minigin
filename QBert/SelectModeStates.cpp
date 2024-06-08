@@ -7,7 +7,7 @@
 namespace dae
 {
 	SelectModeStates::SelectModeStates(GameObject* character, const glm::vec2& input)
-		:m_Character{ character }
+		:m_ArrowHead{ character }
 		, m_Input{ input }
 	{
 		auto gameMode = GameModeManager::GetInstance().GetActiveGameMode();
@@ -31,7 +31,7 @@ namespace dae
 
 	void SoloMode::Enter()
 	{
-		m_Character->SetLocalPosition({ 150, 250 });
+		m_ArrowHead->SetLocalPosition({ 150, 250 });
 	}
 
 	void SoloMode::Update()
@@ -44,7 +44,8 @@ namespace dae
 
 	void SoloMode::SelectGameMode()
 	{
-		m_GameMode->LoadScene(m_SoloMode);
+		//m_GameMode->LoadScene(m_SoloMode);
+		m_GameMode->SetLevelState(m_SoloMode);
 	}
 
 	std::unique_ptr<SelectModeStates> CoopMode::HandleInput(GameObject* character, const glm::vec2& input)
@@ -62,7 +63,7 @@ namespace dae
 
 	void CoopMode::Enter()
 	{
-		m_Character->SetLocalPosition({ 150, 300 });
+		m_ArrowHead->SetLocalPosition({ 150, 300 });
 	}
 
 	void CoopMode::Update()
@@ -75,7 +76,9 @@ namespace dae
 
 	void CoopMode::SelectGameMode()
 	{
-		m_GameMode->LoadScene(m_CoopMode);
+		//m_GameMode->LoadScene(m_CoopMode);
+		m_GameMode->SetLevelState(m_CoopMode);
+
 	}
 
 	std::unique_ptr<SelectModeStates> VersusMode::HandleInput(GameObject* character, const glm::vec2& input)
@@ -93,7 +96,7 @@ namespace dae
 
 	void VersusMode::Enter()
 	{
-		m_Character->SetLocalPosition({ 150, 350 });
+		m_ArrowHead->SetLocalPosition({ 150, 350 });
 	}
 
 	void VersusMode::Update()
@@ -106,7 +109,8 @@ namespace dae
 
 	void VersusMode::SelectGameMode()
 	{
-		m_GameMode->LoadScene(m_VersusMode);
+		//m_GameMode->LoadScene(m_VersusMode);
+		m_GameMode->SetLevelState(m_VersusMode);
 	}
 
 

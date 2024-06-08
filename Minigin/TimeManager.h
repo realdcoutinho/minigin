@@ -17,6 +17,8 @@ namespace dae
 		float GetElapsed() const;
 		float GetTotalTime() const;
 
+		float GlobalElapsed() const;
+
 		void Update(float elapsed);
 
 		void SetActiveTimer(const Timer& timer) { m_ActiveTimer = const_cast<Timer*>(&timer); }
@@ -26,6 +28,7 @@ namespace dae
 		TimeManager() = default;
 		std::vector<std::shared_ptr<Timer>> m_Timers;
 		Timer* m_ActiveTimer;
+		float m_GlobalElapsed{ 0.0f };
 	};
 }
 

@@ -6,6 +6,7 @@
 void dae::TimeManager::Update(float elapsed)
 {
 	m_ActiveTimer->Update(elapsed);
+	m_GlobalElapsed = elapsed;
 }
 
 
@@ -36,4 +37,9 @@ float dae::TimeManager::GetTotalTime() const
 	auto& scene = SceneManager::GetInstance().GetActiveScene();
 	auto& timer = scene.GetTimer();
 	return timer.GetTotalTime();
+}
+
+float dae::TimeManager::GlobalElapsed() const
+{
+	return m_GlobalElapsed;
 }

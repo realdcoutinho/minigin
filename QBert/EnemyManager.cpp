@@ -64,8 +64,8 @@ namespace dae
 		float elapsed = m_pCurrentScene->GetTimer().GetElapsed();
 
 		UpdateCoilySpawnTimers(elapsed);
-		UpdateSlickSamSpawnTimers(elapsed);
-		UpdateUggWrongwaySpawnTimers(elapsed);
+		//UpdateSlickSamSpawnTimers(elapsed);
+		//UpdateUggWrongwaySpawnTimers(elapsed);
 	}
 
 
