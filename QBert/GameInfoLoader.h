@@ -3,6 +3,12 @@
 #include <string>
 #include <map>
 
+#include <iostream>
+#include <fstream>
+#include <cstring>
+#include <map>
+#include <functional>  // For std::greater
+
 namespace dae
 {
 
@@ -24,8 +30,17 @@ namespace dae
 		GameInfo GetGameInfo(std::string form) const;
 		void LoadGameInfo(const std::string path, const std::string& filename, GameForm form);
 
+		void SaveHighScore(const std::string& name, int score);
+		int GetHighestScore() const; // New function to get the highest score
+
+		//a function to return the highscores
+		std::multimap<int, std::string, std::greater<int>> GetHighScores();
+
+
 	private:
 		const std::string m_FilePath = "LevelData/";
+
+		const std::string m_BinaryPath;
 
 		const std::string m_LevelOneSolo = "LevelOneSolo.bin";
 		const std::string m_LevelTwoSolo = "LevelTwoSolo.bin";
@@ -39,8 +54,14 @@ namespace dae
 		const std::string m_LevelTwoVS = "LevelTwoVS.bin";
 		const std::string m_LevelThreeVS = "LevelThreeVS.bin";
 
+		const std::string m_HighScoresPath = "HighScores.bin";
+
+
+		void LoadHighScores(const std::string& filename);
+
 
 		std::map<std::string, GameInfo> m_GameInfoMap;
+		std::multimap<int, std::string, std::greater<int>> m_HighScores;
 	};
 }
 

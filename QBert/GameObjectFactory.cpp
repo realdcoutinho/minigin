@@ -22,6 +22,9 @@
 #include "Input.h"
 #include "Command.h"
 #include "GameOverComponent.h"
+#include "HighScoreComponent.h"
+#include "GameInfoLoader.h"
+
 
 namespace dae
 {
@@ -75,6 +78,10 @@ namespace dae
 		if (gameMode == 3)
 		{
 			auto& coily = GameObjectFactory::GetInstance().CreateCoily(scene, pGrid, true);
+
+			auto& input = scene.GetSceneInput();
+			auto movementCommandBert = std::make_unique<GridMovement>(coily);
+			input.AddAxisCommand(std::move(movementCommandBert));
 			return coily;
 		}
 
@@ -265,6 +272,19 @@ namespace dae
 		return temp;
 	}
 
+	GameObject& GameObjectFactory::CreateHighScoreHUD(Scene& scene, int initialScore)
+	{
+		auto HUD = std::make_unique<dae::GameObject>();
+		HUD->InitializeTransformComponent();
+		HUD->SetLocalPosition(400, 70);
+
+		std::unique_ptr<TextComponent> textComponent = std::make_unique<TextComponent>(*HUD.get(), "Highscore: " + std::to_string(initialScore), ResourceManager::GetInstance().GetFont("Minecraft.ttf", 15));
+		HUD->AddComponent(std::move(textComponent));
+		auto& temp = *HUD.get();
+		scene.Add(std::move(HUD));
+		return temp;
+	}
+
 	GameObject& GameObjectFactory::CreateStartMenu(Scene& scene)
 	{
 
@@ -293,7 +313,7 @@ namespace dae
 		auto quitObject = std::make_unique<GameObject>();
 		quitObject.get()->InitializeTransformComponent();
 		quitObject.get()->SetLocalPosition(290, 415);
-		 
+		
 
 		const SDL_Color color = { 255, 216, 102, 255 };
 		auto font = ResourceManager::GetInstance().GetFont("Minecraft.ttf", 37);
@@ -339,7 +359,7 @@ namespace dae
 		return temp;
 	}
 
-	GameObject& GameObjectFactory::CreateGameOver(Scene& scene, int playerOneScore, int playerTwoScore)
+	GameObject& GameObjectFactory::CreateGameOver(Scene& scene, GameInfoLoader& gil, int playerOneScore, int playerTwoScore)
 	{
 		auto mainObj = std::make_unique<dae::GameObject>();
 		mainObj->InitializeTransformComponent();
@@ -387,6 +407,31 @@ namespace dae
 		input.AddActionCommand(controller1, Controller::ControllerButton::Y, std::move(restartComd));
 
 
+
+
+
+		auto testGui = std::make_unique<dae::GameObject>();
+		auto gui = std::make_unique<HighScoreComponent>(
+			*testGui.get(),
+			[&gil](const std::string& name, int score) { gil.SaveHighScore(name, score); },
+			[&gil]() -> std::multimap<int, std::string, std::greater<int>> { return gil.GetHighScores(); }
+		);		
+		
+		if (playerOneScore > playerTwoScore)
+		{
+			gui->SetScore(playerOneScore);
+		}
+		else
+		{
+			gui->SetScore(playerTwoScore);
+		}
+
+		testGui.get()->AddComponent(std::move(gui));
+		scene.Add(std::move(testGui));
+
+
+
+
 		scoreTextureObj->SetParent(mainObj.get());
 		gameOverObj->SetParent(mainObj.get());
 		restartObj->SetParent(mainObj.get());
@@ -399,7 +444,7 @@ namespace dae
 		return temp;
 	}
 
-	GameObject& GameObjectFactory::CreateVictoryScene(Scene& scene, int playerOneScore, int playerTwoScore)
+	GameObject& GameObjectFactory::CreateVictoryScene(Scene& scene, GameInfoLoader& gil, int playerOneScore, int playerTwoScore)
 	{
 		auto mainObj = std::make_unique<dae::GameObject>();
 		mainObj->InitializeTransformComponent();
@@ -445,6 +490,31 @@ namespace dae
 
 		auto restartComd = std::make_unique<ResartGame>(*mainObj.get());
 		input.AddActionCommand(controller1, Controller::ControllerButton::Y, std::move(restartComd));
+
+
+
+
+		auto testGui = std::make_unique<dae::GameObject>();
+		auto gui = std::make_unique<HighScoreComponent>(
+			*testGui.get(),
+			[&gil](const std::string& name, int score) { gil.SaveHighScore(name, score); },
+			[&gil]() -> std::multimap<int, std::string, std::greater<int>> { return gil.GetHighScores(); }
+		);		
+		
+		if (playerOneScore > playerTwoScore)
+		{
+			gui->SetScore(playerOneScore);
+		}
+		else
+		{
+			gui->SetScore(playerTwoScore);
+		}
+
+		testGui.get()->AddComponent(std::move(gui));
+		
+		
+		
+		scene.Add(std::move(testGui));
 
 
 		scoreTextureObj->SetParent(mainObj.get());

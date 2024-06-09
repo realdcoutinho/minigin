@@ -30,6 +30,14 @@ namespace dae
 		m_pLevelState = std::make_shared<LevelState>();
 	}
 
+	void QBertGameMode::Initialize(GameInfoLoader* infoLoader)
+	{
+		
+		m_pGameInfoLoader = infoLoader;
+		m_HighScore = m_pGameInfoLoader->GetHighestScore();
+		
+	}
+
 	void QBertGameMode::Update(float elapsed)
 	{
 		elapsed;
@@ -50,6 +58,7 @@ namespace dae
 
 	void QBertGameMode::Restart()
 	{
+		m_HighScore = m_pGameInfoLoader->GetHighestScore();
 		m_PlayerOneLives = 3;
 		m_PlayerTwoLives = 3;
 		m_PlayerOneScore = 0;
@@ -85,6 +94,8 @@ namespace dae
 		auto& grid = GameObjectFactory::GetInstance().CreateGrid(scene, m_CurrentGameInfo);
 		m_pGrid = grid.GetComponent<TriangularGrid>();
 
+		GameObjectFactory::GetInstance().CreateHighScoreHUD(scene, m_HighScore);
+
 		m_pEnemyManager->SetNewData(m_CurrentGameInfo);
 		m_pEnemyManager->SetTriangularGrid(*m_pGrid);
 		m_pEnemyManager->SetCurrentScene(&scene);
@@ -101,7 +112,7 @@ namespace dae
 		auto& scene = sm.CreateScene("Game Over");
 		sm.SetActiveScene(scene);
 
-		GameObjectFactory::GetInstance().CreateGameOver(scene, m_PlayerOneScore, m_PlayerTwoScore);
+		GameObjectFactory::GetInstance().CreateGameOver(scene, *m_pGameInfoLoader, m_PlayerOneScore, m_PlayerTwoScore);
 	}
 
 
@@ -112,7 +123,7 @@ namespace dae
 		auto& scene = sm.CreateScene("Victory Scene");
 		sm.SetActiveScene(scene);
 
-		GameObjectFactory::GetInstance().CreateVictoryScene(scene, m_PlayerOneScore, m_PlayerTwoScore);
+		GameObjectFactory::GetInstance().CreateVictoryScene(scene, *m_pGameInfoLoader, m_PlayerOneScore, m_PlayerTwoScore);
 	}
 
 
@@ -213,7 +224,7 @@ namespace dae
 			auto& playerOne = GameObjectFactory::GetInstance().InitializePlayerOne(scene, *m_pGrid, m_CurrentGameInfo);
 			m_pPlayers.push_back(&playerOne);
 		}
-		if (m_CurrentGameInfo.gameMode > 1)
+		if (m_CurrentGameInfo.gameMode == 2)
 		{
 			if(m_PlayerTwoLives > 0)
 			{
@@ -221,6 +232,11 @@ namespace dae
 				m_pPlayers.push_back(&playerTwo);
 			}
 		}
+		//if (m_CurrentGameInfo.gameMode == 3)
+		//{
+		//	auto& playerTwo = GameObjectFactory::GetInstance().InitializePlayerTwo(scene, *m_pGrid, m_CurrentGameInfo);
+		//	m_pPlayers.push_back(&playerTwo);
+		//}
 	}
 	void QBertGameMode::CreateTitleScenes()
 	{

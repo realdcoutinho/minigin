@@ -6,6 +6,9 @@
 #include "ScoreComponent.h"
 #include "TriangularGrid.h"
 #include "EnemyCharacterComponent.h"
+
+
+
 //
 //dae::TileInteractor::TileInteractor(GameObject& pOwner, TriangularGrid& pGrid, unsigned int subID)
 //	: BaseComponent(pOwner)

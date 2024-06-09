@@ -25,7 +25,8 @@ namespace dae
 		QBertGameMode(const std::string& name);
 		virtual ~QBertGameMode() = default;
 
-		void Initialize(GameInfoLoader* infoLoader) { m_pGameInfoLoader = infoLoader; };
+		void Initialize(GameInfoLoader* infoLoader);
+
 		void Update(float elapsed) override;
 
 		void LoadStartScene();
@@ -93,6 +94,7 @@ namespace dae
 		int m_PlayerOneScore{ 0 };
 		int m_PlayerTwoLives{ 3 };
 		int m_PlayerTwoScore{ 0 };
+		int m_HighScore{ 0 };
 
 
 	};

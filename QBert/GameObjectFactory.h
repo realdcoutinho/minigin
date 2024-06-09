@@ -10,6 +10,7 @@ namespace dae
 	struct GameInfo;
 	class Scene;
 	class GridNode;
+	class GameInfoLoader;
 	class GameObjectFactory final : public Singleton<GameObjectFactory>
 	{
 		public:
@@ -30,10 +31,11 @@ namespace dae
 		GameObject& CreateHUDLives(Scene& scene, glm::vec2& pos, int initialLives = 3);
 		GameObject& CreateHUDLevel(Scene& scene, int initialLevel = 1);
 		GameObject& CreateHUDFPS(Scene& scene);
+		GameObject& CreateHighScoreHUD(Scene& scene, int initialScore = 0);
 
 		GameObject& CreateStartMenu(Scene& scene);
-		GameObject& CreateGameOver(Scene& scene, int playerOneScore, int playerTwoScore);
-		GameObject& CreateVictoryScene(Scene& scene, int playerOneScore, int playerTwoScore);
+		GameObject& CreateGameOver(Scene& scene, GameInfoLoader& gil, int playerOneScore, int playerTwoScore);
+		GameObject& CreateVictoryScene(Scene& scene, GameInfoLoader& gil, int playerOneScore, int playerTwoScore);
 
 		GameObject& CreateLevelOneTitle(Scene& scene);
 		GameObject& CreateLevelTwoTitle(Scene& scene);

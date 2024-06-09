@@ -215,9 +215,11 @@ namespace dae
 
 
 
-
-        auto scoreEvent = std::make_unique<ScoreEvent>(points, qbertHunt->GetID());
-        EventDispatcher::GetInstance().DispatchEvent(std::move(scoreEvent));
+        if(qbertHunt)
+        {
+            auto scoreEvent = std::make_unique<ScoreEvent>(points, qbertHunt->GetID());
+            EventDispatcher::GetInstance().DispatchEvent(std::move(scoreEvent));
+        }
 
         auto enemyDeath = std::make_unique<EraseOneEnemyEvent>(event.GetSender().GetID(), event.GetSender());
 	    EventDispatcher::GetInstance().DispatchEvent(std::move(enemyDeath));
