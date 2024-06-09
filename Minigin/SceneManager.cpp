@@ -18,19 +18,11 @@ void dae::SceneManager::Update()
 {
 	if(m_pActiveScene)
 		m_pActiveScene->Update();
-	//for(auto& scene : m_scenes)
-	//{
-	//	scene->Update();
-	//}
+
 }
 
 void dae::SceneManager::Render()
 {
-	//for (const auto& scene : m_scenes)
-	//{
-	//	scene->Render();
-	//}
-
 	if (m_pActiveScene)
 		m_pActiveScene->Render();
 }

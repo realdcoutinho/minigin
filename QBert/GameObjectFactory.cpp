@@ -40,7 +40,7 @@ namespace dae
 		auto& bert = GameObjectFactory::GetInstance().CreateQbert(scene, pGrid, startingNode, playerNumber);
 		glm::vec2 scoreHUDPos{ 10, 70 };
 		auto& HUDScore = GameObjectFactory::GetInstance().CreateHUDScore(scene, scoreHUDPos);
-		glm::vec2 livesHUDPos{ 20, 200 };
+		glm::vec2 livesHUDPos{ 10, 200 };
 		auto& livesHud = GameObjectFactory::GetInstance().CreateHUDLives(scene, livesHUDPos);
 		std::shared_ptr<dae::ScoreListener> scoreListenerHUD = std::make_shared<dae::ScoreListener>(HUDScore, bert.GetID());
 		std::shared_ptr<dae::ScoreListener> scoreListenerPlayer = std::make_shared<dae::ScoreListener>(bert, bert.GetID());
@@ -54,19 +54,19 @@ namespace dae
 
 
 
-		auto& input = scene.GetSceneInput();
-		auto movementCommandBert = std::make_unique<dae::GridMovement>(bert);
-		unsigned int controller1 = dae::InputManager::GetInstance().GetControllerIdx();
-		input.AddAxisCommand(controller1, std::move(movementCommandBert));
 
+		auto& input = scene.GetSceneInput();
+		auto movementCommandBert = std::make_unique<GridMovement>(bert);
+		input.AddAxisCommand(std::move(movementCommandBert));
 
 		auto pauseCommand = std::make_unique<PauseGame>(bert);
 		input.AddActionCommand(SDL_SCANCODE_P, SDL_KEYDOWN, std::move(pauseCommand));
 
+		auto muteCommand = std::make_unique<MuteAllSounds>();
+		input.AddActionCommand(SDL_SCANCODE_M, SDL_KEYDOWN, std::move(muteCommand));
 
-		//auto& input = scene.GetSceneInput();
-		//auto movementCoilyCommand = std::make_unique<GridMovement>(bert);
-		//input.AddAxisCommand(std::move(movementCoilyCommand));
+
+		CreatePlayerTitle(scene, playerNumber);
 
 		return bert;
 	}
@@ -79,19 +79,25 @@ namespace dae
 		{
 			auto& coily = GameObjectFactory::GetInstance().CreateCoily(scene, pGrid, true);
 
+
 			auto& input = scene.GetSceneInput();
-			auto movementCommandBert = std::make_unique<GridMovement>(coily);
-			input.AddAxisCommand(std::move(movementCommandBert));
+			auto movementCommandBert = std::make_unique<dae::GridMovement>(coily);
+			unsigned int controller1 = dae::InputManager::GetInstance().GetControllerIdx();
+			input.AddAxisCommand(controller1, std::move(movementCommandBert));
+
 			return coily;
 		}
 
 		int staringNode = 43;
 		int playerNumber = 2;
 
+
+		CreatePlayerTitle(scene, playerNumber);
+
 		auto& bert = GameObjectFactory::GetInstance().CreateQbert(scene, pGrid, staringNode, playerNumber);
-		glm::vec2 scoreHUDPos{ 500, 70 };
+		glm::vec2 scoreHUDPos{ 550, 70 };
 		auto& HUDScore = GameObjectFactory::GetInstance().CreateHUDScore(scene, scoreHUDPos);
-		glm::vec2 livesHUDPos{ 500, 200 };
+		glm::vec2 livesHUDPos{ 600, 200 };
 		auto& livesHud = GameObjectFactory::GetInstance().CreateHUDLives(scene, livesHUDPos);
 		std::shared_ptr<dae::ScoreListener> scoreListenerHUD = std::make_shared<dae::ScoreListener>(HUDScore, bert.GetID());
 		std::shared_ptr<dae::ScoreListener> scoreListenerPlayer = std::make_shared<dae::ScoreListener>(bert, bert.GetID());
@@ -103,9 +109,11 @@ namespace dae
 		dae::EventDispatcher::GetInstance().SubscribeListener(std::move(healthListenerHUD));
 		dae::EventDispatcher::GetInstance().SubscribeListener(std::move(healthListenerPlayer));
 
+
 		auto& input = scene.GetSceneInput();
-		auto movementCommandBert = std::make_unique<GridMovement>(bert);
-		input.AddAxisCommand(std::move(movementCommandBert));
+		auto movementCommandBert = std::make_unique<dae::GridMovement>(bert);
+		unsigned int controller1 = dae::InputManager::GetInstance().GetControllerIdx();
+		input.AddAxisCommand(controller1, std::move(movementCommandBert));
 		return bert;
 	}
 
@@ -182,15 +190,15 @@ namespace dae
 	{
 		std::unique_ptr colorNode = std::make_unique<dae::GameObject>();
 		colorNode->InitializeTransformComponent();
-		colorNode->SetLocalPosition(15, 175);
+		colorNode->SetLocalPosition(15, 120);
 
-		auto font = ResourceManager::GetInstance().GetFont("Lingua.otf", 17);
+		auto font = ResourceManager::GetInstance().GetFont("Minecraft.ttf", 23);
 		std::unique_ptr textToChange = std::make_unique<TextComponent>(*colorNode.get(), "CHANGE TO", font);
 		colorNode->AddComponent(std::move(textToChange));
 
 		std::unique_ptr colorNodeTextureObject = std::make_unique<dae::GameObject>();
 		colorNodeTextureObject->InitializeTransformComponent();
-		colorNodeTextureObject->SetLocalPosition(100, -5);
+		colorNodeTextureObject->SetLocalPosition(150, -5);
 
 
 		auto idxColor = gi.startColor;
@@ -250,9 +258,9 @@ namespace dae
 	{
 		auto HUD = std::make_unique<dae::GameObject>();
 		HUD->InitializeTransformComponent();
-		HUD->SetLocalPosition(550, 175);
+		HUD->SetLocalPosition(465, 450);
 
-		std::unique_ptr<TextComponent> textComponent = std::make_unique<TextComponent>(*HUD.get(), "Level: " + std::to_string(initialLevel), ResourceManager::GetInstance().GetFont("Lingua.otf", 20));
+		std::unique_ptr<TextComponent> textComponent = std::make_unique<TextComponent>(*HUD.get(), "Level:  " + std::to_string(initialLevel), ResourceManager::GetInstance().GetFont("MInecraft.ttf", 20));
 		HUD->AddComponent(std::move(textComponent));
 		auto& temp = *HUD.get();
 		scene.Add(std::move(HUD));
@@ -276,12 +284,40 @@ namespace dae
 	{
 		auto HUD = std::make_unique<dae::GameObject>();
 		HUD->InitializeTransformComponent();
-		HUD->SetLocalPosition(400, 70);
+		HUD->SetLocalPosition(100, 450);
 
-		std::unique_ptr<TextComponent> textComponent = std::make_unique<TextComponent>(*HUD.get(), "Highscore: " + std::to_string(initialScore), ResourceManager::GetInstance().GetFont("Minecraft.ttf", 15));
+		std::unique_ptr<TextComponent> textComponent = std::make_unique<TextComponent>(*HUD.get(), "Highscore:  " + std::to_string(initialScore), ResourceManager::GetInstance().GetFont("Minecraft.ttf", 20));
 		HUD->AddComponent(std::move(textComponent));
 		auto& temp = *HUD.get();
 		scene.Add(std::move(HUD));
+		return temp;
+	}
+
+	GameObject& GameObjectFactory::CreatePlayerTitle(Scene& scene, int playerNumber)
+	{
+		auto playerTitle = std::make_unique<dae::GameObject>();
+		playerTitle->InitializeTransformComponent();
+		playerTitle->SetLocalPosition(10, 20);
+
+		auto& temp = *playerTitle.get();
+
+		if(playerNumber == 1)
+		{
+			playerTitle->SetLocalPosition(10, 5);
+			std::unique_ptr<TextureComponent> playerTitleTexture = std::make_unique<TextureComponent>(*playerTitle.get(), "PlayerOneTitle.png");
+			playerTitleTexture->SetScale({ 4.0f, 4.0f });
+			playerTitle->AddComponent(std::move(playerTitleTexture));
+			scene.Add(std::move(playerTitle));
+		}
+		else
+		{
+			playerTitle->SetLocalPosition(375, 5);
+			std::unique_ptr<TextureComponent> playerTitleTexture = std::make_unique<TextureComponent>(*playerTitle.get(), "PlayerTwoTitle.png");
+			playerTitleTexture->SetScale({ 4.0f, 4.0f });
+			playerTitle->AddComponent(std::move(playerTitleTexture));
+			scene.Add(std::move(playerTitle));
+		}
+
 		return temp;
 	}
 

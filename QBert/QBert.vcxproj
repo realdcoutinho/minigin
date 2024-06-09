@@ -228,7 +228,6 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClCompile Include="SelectModeComponent.cpp" />
     <ClCompile Include="SelectModeStates.cpp" />
     <ClCompile Include="ServicesLoader.cpp" />
-    <ClCompile Include="TileInteractor.cpp" />
     <ClCompile Include="TriangularGrid.cpp" />
     <ClCompile Include="TricklePathComponent.cpp" />
     <ClCompile Include="UggWrongwayComponent.cpp" />
@@ -272,7 +271,6 @@ xcopy "$(SolutionDir)3rdParty\SDL2_mixer\lib\$(PlatformTarget)\*.dll" "$(OutputP
     <ClInclude Include="SelectModeStates.h" />
     <ClInclude Include="ServicesLoader.h" />
     <ClInclude Include="SoundLibrary.h" />
-    <ClInclude Include="TileInteractor.h" />
     <ClInclude Include="TriangularGrid.h" />
     <ClInclude Include="TricklePathComponent.h" />
     <ClInclude Include="UggWrongwayComponent.h" />

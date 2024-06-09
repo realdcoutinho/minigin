@@ -21,14 +21,14 @@ namespace dae
 		if (m_Score1 > m_Score2)
 		{
 			const std::string score1string = m_Player1 + " Score: " + std::to_string(m_Score1);
-			std::unique_ptr<TextComponent> component = std::make_unique<TextComponent>(pOwner, score1string, ResourceManager::GetInstance().GetFont("Lingua.otf", 36));
+			std::unique_ptr<TextComponent> component = std::make_unique<TextComponent>(pOwner, score1string, ResourceManager::GetInstance().GetFont("Minecraft.ttf", 36));
 			m_pTextPlayerOne = component.get();
 			pOwner.AddComponent(std::move(component));
 		}
 		if (m_Score2 > m_Score1)
 		{
 			const std::string score2string = m_Player2 + " Score: " + std::to_string(m_Score2);
-			std::unique_ptr<TextComponent> component = std::make_unique<TextComponent>(pOwner, score2string, ResourceManager::GetInstance().GetFont("Lingua.otf", 36));
+			std::unique_ptr<TextComponent> component = std::make_unique<TextComponent>(pOwner, score2string, ResourceManager::GetInstance().GetFont("Minecraft.ttf", 36));
 			m_pTextPlayerTwo = component.get();
 			pOwner.AddComponent(std::move(component));
 		}

@@ -43,8 +43,7 @@ namespace dae
 
 	void FacingStates::Enter()
 	{
-		//auto move = m_Character->GetComponent<GridNavigator>();
-		//move->MoveToDirection(m_Input);
+
 	}
 
 	std::unique_ptr<FacingStates> RightUp::HandleInput(GameObject* character, const glm::vec2& input)

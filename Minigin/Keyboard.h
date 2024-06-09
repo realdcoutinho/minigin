@@ -27,8 +27,6 @@ namespace dae
 
 		bool m_PreviousState[256]{}; // 256 is the number of keys on a keyboard
 		bool m_CurrentState[256]{}; // 256 is the number of keys on a keyboard
-
-		//bool m_HasStateChanged{ false };
 	
 	};
 

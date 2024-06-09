@@ -9,8 +9,6 @@ void dae::TimeManager::Update(float elapsed)
 	m_GlobalElapsed = elapsed;
 }
 
-
-
 dae::Timer& dae::TimeManager::CreateTimer(const std::string& sceneName)
 {
 	std::shared_ptr<Timer> timer = std::make_shared<Timer>(sceneName);

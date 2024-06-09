@@ -18,7 +18,7 @@ namespace dae
 	{
 		m_Text = m_Text + ": ";
 		auto iniText = m_Text + std::to_string(m_Value);
-		std::unique_ptr<TextComponent> textComp = std::make_unique<TextComponent>(pOwner, iniText, ResourceManager::GetInstance().GetFont("Lingua.otf", 20));
+		std::unique_ptr<TextComponent> textComp = std::make_unique<TextComponent>(pOwner, iniText, ResourceManager::GetInstance().GetFont("Minecraft.ttf", 20));
 		m_TextComponent = textComp.get();
 		GetOwner()->AddComponent(std::move(textComp));
 	}
@@ -49,34 +49,5 @@ namespace dae
 
 		m_TextComponent->SetText(newText);
 	}
-	
-
-	//void HUDComponent::OnNotify(BaseEvent* event)
-	//{
-	//	auto eventType = static_cast<EventType>(event->type);
-
-	//	switch (eventType)
-	//	{
-	//	case EventType::HealthChange:
-	//	case EventType::ScoreChange:
-	//	{
-	//		// Attempt to cast the base event to a health event
-	//		auto statEvent = dynamic_cast<TemplateEvent<int>*>(event);
-	//		if (statEvent)
-	//		{
-	//			// Successfully cast to HealthEvent, now you can use health-specific data
-	//			int newVal = statEvent->GetValue();
-	//			// Do something with the new health value, e.g., update a health bar
-	//			SetValue(newVal);
-	//		}
-	//		break;
-	//	}
-	//	case EventType::PlayerDeath:
-	//	{
-	//		m_TextComponent->SetText("Player Dead");
-	//		break;
-	//	}
-	//	}
-	//}
 
 }

@@ -187,7 +187,7 @@ namespace dae
 			if (m_MaxUggWrongway <= m_CurrentUggWrongway)
 				return;
 			m_SpawnTimerUggWrongway += elapsedSec;
-			if (m_SpawnTimerUggWrongway <= m_UggWrongwayInterval)
+			if (m_SpawnTimerUggWrongway >= m_UggWrongwayInterval)
 			{
 				m_SpawnTimerUggWrongway = 0.0f;
 				SpawnUggWrongway();
@@ -216,25 +216,5 @@ namespace dae
 		m_pEnemies.push_back(&enemy);
 		m_CurrentUggWrongway++;
 	}
-
-
-
-
-
-
-	//void EnemyManager::MakeCoilyHunt(GridNode& targetNode)
-//{
-//	if(m_VersusMode)
-//		return;
-
-//	if (m_pCoily == nullptr)
-//		return;
-
-//	auto coilyComp = m_pCoily->GetComponent<CoilyComponent>();
-//	if(coilyComp == nullptr)
-//		return;
-
-//	coilyComp->Hunt(targetNode);
-//}
 }
 

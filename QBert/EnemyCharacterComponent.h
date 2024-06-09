@@ -28,20 +28,11 @@ namespace dae
 		virtual void SetType(CharacterType type) override { m_Type = type; };
 
 		void HandleInput(glm::vec2& input) override;
-
-
 		void SetTextures();
+
 	private:
-		//Enemy specific variables
-
-
-
-
-		//enemy ai movement component
 
 		TricklePathComponent* m_TricklePath;
-
-
 	};
 }
 

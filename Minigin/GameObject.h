@@ -64,25 +64,6 @@ namespace dae
 			return nullptr;
 		}
 
-
-
-		//template<typename T>
-		//std::enable_if_t<std::is_base_of_v<BaseComponent, T>, T*>
-		//AddComponent(T* pComp)
-		//{
-		//	if (!HasComponent<T>())
-		//	{
-		//		std::unique_ptr<T> pNewComp(pComp);
-		//		m_pComponents.push_back(std::move(pNewComp));
-
-		//		//m_pComponentsR.push_back(pComp);
-
-		//		return pComp;
-		//	}
-
-		//	return nullptr;
-		//}
-
 		template <class T>
 		T* GetComponent(bool searchChildren = false)
 		{

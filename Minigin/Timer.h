@@ -21,8 +21,8 @@ namespace dae
 		float GetElapsed() const { return m_Elapsed; }
 		float GetTotalTime() const { return m_TotalTime; }
 		std::string& GetSceneName() { return m_name; }
-		//cannot be private
-		/*explicit*/ Timer(const std::string& name);
+
+		Timer(const std::string& name);
 
 	private:
 		/*explicit*/

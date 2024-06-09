@@ -45,9 +45,6 @@
     <ClCompile Include="GridNavigator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TileInteractor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="QBertCharacterComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -168,9 +165,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GridNavigator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TileInteractor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="QBertCharacterComponent.h">

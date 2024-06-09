@@ -21,7 +21,6 @@ namespace dae
 		void SetActiveScene(const std::string& name);
 		void SetActiveScene(const Scene& scene);
 
-		void SwitchScene(const std::string& name);
 		void SwitchScene();
 
 		Scene& GetActiveScene() const;

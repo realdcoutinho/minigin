@@ -28,8 +28,3 @@ namespace dae
 	};
 
 }
-
-class HealthComponent
-{
-};
-

@@ -3,21 +3,11 @@
 #include "GameObject.h"
 #include <iostream>
 
-
-//dae::TransformComponent::TransformComponent(std::unique_ptr<GameObject>  pOwner) 
-//	: BaseComponent(pOwner.get()),
-//	m_LocalPosition( 0, 0, 0 ),
-//	m_WorldPosition{ 0, 0, 0 }
-//{
-//	std::cout << "transformComponent created\n";
-//}
-
 dae::TransformComponent::TransformComponent(GameObject& pOwner)
 	: BaseComponent(pOwner),
 	m_LocalPosition(0, 0, 0),
 	m_WorldPosition{ 0, 0, 0 }
 {
-	//std::cout << "transformComponent created\n";
 }
 
 
@@ -53,8 +43,7 @@ glm::vec3& dae::TransformComponent::GetWorldPosition()
 
  void dae::TransformComponent::UpdateWorldPosition()
  {
-	 //if (m_IsDirty)
-	 //{
+
 		 auto test = GetOwner();
 		 if (test->GetParent() != nullptr)
 		 {
@@ -68,7 +57,6 @@ glm::vec3& dae::TransformComponent::GetWorldPosition()
 			 m_IsDirty = false;
 			 m_WorldPosition = m_LocalPosition;
 		 }
-	 //}
  }
 
  glm::vec3& dae::TransformComponent::GetLocalPosition()

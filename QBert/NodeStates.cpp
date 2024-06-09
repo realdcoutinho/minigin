@@ -23,11 +23,6 @@ namespace dae
     {
     }
 
-    //NodeStates::NodeStates(GridNode* tile, bool enemyInteraction)
-    //    : m_Node(tile), m_IsEnemyInteraction(enemyInteraction)
-    //{
-    //}
-
     NodeStates::NodeStates(GridNode* node, GameObject* character, GridNode* previousNode)
         : m_Node(node), m_Character(character), m_PreviousNode(previousNode)
     {
@@ -64,29 +59,6 @@ namespace dae
     {
 
     }
-
-
-    //std::unique_ptr<NodeStates> NodeStateOne::HandleInput(GridNode* node, bool enemyInteraction)
-    //{
-    //    if (!enemyInteraction)
-    //    {
-    //        if (node->m_Level == 1)
-    //        {
-
-    //            return std::make_unique<NodeStateTwo>(node, enemyInteraction);
-    //        }
-    //        else if (node->m_Level == 2)
-    //        {
-    //            return std::make_unique<NodeStateTwo>(node, enemyInteraction);
-    //        }
-    //        else if (node->m_Level == 3)
-    //        {
-    //            return std::make_unique<NodeStateTwo>(node, enemyInteraction);
-    //        }
-    //    }
-    //    // Blue state is the lowest state, cannot downgrade
-    //    return nullptr;
-    //}
 
     std::unique_ptr<NodeStates> NodeStateOne::HandleInput(GridNode* node, GameObject* character, GridNode* previousNode)
     {
@@ -136,29 +108,6 @@ namespace dae
     {
         NodeStates::Exit();
     }
-
-    //std::unique_ptr<NodeStates> NodeStateTwo::HandleInput(GridNode* node, bool enemyInteraction)
-    //{
-    //    if (enemyInteraction)
-    //    {
-    //        // Downgrade logic: Orange to Blue
-    //        return std::make_unique<NodeStateOne>(node, enemyInteraction);
-    //    }
-    //    else
-    //    {
-    //        if (node->m_Level == 2)
-    //        {
-    //            auto nodeUpgrade = std::make_unique<UpgradeNodeEvent>(node->GetOwner()->GetParent()->GetID(), true);
-    //            EventDispatcher::GetInstance().DispatchEvent(std::move(nodeUpgrade));
-    //            return std::make_unique<NodeStateThree>(node, enemyInteraction);
-    //        }
-    //        if (node->m_Level == 3)
-    //        {
-    //            return std::make_unique<NodeStateOne>(node, enemyInteraction);
-    //        }
-    //    }
-    //    return nullptr;
-    //}
 
     std::unique_ptr<NodeStates> NodeStateTwo::HandleInput(GridNode* node, GameObject* character, GridNode* previousNode)
     {
@@ -214,17 +163,6 @@ namespace dae
 
     }
 
-    //std::unique_ptr<NodeStates> NodeStateThree::HandleInput(GridNode* node, bool enemyInteraction)
-    //{
-
-    //    if (enemyInteraction)
-    //    {
-    //        return std::make_unique<NodeStateTwo>(node, enemyInteraction);
-    //    }
-    //    // Yellow state is the highest state, cannot upgrade
-    //    return nullptr;
-    //}
-
     std::unique_ptr<NodeStates> NodeStateThree::HandleInput(GridNode* node, GameObject* character, GridNode* previousNode)
     {
         auto charType = character->GetComponent<CharacterComponent>()->GetType();
@@ -256,11 +194,6 @@ namespace dae
 
     }
 
-
-    //std::unique_ptr<NodeStates> NodeStateFlickering::HandleInput(GridNode* node, bool enemyInteraction)
-    //{
-    //    return std::unique_ptr<NodeStates>();
-    //}
     std::unique_ptr<NodeStates> NodeStateFlickering::HandleInput(GridNode* node, GameObject* character, GridNode* previousNode)
     {
         return std::make_unique<NodeStateFlickering>(node, character, previousNode);
@@ -325,16 +258,12 @@ namespace dae
         auto charType = character->GetComponent<CharacterComponent>(true)->GetType();
         if (charType == CharacterType::QBert)
         {
-            node;
-            character;
-            previousNode;
             if (node->m_Disc)
             {
                 node->m_Disc->SetParent(character);
                 node->m_Disc->SetLocalPosition({ 0, 20.0f, 0 });
             }
             character->GetComponent<GridNavigator>()->MoveToDirection({ 0, 1 }, true);
-            //return std::make_unique<NodeStatePit>(node, character, previousNode);
         }
         else
         {

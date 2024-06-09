@@ -10,7 +10,6 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include "TimeManager.h"
-#include "EventManager.h"
 #include <thread>
 #include <chrono>
 #include <AudioSystem.h>
@@ -84,13 +83,8 @@ dae::Minigin::~Minigin()
 	SDL_Quit();
 }
 
-void dae::Minigin::Run(const std::function<void()>& load)
+void dae::Minigin::Run(/*const std::function<void()>& load*/)
 {
-
-
-
-
-	load();
 
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();

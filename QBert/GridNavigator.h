@@ -36,7 +36,6 @@ namespace dae
 
 	private:
 		void Move(float delta);
-		void CheckForPit(NodeInfo& nodeInfo);
 
 
 		TriangularGrid* m_pGrid;

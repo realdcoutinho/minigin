@@ -4,9 +4,7 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include <stdexcept>
-//#include "Texture2D.h"
-//#include "TextureComponent.h"
-//#include "Font.h"
+
 #include "SDL_render.h"
 
 void dae::ResourceManager::Init(const std::string& dataPath)
@@ -32,18 +30,6 @@ SDL_Texture* dae::ResourceManager::LoadTexture(const std::string& file)
 	m_TexturesMap[file] = texture;
 	return texture;
 }
-
-//std::shared_ptr<dae::Font> dae::ResourceManager::LoadFont(const std::string& file, unsigned int size) const
-//{
-//	return std::make_shared<Font>(m_dataPath + file, size);
-//
-//	//auto font = TTF_OpenFont(file.c_str(), size);
-//	//if (font == nullptr)
-//	//{
-//	//	throw std::runtime_error(std::string("Failed to load font: ") + SDL_GetError());
-//	//}
-//
-//}
 
 _TTF_Font* dae::ResourceManager::GetFont(const std::string& name, unsigned int size)
 {
@@ -131,26 +117,8 @@ Mix_Chunk* dae::ResourceManager::GetSound(const std::string& file)
 		auto sound = LoadSound(file);
 		if (sound) 
 		{
-			//currentSoundId++;
-			//m_SoundMap[currentSoundId] = sound;
-			//m_FileToIdMap[file] = currentSoundId;
 			return sound;
 		}
 	}
 	return nullptr; // File could not be loaded
-}
-
-
-void dae::ResourceManager::FreeAllSoundsSound()
-{
-	//if (m_SoundMap.size() > 0)
-	//{
-	//	for (auto& sound : m_SoundMap)
-	//	{
-	//		if (sound.second != nullptr)
-	//		{
-	//			Mix_FreeChunk(sound.second);
-	//		}
-	//	}
-	//}
 }

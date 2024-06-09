@@ -3,15 +3,6 @@
 #include "GameObject.h"
 #include "TimeManager.h"
 
-//dae::RotatorComponent::RotatorComponent(std::unique_ptr<GameObject> pOwner, float radius, float speed)
-//	: BaseComponent(pOwner.get())
-//	, m_Radius(radius)
-//	, m_RotSpeed(speed)
-//{
-//	m_pTransform = pOwner.GetComponent<TransformComponent>();
-//	m_Center = m_pTransform->GetLocalPosition();
-//}
-
 dae::RotatorComponent::RotatorComponent(GameObject& pOwner, float radius, float speed)
 	: BaseComponent(pOwner)
 	, m_Radius(radius)

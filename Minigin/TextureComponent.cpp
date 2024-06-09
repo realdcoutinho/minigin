@@ -5,13 +5,6 @@
 #include "GameObject.h"
 
 
-//dae::TextureComponent::TextureComponent(std::unique_ptr<GameObject> pOwner, const std::string& filename)
-//	: BaseComponent(pOwner.get())
-//{
-//	m_texture = ResourceManager::GetInstance().LoadTexture(filename);
-//	//pOwner->AddComponent(std::move(this));
-//}
-
 dae::TextureComponent::TextureComponent(GameObject& pOwner, const std::string& filename, int segments)
 	: BaseComponent(pOwner),
 	m_texture(ResourceManager::GetInstance().GetTexture(filename)),

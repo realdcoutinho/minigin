@@ -1,10 +1,7 @@
 #include "ScoreComponent.h"
-#include "ScoreComponent.h"
 #include "Subject.h"
-#include "EventManager.h"
 #include "GameObject.h"
 #include "BaseEvent.h"
-#include "EventManager.h"
 #include <memory>
 #include "QbertEvents.h"
 #include "EventDispatcher.h"

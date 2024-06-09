@@ -16,7 +16,6 @@ namespace dae
 	class FPSComponent : public BaseComponent
 	{
 	public:
-		//FPSComponent(std::unique_ptr<GameObject> pOwner/*, const std::string& text, std::shared_ptr<Font> pFont*/);
 		FPSComponent(GameObject& pOwner);
 
 		~FPSComponent();

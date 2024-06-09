@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <iostream>
-#include "ScoreComponent.h"
 #include <vector>
 #include "BaseEvent.h"
 #include <memory>

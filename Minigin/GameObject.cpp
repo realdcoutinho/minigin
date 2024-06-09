@@ -14,13 +14,11 @@ dae::GameObject::GameObject()
 	, m_pTransformComponent(nullptr)
 	, m_LocalPosition{}
 {
-	m_ID = m_NextID++;  // Assign the current next ID and increment it for the next object
+	m_ID = m_NextID++;  
 }
 
 dae::GameObject::~GameObject() = default;
-//{
-//	//delete m_pTransformComponent;
-//}
+
 
 void dae::GameObject::Update()
 {
@@ -34,11 +32,6 @@ void dae::GameObject::Update()
 			component->Update();
 		}
 	}
-
-	//for (auto& child : m_Children)
-	//{
-	//	child->Update(); 
-	//}
 }
 
 void dae::GameObject::Render() const
@@ -49,11 +42,6 @@ void dae::GameObject::Render() const
 			component->Render();
 		}
 	}
-
-	//for (auto& child : m_Children)
-	//{
-	//	child->Render();
-	//}
 }
 
 void dae::GameObject::SetLocalPosition(float x, float y)
@@ -86,7 +74,6 @@ void dae::GameObject::SetChildrenDirty()
 		}
 
 	}
-	//m_pTransformComponent->SetDirty();
 }
 
 glm::vec3& dae::GameObject::GetWorldPosition()

@@ -18,28 +18,23 @@ namespace dae
     void HighScoreComponent::Render()
     {
         ImGui_ImplSDL2_NewFrame();
-        //ImGui::NewFrame();
 
         ImGui::SetNextWindowPos(ImVec2(472.5f, 10));
         ImGui::SetNextWindowSize(ImVec2(160, 275));
-        ImGui::Begin("Leaderboard", nullptr, ImGuiWindowFlags_NoResize);
+        ImGui::Begin("Ranking", nullptr, ImGuiWindowFlags_NoResize);
 
-        ImGui::Text("Input your name:");
+        ImGui::Text("Name:");
         ImGui::InputText("Name", m_PlayerNameBuffer, sizeof(m_PlayerNameBuffer));
-        if (ImGui::Button("Save Score", ImVec2(128.f, 24.f)))
+        if (ImGui::Button("Save", ImVec2(128.f, 24.f)))
         {
-            //if (!m_IsScoreSaved)
-            //{
-            //    m_IsScoreSaved = true;
-                std::cout << "Save Score button pressed" << std::endl;
-                //print name and score
-                std::cout << "Name: " << m_PlayerNameBuffer << std::endl;
-                std::cout << "Score: " << m_Score << std::endl;
-                    m_SaveHighScoreFunc(m_PlayerNameBuffer, m_Score);
-                    m_HighScores = m_GetHighScoresFunc();
+            if (!m_IsScoreSaved)
+            {
+                m_IsScoreSaved = true;;
+                m_SaveHighScoreFunc(m_PlayerNameBuffer, m_Score);
+                m_HighScores = m_GetHighScoresFunc();
+            }
         }
 
-        // Display each entry in the high scores multimap
         int rank = 1;
         for (auto it = m_HighScores.begin(); it != m_HighScores.end(); ++it, ++rank)
         {
@@ -53,6 +48,5 @@ namespace dae
 
     void HighScoreComponent::Update()
     {
-        // Implement update logic if necessary
     }
 }

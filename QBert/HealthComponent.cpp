@@ -2,7 +2,7 @@
 #include "Subject.h"
 #include "SceneManager.h"
 #include "Scene.h"
-#include "EventManager.h"
+
 #include "EventDispatcher.h"
 #include <memory.h>
 #include "QBertEvents.h"

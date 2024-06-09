@@ -210,11 +210,6 @@ namespace dae
         int points = coily->GetPoints();
 
 
-
-
-
-
-
         if(qbertHunt)
         {
             auto scoreEvent = std::make_unique<ScoreEvent>(points, qbertHunt->GetID());

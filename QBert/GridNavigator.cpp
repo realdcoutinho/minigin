@@ -5,7 +5,6 @@
 #include "TriangularGrid.h"
 #include "CharacterComponent.h"
 #include "QBertEvents.h"
-#include "EventManager.h"
 #include <memory>
 #include "QBertCharacterComponent.h"
 #include "TimeManager.h"
@@ -43,10 +42,6 @@ namespace dae
 	{
 		if (m_IsMoving)
 		{
-			//auto transform = GetOwner()->GetComponent<TransformComponent>();
-			//if (!transform)
-			//	return;
-
 			auto& timer = TimeManager::GetInstance().GetTimer();
 			float delta = timer.GetElapsed();
 
@@ -158,33 +153,5 @@ namespace dae
 			m_Pos += dir * moveDistance;
 		}
 
-				//m_MoveTimer += delta;
-				//if (m_MoveTimer >= m_MoveTime)
-				//{
-				//	m_MoveTimer = m_MoveTime;
-				//	m_IsMoving = false;
-				//	m_CanMove = true;
-				//}
-				//float t = m_MoveTimer / m_MoveTime;
-				//m_Pos = glm::mix(m_StartPos, m_TargetPos, t);
-				//
-				//
-				//if (m_MoveTimer >= m_MoveTime)
-				//{
-				//	m_MoveTimer = 0.0f;
-				//	m_Pos = m_TargetPos;
-				//}
-	}
-
-	void GridNavigator::CheckForPit(NodeInfo& nodeInfo)
-	{
-		nodeInfo;
-		//if (nodeInfo.type == TileType::Pit)
-		//{
-		//	//std::cout << "Char died to pit" << std::endl;
-		//	m_IsAlive = false;
-		//	auto death = std::make_unique<CharacterDeathEvent>(m_pGrid->GetOwnerID(), *m_PreviousNode, *GetOwner());
-		//	EventDispatcher::GetInstance().DispatchEvent(std::move(death));
-		//}
 	}
 }

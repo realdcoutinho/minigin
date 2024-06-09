@@ -9,7 +9,6 @@ namespace dae {
     class RotatorComponent : public BaseComponent 
     {
     public:
-        //RotatorComponent(std::unique_ptr<GameObject> pOwner, float radius, float speed);
         RotatorComponent(GameObject& pOwner, float radius, float speed);
         void Update() override;
         virtual void Render() override;

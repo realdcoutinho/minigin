@@ -49,8 +49,6 @@ namespace dae
 		const std::string m_CoilyTextureFile{ "Coily Spritesheet.png" };
 		const std::string m_EggTextureFile{"Egg.png"};
 		GameObject* m_TargetQbert;
-
-
 	};
 }
 

@@ -21,12 +21,6 @@ namespace dae
 
 		void SetCoily(CoilyComponent* pCoily) { m_pCoilies.push_back(pCoily); }
 
-		//void LoadLevel(int levelIndex);
-		//void LoadNextLevel();
-		//void LoadPreviousLevel();
-		//void ResetLevel();
-		//void SetLevel(int levelIndex);
-		//int GetCurrentLevel() const { return m_CurrentLevel; }
 	private:
 		friend class Singleton<LevelManager>;
 		LevelManager() = default;

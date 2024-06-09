@@ -7,10 +7,7 @@ namespace dae
 	class Controller final
 	{
 
-
 	public:
-
-
 
 		enum class ControllerButton
 		{

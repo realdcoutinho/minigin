@@ -9,16 +9,10 @@ namespace dae
 	class TextureComponent : public BaseComponent
 	{
 	public:
-		//TextureComponent(std::unique_ptr<GameObject> pOwner, const std::string& filename);
 		TextureComponent(GameObject& pOwner, const std::string& filename, int segments = 1);
 		TextureComponent(GameObject& pOwner, SDL_Texture* texture, int segments = 1);
 		TextureComponent(GameObject& pOwner);
 		~TextureComponent();
-
-		//TextureComponent(const TextureComponent&) = delete;
-		//TextureComponent(TextureComponent&&) = delete;
-		//TextureComponent& operator= (const TextureComponent&) = delete;
-		//TextureComponent& operator= (const TextureComponent&&) = delete;
 
 		void Render() override;
 		void Update() override;

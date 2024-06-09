@@ -23,7 +23,5 @@ namespace dae
     public:
         IEvent() = default;
         virtual ~IEvent() = default;
-
-        // Add common event functionality here if needed
     };
 }

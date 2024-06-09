@@ -29,14 +29,10 @@ bool dae::InputManager::ProcessInput()
 		if (e.type == SDL_KEYDOWN) 
 		{
 
-			if (e.key.keysym.scancode == SDL_SCANCODE_F5)
+			if (e.key.keysym.scancode == SDL_SCANCODE_F1)
 			{
 				SceneManager::GetInstance().SwitchScene();
 			}
-			//if (e.button == SDL_SCANCODE_F5)
-			//{
-			//	SceneManager::GetInstance().SwitchScene();
-			//}
 		}
 		if (e.type == SDL_MOUSEBUTTONDOWN) {
 
@@ -56,8 +52,6 @@ void dae::InputManager::Update()
 {
 	m_Keyboard->Update();
 
-
-	//m_ControllersVector[0]->Update();
 	std::for_each(m_ControllersVector.begin(), m_ControllersVector.end(), [](const std::unique_ptr<Controller>& controllerPtr) 
 		{
 			controllerPtr->Update();
@@ -90,31 +84,6 @@ dae::Controller* dae::InputManager::GetController()
 	}
 	return m_ControllersVector[m_ControllerCount - 1].get();
 }
-
-//std::vector<dae::Controller*>& dae::InputManager::GetControllers()
-//{
-//
-//
-//	//static std::vector<std::unique_ptr<int>> uniquePtrVec;
-//
-//
-//	//if (m_ControllersVector.empty())
-//	//{
-//	//	AddController();
-//	//}
-//
-//	m_RawControllersVector.reserve(m_ControllersVector.size()); // Preallocate memory for efficiency
-//
-//	// Use std::transform to convert unique_ptr to raw pointers
-//	std::transform(m_ControllersVector.begin(), m_ControllersVector.end(), std::back_inserter(m_RawControllersVector),
-//		[](const std::unique_ptr<dae::Controller>& uniquePtr) -> dae::Controller* {
-//			return uniquePtr.get(); // .get() returns the raw pointer
-//		});
-//
-//	return m_RawControllersVector;
-//
-//	//return &m_ControllersVector;
-//}
 
 unsigned int dae::InputManager::AddController()
 {

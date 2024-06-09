@@ -18,7 +18,6 @@ namespace dae
 	class TextComponent : public BaseComponent
 	{
 	public:
-		//TextComponent(std::unique_ptr<GameObject> pOwner, const std::string& text, std::shared_ptr<Font> pFont/*, int posX, int posY, int posZ = 1 */);
 		TextComponent(GameObject& pOwner, const std::string& text, _TTF_Font* pFont, const SDL_Color& color = { 255, 255, 255, 255 });
 
 		~TextComponent();

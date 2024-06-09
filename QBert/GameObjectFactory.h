@@ -33,6 +33,8 @@ namespace dae
 		GameObject& CreateHUDFPS(Scene& scene);
 		GameObject& CreateHighScoreHUD(Scene& scene, int initialScore = 0);
 
+		GameObject& CreatePlayerTitle(Scene& scene, int playerNumber = 1);
+
 		GameObject& CreateStartMenu(Scene& scene);
 		GameObject& CreateGameOver(Scene& scene, GameInfoLoader& gil, int playerOneScore, int playerTwoScore);
 		GameObject& CreateVictoryScene(Scene& scene, GameInfoLoader& gil, int playerOneScore, int playerTwoScore);
@@ -47,8 +49,6 @@ namespace dae
 
 		GameObject& CreatePauseScreen(Scene& scene);
 
-
-		//GameObject& CreateGridNode(Scene& scene, GameInfo& gi, glm::vec2& pos, int col, int row, int rows, int width, int height, int index);
 	private:
 		friend class Singleton<GameObjectFactory>;
 		~GameObjectFactory() = default;

@@ -17,46 +17,8 @@ namespace dae
 	public:
 		EventQueue();
 
-		//BaseEvent& RequestEvent();
-
-        //template <typename SpecificEventType>
-        //SpecificEventType& RequestSpecificEvent() 
-        //{
-        //    std::scoped_lock lock(m_Mutex);
-        //    if ((m_Tail + 1) % m_MaxEvents == m_Head) {
-        //        // Increment head if buffer is full
-        //        m_Head = (m_Head + 1) % m_MaxEvents;
-        //    }
-
-        //    // Create a new event if the existing one is not of the right type
-        //    if (!std::dynamic_pointer_cast<SpecificEventType>(m_Events[m_Tail])) {
-        //        m_Events[m_Tail] = std::make_shared<SpecificEventType>();
-        //    }
-
-        //    auto& event = m_Events[m_Tail];
-        //    m_Tail = (m_Tail + 1) % m_MaxEvents;
-        //    return *std::static_pointer_cast<SpecificEventType>(event);
-
-        //}
-
-
-        //std::optional<std::unique_ptr<dae::BaseEvent>> DequeueEvent();
-
         std::optional<std::unique_ptr<dae::IEvent>> GetEvent();
 
-        //template<typename T>
-        //std::enable_if_t<std::is_base_of_v<dae::BaseEvent, T>, void>
-        //    AddEvent(std::unique_ptr<T> event)
-        //{
-        //    std::scoped_lock lock(m_Mutex);
-        //    if ((m_Tail + 1) % m_MaxEvents == m_Head) {
-        //        // Increment head if buffer is full
-        //        m_Head = (m_Head + 1) % m_MaxEvents;
-        //    }
-        //    m_Events[m_Tail] = std::move(event);
-        //    m_Tail = (m_Tail + 1) % m_MaxEvents;
-        //}
-        
         void AddEvent(std::unique_ptr<IEvent> event)
         {
             std::scoped_lock lock(m_Mutex);
@@ -71,7 +33,6 @@ namespace dae
 
 
 	private:
-        //std::vector<std::unique_ptr<dae::BaseEvent>> m_Events;
 
         std::vector<std::unique_ptr<dae::IEvent>> Events;
 

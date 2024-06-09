@@ -383,19 +383,10 @@ namespace dae
         auto state = m_NodeStates->HandleInput(this, character, previousNode);
         if (state)
         {
-            //if(m_NodeStates)
-            //    m_NodeStates->Exit();
-			//state->Exit();
+
 			m_NodeStates = std::move(state);
 			m_NodeStates->Enter();
-   //         if (m_NodeStates->GetChange())
-   //         {
-			//	return m_Points;
-			//}
-   //         else
-   //         {
-			//	return -m_Points;
-			//}
+
 		}
         return 0;
     }

@@ -66,8 +66,6 @@ namespace dae
 		m_pEnemyManager->Reset();
 		m_pPlayers.clear();
 		m_pEnemyListener.reset();
-		//std::string restart{ "Restart" };
-		//SetLevelState(restart);
 		m_pLevelState = std::make_shared<LevelState>();
 		LoadStartScene();
 	}
@@ -95,6 +93,7 @@ namespace dae
 		m_pGrid = grid.GetComponent<TriangularGrid>();
 
 		GameObjectFactory::GetInstance().CreateHighScoreHUD(scene, m_HighScore);
+		GameObjectFactory::GetInstance().CreateHUDLevel(scene, m_CurrentGameInfo.level);
 
 		m_pEnemyManager->SetNewData(m_CurrentGameInfo);
 		m_pEnemyManager->SetTriangularGrid(*m_pGrid);
@@ -232,11 +231,7 @@ namespace dae
 				m_pPlayers.push_back(&playerTwo);
 			}
 		}
-		//if (m_CurrentGameInfo.gameMode == 3)
-		//{
-		//	auto& playerTwo = GameObjectFactory::GetInstance().InitializePlayerTwo(scene, *m_pGrid, m_CurrentGameInfo);
-		//	m_pPlayers.push_back(&playerTwo);
-		//}
+
 	}
 	void QBertGameMode::CreateTitleScenes()
 	{

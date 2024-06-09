@@ -25,9 +25,6 @@
     <Filter Include="Managers">
       <UniqueIdentifier>{c4b95b9d-0af2-4df9-a144-40aafedc2794}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Components\HUD">
-      <UniqueIdentifier>{f5cf7490-5a70-464f-9377-f338d714fde3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="EventHandling">
       <UniqueIdentifier>{6a1aea5d-2b10-4a62-a1fe-23fc69746981}</UniqueIdentifier>
     </Filter>
@@ -87,9 +84,6 @@
     <ClInclude Include="Timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FPSComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="BaseComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -132,9 +126,6 @@
     <ClInclude Include="Font.h">
       <Filter>not in use</Filter>
     </ClInclude>
-    <ClInclude Include="PlotGraphComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="Command.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -156,12 +147,6 @@
     <ClInclude Include="Subject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ScoreComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="HUDComponent.h">
-      <Filter>Components\HUD</Filter>
-    </ClInclude>
     <ClInclude Include="AudioSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -173,9 +158,6 @@
     </ClInclude>
     <ClInclude Include="State.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EventManager.h">
-      <Filter>EventHandling</Filter>
     </ClInclude>
     <ClInclude Include="EventQueue.h">
       <Filter>EventHandling</Filter>
@@ -254,9 +236,6 @@
     <ClCompile Include="BaseComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="FPSComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="RotatorComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -293,9 +272,6 @@
     <ClCompile Include="Font.cpp">
       <Filter>not in use</Filter>
     </ClCompile>
-    <ClCompile Include="PlotGraphComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="Command.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -314,12 +290,6 @@
     <ClCompile Include="Observer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HUDComponent.cpp">
-      <Filter>Components\HUD</Filter>
-    </ClCompile>
-    <ClCompile Include="ScoreComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="Subject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -328,9 +298,6 @@
     </ClCompile>
     <ClCompile Include="ServiceLocator.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EventManager.cpp">
-      <Filter>EventHandling</Filter>
     </ClCompile>
     <ClCompile Include="EventQueue.cpp">
       <Filter>EventHandling</Filter>
