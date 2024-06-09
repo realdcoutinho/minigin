@@ -1,3 +1,5 @@
+https://github.com/realdcoutinho/minigin/tree/main
+
 Scene and Scene Manager Overview
 Scene
 Each Scene represents a potential game level and is uniquely identified by a name. Scenes manage their own timers and use std::shared_ptr for efficient memory management.
