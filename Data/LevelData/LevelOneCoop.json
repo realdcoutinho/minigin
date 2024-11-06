@@ -1,0 +1,15 @@
+{
+    "gameMode": 2,
+    "level": 1,
+    "startColor": 0,
+    "spawnCoily": true,
+    "spawnSam": true,
+    "spawnUgg": false,
+    "coilyInterval": 10.0,
+    "samInterval": 12.0,
+    "uggInterval": 0.0,
+    "discOne":21,
+    "discTwo":14,
+    "discThree":-1
+  }
+  
